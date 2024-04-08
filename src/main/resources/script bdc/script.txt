@@ -1,0 +1,8 @@
+/********** Script pour la gestion des roles **********/
+
+INSERT INTO MEMBRE (username, last_name, first_name, email, phone, street, postal_code, city, password, credit, administrator) values ('Mobius','Jacques','BREL','jacques@gmail.com','0102030405','3 rue de la paix','99000','MoonCity','(bcrypt)$2a$12$MqwJfS4pXYesBQzvqnXyuOVC1Jtq7FkDUvcfgkR5y6i2kHvIcP1vW',1000000,1);
+INSERT INTO USERS (username, last_name, first_name, email, phone, street, postal_code, city, password, credit, administrator) values ('Loki','Francis','Lalanne','francis@gmail.com','0102030405','5 rue de la foret','99999','LostCity','(bcrypt)$2a$12$O.dtqrQPa3Y3s267BpM0fupCrghiIIwRJHCQZihi.WdQWDPBGsfVO',500,0);
+
+INSERT INTO ROLES (role, is_admin) VALUES ('ROLE_MEMBER',0);
+INSERT INTO ROLES (role, is_admin) VALUES ('ROLE_MEMBER',1);
+INSERT INTO ROLES (role, is_admin) VALUES ('ROLE_ADMIN',1);

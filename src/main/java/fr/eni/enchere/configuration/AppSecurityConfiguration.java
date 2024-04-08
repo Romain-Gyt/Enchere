@@ -4,6 +4,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
@@ -42,11 +44,16 @@ public class AppSecurityConfiguration {
     @Bean
     public UserDetailsManager userDetailsManager(DataSource dataSource) {
         JdbcUserDetailsManager jdbcUserDetailsManager = new JdbcUserDetailsManager(dataSource);
-        String sqlUsername = "SELECT email, password, 1 FROM MEMBRE WHERE email = ?;";
-        String sqlAuthorities = "SELECT email, ROLE FROM MEMBRE INNER JOIN ROLES ON admin = IS_ADMIN WHERE email = ?";
+        String sqlUsername = "SELECT username, password, 1 FROM MEMBRE WHERE username = ?;";
+        String sqlAuthorities = "SELECT username, ROLE FROM MEMBRE INNER JOIN ROLES ON admin = IS_ADMIN WHERE username = ?";
         jdbcUserDetailsManager.setUsersByUsernameQuery(sqlUsername);
         jdbcUserDetailsManager.setAuthoritiesByUsernameQuery(sqlAuthorities);
 
         return jdbcUserDetailsManager;
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder(); // Configure BCryptPasswordEncoder
     }
 }
