@@ -21,8 +21,11 @@ Enchère-ENI est un projet de site d'enchères en ligne développé avec Spring 
 
 ## **Technologies Utilisées**
 **Backend** : Spring Boot
+
 **Base de Données** : MariaDB
+
 **IDE** : IntelliJ IDEA
+
 **Frontend** : HTML, CSS, JavaScript, Bootstrap, thymeleaf
 
 ## **Installation et Utilisation**
