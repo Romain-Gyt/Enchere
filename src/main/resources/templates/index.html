@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        th:replace="~{layouts/layout :: layout(
+            pageContent=~{:: .main-content},
+            pageTitle=~{:: title},
+            additionalCss=~{}
+        )}"
+>
+
+<title th:text="Accueil">Test</title>
+
+<main class="main-content">
+    <h1>Bienvenue sur la page d'accueil</h1>
+    <p>Ceci est un exemple de contenu pour la page d'accueil.</p>
+</main>
+</html>
