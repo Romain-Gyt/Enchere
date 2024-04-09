@@ -2,7 +2,7 @@
 <html
         xmlns:th="http://www.thymeleaf.org"
         lang="en"
-        th:fragment="layout(pageContent, pageTitle, additionalCss)"
+        th:fragment="layout(pageContent, pageTitle, additionalCss,additionalJs)"
 >
 <head>
     <meta charset="UTF-8">
@@ -19,5 +19,9 @@
     <main th:replace="${pageContent} ?: ~{}"></main>
 
     <footer th:replace="~{fragments/fragment-footer :: frag-footer}"></footer>
+    <script src="http://code.jquery.com/jquery-2.1.1.js"></script>
+    <th:block th:replace="${additionalJs} ?: ~{}">
+        <script th:src="@{additionalJs}"></script>
+    </th:block>
 </body>
 </html>

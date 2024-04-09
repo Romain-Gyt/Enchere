@@ -4,11 +4,13 @@
         th:replace="~{layouts/layout :: layout(
             pageContent=~{:: .main-content},
             pageTitle=~{:: title},
-            additionalCss=~{/css/profil/details.css}
+            additionalCss=~{:: link},
+            additionalJs=~{:: script}
         )}"
 >
-    <title th:text="Accueil">Profil</title>
-
+    <title>Profil</title>
+    <link rel="stylesheet" href="/css/details.css">
+    <script src="/js/profil_details.js"></script>
     <main class="main-content">
         <div th:replace="~{fragments/fragment-form-user :: frag-form-user('','GET')}"></div>
     </main>

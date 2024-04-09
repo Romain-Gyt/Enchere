@@ -41,8 +41,11 @@ public class AppSecurityConfiguration  {
             auth.requestMatchers("/").permitAll();
             auth.requestMatchers("/css/*").permitAll();
             auth.requestMatchers("/images/*").permitAll();
+            auth.requestMatchers("/js/*").permitAll();
             auth.anyRequest().authenticated();
+
         });
+
 
         http.formLogin(form -> {
             form.loginPage("/login").permitAll();

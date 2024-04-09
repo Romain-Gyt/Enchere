@@ -11,11 +11,8 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 @SessionAttributes({"memberSession"})
 public class ProfilController {
 
-    @GetMapping("/display_profil")
-    public String displayProfil(
-            @ModelAttribute("memberSession") User user,
-            Model model
-    ) {
+    @GetMapping("/profil/details")
+    public String displayProfil() {
         return "profil/details.html";
     }
 }
