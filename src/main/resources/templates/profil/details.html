@@ -4,13 +4,12 @@
         th:replace="~{layouts/layout :: layout(
             pageContent=~{:: .main-content},
             pageTitle=~{:: title},
-            additionalCss=~{}
+            additionalCss=~{/css/profil/details.css}
         )}"
 >
-    <title th:text="Accueil">Test</title>
+    <title th:text="Accueil">Profil</title>
 
     <main class="main-content">
-        <h1>Bienvenue sur la page d'accueil</h1>
-        <p>Ceci est un exemple de contenu pour la page d'accueil.</p>
+        <div th:replace="~{fragments/fragment-form-user :: frag-form-user('','GET')}"></div>
     </main>
 </html>

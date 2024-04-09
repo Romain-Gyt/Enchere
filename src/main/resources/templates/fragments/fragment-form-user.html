@@ -1,0 +1,122 @@
+<div
+        xmlns:th="http://www.thymeleaf.org"
+        th:fragment="frag-form-user(action,metthod)"
+        th:object="${movie}"
+>
+<div class="my-form">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div th:if="${#strings.isEmpty(action)}" class="card-header">Mon profil</div>
+                        <div th:unless="${#strings.isEmpty(action)}" class="card-header">Modifier mon profil</div>
+                        <div class="card-body">
+                            <form name="form_profil"  th:action="${action}" th:method="${method}">
+                                <div th:if="${#strings.isEmpty(action)}" class="form-group row">
+                                    <label for="username" class="col-md-4 col-form-label text-md-right">Pseudo</label>
+                                    <div class="col-md-6">
+                                        <input type="text" id="username" class="form-control" name="username" disabled>
+                                    </div>
+                                </div>
+                                <div th:unless="${#strings.isEmpty(action)}" class="form-group row">
+                                    <label for="username" class="col-md-4 col-form-label text-md-right">Pseudo</label>
+                                    <div class="col-md-6">
+                                        <input type="text" id="username" class="form-control" name="username">
+                                    </div>
+                                </div>
+                                <div th:if="${#strings.isEmpty(action)}" class="form-group row">
+                                    <label for="last_name" class="col-md-4 col-form-label text-md-right">Nom</label>
+                                    <div class="col-md-6">
+                                        <input type="text" id="last_name" class="form-control" name="last_name" disabled>
+                                    </div>
+                                </div>
+                                <div th:unless="${#strings.isEmpty(action)}" class="form-group row">
+                                    <label for="last_name" class="col-md-4 col-form-label text-md-right">Nom</label>
+                                    <div class="col-md-6">
+                                        <input type="text" id="last_name" class="form-control" name="last_name">
+                                    </div>
+                                </div>
+                                <div th:if="${#strings.isEmpty(action)}" class="form-group row">
+                                    <label for="first_name" class="col-md-4 col-form-label text-md-right">Prénom</label>
+                                    <div class="col-md-6">
+                                        <input type="text" id="first_name" class="form-control" name="first_name" disabled>
+                                    </div>
+                                </div>
+                                <div th:unless="${#strings.isEmpty(action)}" class="form-group row">
+                                    <label for="first_name" class="col-md-4 col-form-label text-md-right">Prenom</label>
+                                    <div class="col-md-6">
+                                        <input type="text" id="first_name" class="form-control" name="first_name">
+                                    </div>
+                                </div>
+                                <div th:if="${#strings.isEmpty(action)}" class="form-group row">
+                                    <label for="email" class="col-md-4 col-form-label text-md-right">Email</label>
+                                    <div class="col-md-6">
+                                        <input type="email" id="email" class="form-control" name="email" disabled>
+                                    </div>
+                                </div>
+                                <div th:unless="${#strings.isEmpty(action)}" class="form-group row">
+                                    <label for="email" class="col-md-4 col-form-label text-md-right">Email</label>
+                                    <div class="col-md-6">
+                                        <input type="email" id="email" class="form-control" name="email">
+                                    </div>
+                                </div>
+                                <div th:if="${#strings.isEmpty(action)}" class="form-group row">
+                                    <label for="phone_number" class="col-md-4 col-form-label text-md-right">Téléphone</label>
+                                    <div class="col-md-6">
+                                        <input type="text" id="phone_number" class="form-control" name="phone_number" disabled>
+                                    </div>
+                                </div>
+                                <div th:unless="${#strings.isEmpty(action)}" class="form-group row">
+                                    <label for="phone_number" class="col-md-4 col-form-label text-md-right">Téléphone</label>
+                                    <div class="col-md-6">
+                                        <input type="text" id="phone_number" class="form-control" name="phone_number">
+                                    </div>
+                                </div>
+                                <div th:if="${#strings.isEmpty(action)}" class="form-group row">
+                                    <label for="street" class="col-md-4 col-form-label text-md-right">Rue</label>
+                                    <div class="col-md-6">
+                                        <input type="text" id="street" class="form-control" name="street" disabled>
+                                    </div>
+                                </div>
+                                <div th:unless="${#strings.isEmpty(action)}" class="form-group row">
+                                    <label for="street" class="col-md-4 col-form-label text-md-right">Rue</label>
+                                    <div class="col-md-6">
+                                        <input type="text" id="street" class="form-control" name="street">
+                                    </div>
+                                </div>
+                                <div th:if="${#strings.isEmpty(action)}" class="form-group row">
+                                    <label for="city" class="col-md-4 col-form-label text-md-right">Ville</label>
+                                    <div class="col-md-6">
+                                        <input type="text" id="city" class="form-control" name="city" disabled>
+                                    </div>
+                                </div>
+                                <div th:if="${#strings.isEmpty(action)}" class="form-group row">
+                                    <label for="postal_code" class="col-md-4 col-form-label text-md-right">Code postal</label>
+                                    <div class="col-md-6">
+                                        <input type="text" id="postal_code" class="form-control" name="postal_code" disabled>
+                                    </div>
+                                </div>
+                                <div th:unless="${#strings.isEmpty(action)}" class="form-group row">
+                                    <label for="city" class="col-md-4 col-form-label text-md-right">Ville</label>
+                                    <div class="col-md-6">
+                                        <input type="text" id="city" class="form-control" name="city">
+                                    </div>
+                                </div>
+
+                                <div th:if="${#strings.isEmpty(action)}" class="col-md-6 offset-md-4">
+                                    <button type="submit" class="btn btn-primary">
+                                        Modifier
+                                    </button>
+                                </div>
+                                <div th:unless="${#strings.isEmpty(action)}" class="col-md-6 offset-md-4">
+                                    <button type="submit" class="btn btn-primary">
+                                        Enregistrer
+                                    </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
