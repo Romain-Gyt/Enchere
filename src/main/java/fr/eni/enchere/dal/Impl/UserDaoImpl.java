@@ -23,6 +23,11 @@ private static final String SELECT_BY_USERNAME ="SELECT user_id,username,last_na
                                                 "WHERE username = :username;";
 private static final String SELECT_ALL ="SELECT user_id,username,last_name,first_name,email,phone,street,postal_code,city,password,credit,administrator\n" +
                                             "FROM users;";
+private static final String UPDATE_USER = "UPDATE users " +
+                                                "SET username = :username, last_name = :last_name, first_name = :first_name, email = :email, phone = :phone, street = :street, postal_code = :postal_code, city = :city, password = :password, credit = :credit, administrator = :administrator " +
+                                                "WHERE user_id = :id;";
+private static final String DELETE_USER = "DELETE FROM users WHERE user_id = :id;";
+
 private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 private JdbcTemplate jdbcTemplate;
 
@@ -64,6 +69,31 @@ private JdbcTemplate jdbcTemplate;
     @Override
     public List<User> findAll() {
         return jdbcTemplate.query(SELECT_ALL, new UserRowMapper());
+    }
+
+    @Override
+    public User update(User user) {
+        MapSqlParameterSource namedParameters = new MapSqlParameterSource();
+        namedParameters.addValue("id", user.getIdUser());
+        namedParameters.addValue("username", user.getPseudo());
+        namedParameters.addValue("last_name", user.getLastName());
+        namedParameters.addValue("first_name", user.getFirstName());
+        namedParameters.addValue("email", user.getEmail());
+        namedParameters.addValue("phone", user.getPhoneNumber());
+        namedParameters.addValue("street", user.getStreet());
+        namedParameters.addValue("postal_code", user.getZipCode());
+        namedParameters.addValue("city", user.getCity());
+        namedParameters.addValue("credit", user.getCredit());
+        namedParameters.addValue("password", user.getPassword());
+        namedParameters.addValue("administrator", user.isAdmin());
+        namedParameterJdbcTemplate.update(UPDATE_USER, namedParameters);
+        return user;
+    }
+
+    public void delete(long id) {
+        MapSqlParameterSource namedParameters = new MapSqlParameterSource();
+        namedParameters.addValue("id", id);
+        namedParameterJdbcTemplate.update(DELETE_USER, namedParameters);
     }
 
     class UserRowMapper implements RowMapper<User> {

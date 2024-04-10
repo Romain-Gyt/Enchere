@@ -41,20 +41,7 @@
     margin-bottom: 5px;
 }
 
-.btn-form{
-    background-color: rgba(33, 37, 41, 1);
-    color: white;
-    font-weight: bold;
-    border: 1px solid darkslategrey;
-    margin-left: 130px;
-    margin-top: 10px;
-}
 
-.btn-form:hover{
-    background-color: white;
-    color: black;
-    font-weight: bold;
-}
 
 
 .card-header{
@@ -62,3 +49,11 @@
     border-top: 1px solid rgba(33, 37, 41, 1) ;
     border-right: 1px solid rgba(33, 37, 41, 1) ;
 }
+
+.flex{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+

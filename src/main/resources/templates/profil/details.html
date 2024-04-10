@@ -8,10 +8,10 @@
             additionalJs=~{:: script}
         )}"
 >
-    <title>Profil</title>
+    <title>Modifier profil</title>
     <link rel="stylesheet" href="/css/details.css">
     <script src="/js/profil_details.js"></script>
     <main class="main-content">
-        <div th:replace="~{fragments/fragment-form-user :: frag-form-user('','GET')}"></div>
+        <div th:replace="~{fragments/fragment-form-user :: frag-form-user('/profil/details','')}"></div>
     </main>
 </html>

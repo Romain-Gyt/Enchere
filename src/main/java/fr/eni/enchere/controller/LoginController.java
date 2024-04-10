@@ -44,6 +44,7 @@ public class LoginController {
         memberSession.setCity(user.getCity());
         memberSession.setCity(user.getCity());
         memberSession.setCredit(user.getCredit());
+        memberSession.setPassword(user.getPassword());
         memberSession.setAdmin(user.isAdmin());
         return "redirect:/";
     }

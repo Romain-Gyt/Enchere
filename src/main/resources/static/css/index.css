@@ -4,3 +4,18 @@ footer{
     left: 0;
     right: 0;
 }
+
+.btn-form{
+    background-color: rgba(33, 37, 41, 1);
+    color: white;
+    font-weight: bold;
+    border: 1px solid darkslategrey;
+    margin: 5px;
+
+}
+
+.btn-form:hover{
+    background-color: white;
+    color: black;
+    font-weight: bold;
+}

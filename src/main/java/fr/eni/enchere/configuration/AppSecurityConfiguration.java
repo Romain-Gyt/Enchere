@@ -35,8 +35,11 @@ public class AppSecurityConfiguration  {
         http.authorizeHttpRequests(auth -> {
 
             auth
-                    .requestMatchers(HttpMethod.GET,"display_profil").authenticated()
-                    .requestMatchers(HttpMethod.POST,"display_profil").authenticated();
+                    .requestMatchers(HttpMethod.GET,"/profil/details").authenticated()
+                    .requestMatchers(HttpMethod.POST,"/profil/details").authenticated()
+                    .requestMatchers("/profil").authenticated()
+                    .requestMatchers(HttpMethod.GET,"/profil/details").authenticated()
+                    .requestMatchers(HttpMethod.POST,"/profil/details").authenticated();
 
             auth.requestMatchers("/").permitAll();
             auth.requestMatchers("/css/*").permitAll();
