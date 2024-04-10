@@ -76,8 +76,8 @@ public class AppSecurityConfiguration  {
     @Bean
     public UserDetailsManager userDetailsManager(DataSource dataSource) {
         JdbcUserDetailsManager jdbcUserDetailsManager = new JdbcUserDetailsManager(dataSource);
-        String sqlUsername = "SELECT username, password, 1 FROM MEMBRE WHERE username = ?;";
-        String sqlAuthorities = "SELECT username, ROLE FROM MEMBRE INNER JOIN ROLES ON administrator = IS_ADMIN WHERE username = ?";
+        String sqlUsername = "SELECT username, password, 1 FROM USERS WHERE username = ?;";
+        String sqlAuthorities = "SELECT username, ROLE FROM USERS INNER JOIN ROLES ON administrator = IS_ADMIN WHERE username = ?";
         jdbcUserDetailsManager.setUsersByUsernameQuery(sqlUsername);
         jdbcUserDetailsManager.setAuthoritiesByUsernameQuery(sqlAuthorities);
 
