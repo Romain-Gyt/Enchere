@@ -1,0 +1,15 @@
+INSERT INTO `categories` (`category_id`, `label`) VALUES
+(1, 'Électronique'),
+(2, 'Vêtements'),
+(3, 'Maison et jardin'),
+(4, 'Sport et loisirs'),
+(5, 'Livres et magazines'),
+(6, 'Accessoires'),
+(7, 'Bijoux'),
+(8, 'Informatique'),
+(9, 'Art et artisanat'),
+(10, 'Automobile');
+
+INSERT INTO `sold_items` (`item_id`, `item_name`, `description`, `start_auction_date`, `end_auction_date`, `initial_price`, `sale_price`, `user_id`, `category_id`) VALUES
+(1, 'Pull', 'Pull en laine de qualité supérieure', '2024-04-09', '2024-04-16', 50, NULL, 4, 1),
+(2, 'BMW M5', 'BMW M5 noire qui claque', '2024-04-09', '2024-04-19', 10000, NULL, 4, 10);
