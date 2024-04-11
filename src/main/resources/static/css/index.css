@@ -19,3 +19,16 @@ footer{
     color: black;
     font-weight: bold;
 }
+.error_list{
+    text-align: center;
+    color: red;
+    max-height: 150px;
+    overflow-y: auto;
+    font-weight: bold;
+}
+
+.error {
+    color: red;
+    font-weight: bold;
+    text-align: center;
+}

@@ -1,6 +1,6 @@
 package fr.eni.enchere.controller;
 
-import fr.eni.enchere.bll.ContextService;
+import fr.eni.enchere.bll.UserService;
 import fr.eni.enchere.bo.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,10 +13,10 @@ import java.security.Principal;
 @SessionAttributes({"memberSession"})
 public class LoginController {
 
-    private ContextService contextService;
+    private UserService userService;
 
-    public LoginController(ContextService contextService) {
-        this.contextService = contextService;
+    public LoginController(UserService userService) {
+        this.userService = userService;
     }
 
     @GetMapping("/login")
@@ -31,7 +31,7 @@ public class LoginController {
             Principal principal
     ){
         String username = principal.getName();
-        User user = contextService.loadUserByUsername(username);
+        User user = userService.loadUserByPseudo(username);
         memberSession.setIdUser(user.getIdUser());
         memberSession.setFirstName(user.getFirstName());
         memberSession.setLastName(user.getLastName());

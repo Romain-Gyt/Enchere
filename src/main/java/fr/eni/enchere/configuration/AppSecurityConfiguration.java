@@ -35,6 +35,10 @@ public class AppSecurityConfiguration  {
         http.authorizeHttpRequests(auth -> {
 
             auth
+                    .requestMatchers(HttpMethod.GET,"/register").permitAll()
+                    .requestMatchers(HttpMethod.POST,"/register").permitAll()
+                    .requestMatchers(HttpMethod.GET,"/profil").authenticated()
+                    .requestMatchers(HttpMethod.POST,"/profil").authenticated()
                     .requestMatchers(HttpMethod.GET,"/profil/details").authenticated()
                     .requestMatchers(HttpMethod.POST,"/profil/details").authenticated()
                     .requestMatchers("/profil").authenticated()
@@ -100,6 +104,6 @@ public class AppSecurityConfiguration  {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(); // Configure BCryptPasswordEncoder
+        return new BCryptPasswordEncoder();
     }
 }

@@ -27,13 +27,6 @@ public class ProfilController {
         return "profil/profil.html";
     }
 
-    @GetMapping("/profil/display")
-    public String displayUpdatedProfil(Model model, HttpSession session) {
-        User userSession = (User) session.getAttribute("memberSession");
-        model.addAttribute("memberSession", mem);
-        return "profil/profil.html";
-    }
-
     @GetMapping("/profil/details")
     public String displayProfilDetails(
             Model model
@@ -57,8 +50,7 @@ public class ProfilController {
         User userSession = (User) session.getAttribute("memberSession");
          userSession = userService.udpadeUser(user, userSession, passwordMap);
         session.setAttribute("memberSession",userSession);
-        System.out.println(userSession);
-        return "redirect:/profil/display";
+        return "redirect:/profil";
     }
 
     @GetMapping("/profil/delete")
