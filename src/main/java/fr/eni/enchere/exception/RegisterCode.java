@@ -10,6 +10,7 @@ public class RegisterCode {
     public static final String EMAIL_ALREADY_EXIST = "l'email existe déjà";
     public static final String PASSWORD_IS_EMPTY = "le mot de passe est vide";
     public static final String PASSWORD_LENGTH = "le mot de passe doit contenir entre 8 et 30 caractères";
+    public static final String CURRENT_PASSWORD_UNKNOWN = "Le mot de passe actuel n'est pas reconnu";
     public static final String PASSWORD_CONFIRMATION_IS_EMPTY = "la confirmation du mot de passe est vide";
     public static final String PASSWORD_CONFIRMATION = "les mots de passe ne correspondent pas";
     public static final String FIRST_NAME_IS_EMPTY = "le prénom est vide";

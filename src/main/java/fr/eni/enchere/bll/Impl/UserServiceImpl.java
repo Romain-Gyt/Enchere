@@ -73,8 +73,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User udpadeUser(User user, User userSession, Map<String,String> password) {
-        user = checkObject(user, userSession);
-        user.setPassword(setPassword(user, userSession, password).getPassword());
+        RegisterException registerException = new RegisterException();
+        user = checkObject(user, userSession,password,registerException);
+//        user.setPassword(setPassword(user, userSession, password,registerException).getPassword());
+        if(registerException.getKeys().size() > 0){
+            throw registerException;
+        }
         return userDao.update(user);
     }
 
@@ -212,64 +216,106 @@ public class UserServiceImpl implements UserService {
     }
 
 
-    private User checkObject(User user,User userSession) {
-        user.setIdUser(userSession.getIdUser());
-        user.setCredit(userSession.getCredit());
-        user.setAdmin(userSession.isAdmin());
-        if (user.getPseudo() == null || user.getPseudo().isEmpty()) {
-            user.setPseudo(userSession.getPseudo());
+    private User checkObject(User user,
+                             User userSession,
+                             Map<String, String> password,
+                             RegisterException registerException
+    ) {
+        Boolean isValid = isUserNull(user,registerException);
+        if(isValid){
+            user.setIdUser(userSession.getIdUser());
+            user.setCredit(userSession.getCredit());
+            user.setAdmin(userSession.isAdmin());
+            if (user.getPseudo() == null || user.getPseudo().isEmpty()) {
+                user.setPseudo(userSession.getPseudo());
+            } else{
+                isValid &=isPeudoValid(user.getPseudo(),registerException);
+            }
+
+            if (user.getLastName() == null || user.getLastName().isEmpty()) {
+                user.setLastName(userSession.getLastName());
+            } else{
+                isValid &=isLastNameValid(user.getLastName(),registerException);
+            }
+            if (user.getFirstName() == null || user.getFirstName().isEmpty()) {
+                user.setFirstName(userSession.getFirstName());
+            }else{
+                isValid &=isFirstNameValid(user.getFirstName(),registerException);
+            }
+            if (user.getEmail() == null || user.getEmail().isEmpty()) {
+                user.setEmail(userSession.getEmail());
+            }else{
+                isValid &=isEmailValid(user.getEmail(),registerException);
+            }
+            if (user.getPhoneNumber() == null || user.getPhoneNumber().isEmpty()) {
+                user.setPhoneNumber(userSession.getPhoneNumber());
+            } else{
+                isValid &=isPhoneNumberValid(user.getPhoneNumber(),registerException);
+            }
+            if (user.getStreet() == null || user.getStreet().isEmpty()) {
+                user.setStreet(userSession.getStreet());
+            } else{
+                isValid &=isStreetValid(user.getStreet(),registerException);
+            }
+            if (user.getZipCode() == null || user.getZipCode().isEmpty()) {
+                user.setZipCode(userSession.getZipCode());
+            } else{
+                isValid &=isZipCodeValid(user.getZipCode(),registerException);
+            }
+            if (user.getCity() == null || user.getCity().isEmpty()) {
+                user.setCity(userSession.getCity());
+            } else{
+                isValid &=isCityValid(user.getCity(),registerException);
+            }
+            if(user.getPassword() ==  null || user.getPassword().isEmpty()){
+                user.setPassword(userSession.getPassword());
+            } else{
+                isValid &= isPasswordValid(user.getPassword(),registerException);
+                isValid &= isPasswordValid(password.get("newPassword"),registerException);
+                isValid &= isPasswordValid(password.get("confirmPassword"),registerException);
+                if (checkPassword(password.get("currentPassword"),user.getPassword())){
+                    isValid &= true;
+                } else{
+                    registerException.addKey(RegisterCode.CURRENT_PASSWORD_UNKNOWN);
+                }
+                if(password.get("newPassword").equals(password.get("confirmPassword"))){
+                    isValid &= true;
+                } else{
+                    registerException.addKey(RegisterCode.PASSWORD_CONFIRMATION);
+                }
+            }
         }
-        if (user.getLastName() == null || user.getLastName().isEmpty()) {
-            user.setLastName(userSession.getLastName());
-        }
-        if (user.getFirstName() == null || user.getFirstName().isEmpty()) {
-            user.setFirstName(userSession.getFirstName());
-        }
-        if (user.getEmail() == null || user.getEmail().isEmpty()) {
-            user.setEmail(userSession.getEmail());
-        }
-        if (user.getPhoneNumber() == null || user.getPhoneNumber().isEmpty()) {
-            user.setPhoneNumber(userSession.getPhoneNumber());
-        }
-        if (user.getStreet() == null || user.getStreet().isEmpty()) {
-            user.setStreet(userSession.getStreet());
-        }
-        if (user.getZipCode() == null || user.getZipCode().isEmpty()) {
-            user.setZipCode(userSession.getZipCode());
-        }
-        if (user.getCity() == null || user.getCity().isEmpty()) {
-            user.setCity(userSession.getCity());
-        }
+       if(isValid){
+           user.setPassword(encodePassword(password.get("newPassword")));
+           return user;
+       }
         return user;
     }
 
-    private User setPassword(User user,User userSession, Map<String, String> password) {
-        if(password.size() < 3){
-            user.setPassword(userSession.getPassword());
-            return user;
-        }
-        if (password.get("newPassword") != null && !password.get("newPassword").isEmpty()) {
-            if (checkPassword(password.get("currentPassword"), userSession.getPassword())) {
-                if (password.get("newPassword").equals(password.get("confirmPassword"))) {
-                    user.setPassword(encodePassword(password.get("newPassword")));
-                } else{
-                    user.setPassword(userSession.getPassword());
-                }
-            } else{
-                user.setPassword(userSession.getPassword());
-            }
-        } else {
-            user.setPassword(userSession.getPassword());
-        }
-        return user;
-    }
+//    private User setPassword(User user,
+//                             User userSession,
+//                             Map<String, String> password,
+//                             RegisterException registerException
+//    ) {
+//        boolean isValid = true;
+//        isValid &= isPasswordValid(password.get("currentPassword"), registerException);
+//        isValid &= isPasswordValid(password.get("newPassword"), registerException);
+//        isValid &= isPasswordValid(password.get("confirmPassword"), registerException);
+//        isValid &= checkPassword(password.get("currentPassword"), userSession.getPassword());
+//        isValid &= password.get("newPassword").equals(password.get("confirmPassword"));
+//        if(isValid){
+//            user.setPassword(encodePassword(password.get("newPassword")));
+//        } else{
+//            user.setPassword(userSession.getPassword());
+//        }
+//        return user;
+//    }
 
     private boolean checkPassword(String password, String encodedPassword) {
         return passwordEncoder.matches(password, encodedPassword);
     }
 
     private String encodePassword(String password) {
-
         return passwordEncoder.encode(password);
     }
 }

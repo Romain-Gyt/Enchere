@@ -10,16 +10,18 @@ $(document).ready(function() {
     $(document).on("click", "#delete_btn", function(event) {
         // Empêcher le comportement par défaut du bouton
         event.preventDefault();
-        var id = $("#user_id").val();
+        let id = $("#user_id").val();
+        console.log(id);
         // Demander une confirmation avant de supprimer le profil
         if (confirm("Voulez-vous vraiment supprimer votre profil ?")) {
             $.ajax(
                 {
                     type: "GET",
                     url: "/profil/delete",
-                    data:id,
+                    data:{'user_id' :id },
                     success: function() {
-                        // Rediriger l'utilisateur vers la page de connexion
+                       alert("Profil supprimé avec succès");
+                        window.location.href = "/logout";
                     },
                     error: function(data) {
                         alert("Erreur lors de la suppression du profil");
