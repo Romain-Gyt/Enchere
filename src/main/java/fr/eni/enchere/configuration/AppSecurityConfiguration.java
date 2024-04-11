@@ -35,6 +35,7 @@ public class AppSecurityConfiguration  {
 
                     auth.anyRequest().permitAll();
         });
+        http.csrf().disable();
 
         http.formLogin(form -> {
             form.loginPage("/login").permitAll();

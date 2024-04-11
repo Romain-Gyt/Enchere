@@ -31,7 +31,11 @@
 
         <div class="row auctions-container">
             <div class="col-md-6" th:each="auction : ${auctions}">
-                <div class="card mb-3">
+                <div id="divBid" class="card mb-3">
+                    <form id="hiddenForm" method="post" action="/showDetails">
+                        <input type="hidden" id="itemId" name="itemId" th:value="${auction.itemId}" />
+                        <input type="hidden" id="userId" name="userId" th:value="${auction.userId}" />
+                    </form>
                     <div class="row no-gutters">
                         <div class="col-md-4">
                             <!-- Ici, vous pouvez afficher l'image de l'article en vente -->
@@ -55,3 +59,9 @@
 </main>
 </body>
 </html>
+<script>
+    var divElement = document.getElementById('divBid');
+    divElement.addEventListener('click', function() {
+        document.getElementById('hiddenForm').submit();
+    });
+</script>

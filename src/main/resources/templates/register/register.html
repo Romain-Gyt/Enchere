@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        th:replace="~{layouts/layout :: layout(
+            pageContent=~{:: .main-content},
+            pageTitle=~{:: title},
+            additionalCss=~{}
+        )}"
+>
+<title th:text="#{view-user-form.title}"></title>
+
+<main class="main-content">
+    <h1 th:text="#{view-user-form.h1}"></h1>
+    <form action="/register" th:replace="~{fragments/fragment-form-user :: frag-form-user('/register')}"></form>
+</main>
+
+</html>

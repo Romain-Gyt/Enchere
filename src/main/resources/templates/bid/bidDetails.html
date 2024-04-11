@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        th:replace="~{layouts/layout :: layout(
+            pageContent=~{:: .main-content},
+            pageTitle=~{:: title},
+            additionalCss=~{}
+        )}"
+>
+<title th:text="#{view-bidDetails.title}"></title>
+
+<main class="main-content">
+    <h1 class="text-center" th:text="#{view-bidDetails.detail}"></h1>
+    <div class="row no-gutters">
+        <div class="col-md-4">
+            <img src="/pictures/Enchere.jpg" class="card-img" alt="..." >
+        </div>
+        <div class="col-md-8">
+            <div class="card-body">
+                <h5 class="card-title" th:text="${soldItem.itemName}"></h5>
+                <p class="card-text">Description : <span th:text="${soldItem.description}"></span></p>
+                <p class="card-text">Catégorie : <span th:text="${categorie}"></span></p>
+                <p class="card-text">Meilleur offre : <span th:text="${soldItem.salePrice}"></span></p>
+                <p class="card-text">Mise à prix : <span th:text="${soldItem.initialPrice}"></span></p>
+                <p class="card-text">Fin de l'enchère : <span th:text="${#dates.format(soldItem.endAuctionDate, 'dd/MM/yyyy')}"></span></p>
+                <div class="row">
+                    <div class="col-auto">
+                        <p class="card-text mr-3">Retrait :</p>
+                    </div>
+                    <div class="col">
+                        <div class="d-flex flex-column">
+                            <div>
+                                <span th:text="${withdrawals.street}"></span>
+                            </div>
+                            <div>
+                                <span th:text="${withdrawals.postal_code + ' ' + withdrawals.city}"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <p class="card-text">Vendeur : <span th:text="${user.pseudo}"></span></p>
+                <label class="card-text">Ma proposition : <input type="number" th:min="${soldItem.salePrice}" th:max="${user.credit}" th:value="${soldItem.salePrice}" oninput="this.value = Math.min(this.value, this.getAttribute('max'))"/> </label>
+                <button type="button">Enchérir</button>
+            </div>
+        </div>
+    </div>
+</main>
+
+</html>
+
+<!--                <div class="form-inline">-->
+<!--                    <div class="form-group mr-3">-->
+<!--                        <span th:text="${withdrawals.street}"></span><br>-->
+<!--                    </div>-->
+<!--                    <div class="form-group mr-3">-->
+<!--                        <span th:text="${withdrawals.postal_code + ' ' + withdrawals.city}"></span>-->
+<!--                    </div>-->
+<!--                </div>-->
