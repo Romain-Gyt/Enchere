@@ -33,7 +33,7 @@
                         <select class="form-control" id="categorySelect" name="categoryId">
                             <option value="">Catégories</option>
                             <!-- Boucle pour afficher les libellés des catégories -->
-                            <option th:each="category : ${categories}" th:value="${category.categoryId}" th:text="${category.label}"></option>
+<!--                            <option th:each="category : ${categories}" th:value="${category.categoryId}" th:text="${category.label}"></option>-->
                         </select>
                     </div>
                     <div class="col-md-6">
@@ -58,8 +58,8 @@
                                 <p class="card-text text-white">Prix initial : <span th:text="${articles.initialPrice}"></span></p>
                                 <p class="card-text text-white">Date de début de l'enchère : <span th:text="${#dates.format(articles.startAuctionDate, 'dd/MM/yyyy')}"></span></p>
                                 <p class="card-text text-white">Date de fin de l'enchère : <span th:text="${#dates.format(articles.endAuctionDate, 'dd/MM/yyyy')}"></span></p>
-                                <p class="card-text text-white">Vendu par : <span th:text="${articles.username}"></span></p>
-                                <p class="card-text text-white">Catégorie : <span th:text="${articles.categoryId}"></span></p>
+<!--                                <p class="card-text text-white">Vendu par : <span th:text="${articles.username}"></span></p>-->
+<!--                                <p class="card-text text-white">Catégorie : <span th:text="${articles.categoryId}"></span></p>-->
                             </div>
                         </div>
                     </div>

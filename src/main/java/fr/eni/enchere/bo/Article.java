@@ -1,5 +1,7 @@
 package fr.eni.enchere.bo;
 
+import org.eclipse.angus.mail.imap.protocol.UIDSet;
+
 import java.sql.Date;
 
 public class Article {
@@ -11,8 +13,12 @@ public class Article {
     private int initialPrice;
     private Integer salePrice; // Peut être nul si l'enchère n'est pas encore terminée
     private int userId;
-    private int categoryId;
-    private String username;
+    private Category category;
+    private User user;
+
+
+    public Article() {
+    }
 
     public int getItemId() {
         return itemId;
@@ -78,20 +84,20 @@ public class Article {
         this.userId = userId;
     }
 
-    public int getCategoryId() {
-        return categoryId;
+    public Category getCategory() {
+        return category;
     }
 
-    public void setCategoryId(int categoryId) {
-        this.categoryId = categoryId;
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
-    public String getUsername() {
-        return username;
+    public User getUser() {
+        return user;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUser(User user) {
+        this.user = user;
     }
 
 }
