@@ -7,6 +7,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -43,7 +44,6 @@ public class AppSecurityConfiguration  {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         http.authorizeHttpRequests(auth -> {
-
             auth
                     .requestMatchers(HttpMethod.GET,"/register").permitAll()
                     .requestMatchers(HttpMethod.POST,"/register").permitAll()
@@ -61,14 +61,13 @@ public class AppSecurityConfiguration  {
             auth.anyRequest().authenticated();
 
         });
-
-
         http.formLogin(form -> {
             form.loginPage("/login").permitAll();
             form.defaultSuccessUrl("/session");
             form.failureUrl("/login?error=true");
         });
 
+//        gestion du de la méthode se souvenir de moi
         http
                 .rememberMe(rememberMe -> rememberMe
                         .tokenRepository(persistentTokenRepository())
@@ -85,6 +84,16 @@ public class AppSecurityConfiguration  {
                         .logoutSuccessUrl("/")
                         .permitAll()
         );
+
+        http.sessionManagement(sessionManagement ->
+                sessionManagement
+                        .invalidSessionUrl("/logout")
+                        .sessionFixation(sessionFixation -> sessionFixation.none())
+                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                        .maximumSessions(1)
+                        .expiredUrl("/")
+        );
+
         return http.build();
     }
 
