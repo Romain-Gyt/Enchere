@@ -35,7 +35,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User loadUserByPseudo(String pseudo) {
-        System.out.println("test user");
         return userDao.read(pseudo);
     }
 
@@ -80,6 +79,11 @@ public class UserServiceImpl implements UserService {
             throw registerException;
         }
         return userDao.update(user);
+    }
+
+    @Override
+    public void updateUserCredit(User user, int credit){
+        userDao.updateCredit(user, credit);
     }
 
     @Override
