@@ -32,10 +32,9 @@ public class AppSecurityConfiguration  {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         http.authorizeHttpRequests(auth -> {
-
-                    auth.anyRequest().permitAll();
+            auth
+                    .requestMatchers("/").permitAll();
         });
-        http.csrf().disable();
 
         http.formLogin(form -> {
             form.loginPage("/login").permitAll();

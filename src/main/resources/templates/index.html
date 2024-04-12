@@ -1,67 +1,17 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      th:replace="~{layouts/layout :: layout(
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        th:replace="~{layouts/layout :: layout(
             pageContent=~{:: .main-content},
             pageTitle=~{:: title},
-            additionalCss=~{}
-        )}">
-<head>
-    <title th:text="Accueil">Home</title>
-    <script src="/js/Filter_home.js"></script>
-</head>
-<body>
-<main class="main-content">
-    <div class="container">
-        <h1 class="text-center">Liste des enchères</h1>
+            additionalCss=~{},
+            additionalJs=~{}
+        )}"
+>
+    <title th:text="Accueil">Test</title>
 
-        <div class="row my-3">
-            <div class="col-md-6">
-                <input type="text" class="form-control" id="searchInput" placeholder="Recherche..." onkeyup="searchAuctions()">
-            </div>
-            <div class="col-md-6">
-                <button class="btn btn-primary float-right">Rechercher</button>
-            </div>
-            <div class="col-md-6">
-                <select class="form-control" id="categorySelect">
-                    <option value="">Catégories</option>
-                    <option th:each="category : ${categories}" th:text="${category}"></option>
-                </select>
-            </div>
-        </div>
-
-        <div class="row auctions-container">
-            <div class="col-md-6" th:each="auction : ${auctions}">
-                <div id="divBid" class="card mb-3">
-                    <form id="hiddenForm" method="post" action="/showDetails">
-                        <input type="hidden" id="itemId" name="itemId" th:value="${auction.itemId}" />
-                        <input type="hidden" id="userId" name="userId" th:value="${auction.userId}" />
-                    </form>
-                    <div class="row no-gutters">
-                        <div class="col-md-4">
-                            <!-- Ici, vous pouvez afficher l'image de l'article en vente -->
-                            <img src="/pictures/Enchere.jpg" class="card-img" alt="..." >
-                        </div>
-                        <div class="col-md-8">
-                            <div class="card-body">
-                                <!-- Afficher les détails de l'enchère -->
-                                <h5 class="card-title" th:text="${auction.itemName}"></h5>
-                                <p class="card-text">Prix initial : <span th:text="${auction.initialPrice}"></span></p>
-                                <p class="card-text">Date de l'enchère : <span th:text="${#dates.format(auction.bidDate, 'dd/MM/yyyy')}"></span></p>
-                                <p class="card-text">Vendu par : <span th:text="${auction.username}"></span></p>
-                                <p class="card-text">Montant actuel de l'enchère : <span th:text="${auction.bidAmount}"></span> points</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</main>
-</body>
+    <main class="main-content">
+        <h1>Bienvenue sur la page d'accueil</h1>
+        <p>Ceci est un exemple de contenu pour la page d'accueil.</p>
+    </main>
 </html>
-<script>
-    var divElement = document.getElementById('divBid');
-    divElement.addEventListener('click', function() {
-        document.getElementById('hiddenForm').submit();
-    });
-</script>

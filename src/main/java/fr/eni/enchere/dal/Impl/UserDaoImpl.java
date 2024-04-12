@@ -14,29 +14,29 @@ import java.util.List;
 
 @Repository
 public class UserDaoImpl implements UserDao {
-    /******** Declaration ********/
-    private static final String SELECT_BY_ID ="SELECT user_id,username,last_name,first_name,email,phone,street,postal_code,city,password,credit,administrator\n" +
-            "FROM users\n" +
-            "WHERE user_id = :id;";
-    private static final String SELECT_BY_USERNAME ="SELECT user_id,username,last_name,first_name,email,phone,street,postal_code,city,password,credit,administrator\n" +
-            "FROM users\n" +
-            "WHERE username = :username;";
-    private static final String SELECT_ALL ="SELECT user_id,username,last_name,first_name,email,phone,street,postal_code,city,password,credit,administrator\n" +
-            "FROM users;";
+/******** Declaration ********/
+private static final String SELECT_BY_ID ="SELECT user_id,username,last_name,first_name,email,phone,street,postal_code,city,password,credit,administrator\n" +
+                                            "FROM users\n" +
+                                            "WHERE user_id = :id;";
+private static final String SELECT_BY_USERNAME ="SELECT user_id,username,last_name,first_name,email,phone,street,postal_code,city,password,credit,administrator\n" +
+                                                "FROM users\n" +
+                                                "WHERE username = :username;";
+private static final String SELECT_ALL ="SELECT user_id,username,last_name,first_name,email,phone,street,postal_code,city,password,credit,administrator\n" +
+                                            "FROM users;";
 
-    private static final String INSERT_USER = "INSERT INTO users (username, last_name, first_name, email, phone, street, postal_code, city, password, credit, administrator) " +
-            "VALUES (:username, :last_name, :first_name, :email, :phone, :street, :postal_code, :city, :password, :credit, :administrator);";
+private static final String INSERT_USER = "INSERT INTO users (username, last_name, first_name, email, phone, street, postal_code, city, password, credit, administrator) " +
+                                            "VALUES (:username, :last_name, :first_name, :email, :phone, :street, :postal_code, :city, :password, :credit, :administrator);";
 
-    private static final String UPDATE_USER = "UPDATE users " +
-            "SET username = :username, last_name = :last_name, first_name = :first_name, email = :email, phone = :phone, street = :street, postal_code = :postal_code, city = :city, password = :password, credit = :credit, administrator = :administrator " +
-            "WHERE user_id = :id;";
-    private static final String DELETE_USER = "DELETE FROM users WHERE user_id = :id;";
+private static final String UPDATE_USER = "UPDATE users " +
+                                                "SET username = :username, last_name = :last_name, first_name = :first_name, email = :email, phone = :phone, street = :street, postal_code = :postal_code, city = :city, password = :password, credit = :credit, administrator = :administrator " +
+                                                "WHERE user_id = :id;";
+private static final String DELETE_USER = "DELETE FROM users WHERE user_id = :id;";
 
-    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-    private JdbcTemplate jdbcTemplate;
+private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+private JdbcTemplate jdbcTemplate;
 
 
-    /******** Constructor ********/
+/******** Constructor ********/
     public UserDaoImpl(
             NamedParameterJdbcTemplate namedParameterJdbcTemplate,
             JdbcTemplate jdbcTemplate
@@ -46,8 +46,8 @@ public class UserDaoImpl implements UserDao {
     }
 
 
-    /******** Methods ********/
-    @Override
+/******** Methods ********/
+        @Override
     public User read(long id) {
         MapSqlParameterSource namedParameters = new MapSqlParameterSource();
         namedParameters.addValue("id", id);

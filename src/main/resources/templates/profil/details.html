@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html
         xmlns:th="http://www.thymeleaf.org"
         th:replace="~{layouts/layout :: layout(
@@ -9,12 +8,11 @@
             additionalJs=~{:: script}
         )}"
 >
-    <title>Inscription</title>
+    <title>Modifier profil</title>
     <link rel="stylesheet" href="/css/details.css">
-    <script src="/js/form-register.js"></script>
+    <script src="/js/profil_details.js"></script>
+    <script src="/js/form-register.js"> </script>
     <main class="main-content">
-        <div th:replace="~{fragments/fragment-form-user :: frag-form-user('/register','create')}"></div>
+        <div th:replace="~{fragments/fragment-form-user :: frag-form-user('/profil/details','')}"></div>
     </main>
-
-
 </html>

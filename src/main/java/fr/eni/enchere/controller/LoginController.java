@@ -24,6 +24,7 @@ public class LoginController {
         return "login/login.html";
     }
 
+
     @GetMapping("/session")
     public String session(
             @ModelAttribute("memberSession") User memberSession,
@@ -48,9 +49,9 @@ public class LoginController {
         return "redirect:/";
     }
 
-
     @ModelAttribute("memberSession")
     public User memberSession(){
-        return new User();
+        User user = new User();
+        return user;
     }
 }

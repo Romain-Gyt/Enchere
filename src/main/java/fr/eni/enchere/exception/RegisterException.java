@@ -3,7 +3,8 @@ package fr.eni.enchere.exception;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RegisterException extends RuntimeException {
+public class RegisterException extends RuntimeException{
+
     List<String> keys = new ArrayList<>();
 
     public RegisterException() {

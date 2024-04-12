@@ -1,0 +1,8 @@
+<div
+        xmlns:th="http://www.thymeleaf.org"
+        th:fragment="frag-errors"
+        th:if="${#fields.hasErrors('*')}"
+>
+        <h2 class="error" > Veuillez verifier vos champs</h2>
+
+</div>
