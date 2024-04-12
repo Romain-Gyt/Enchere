@@ -7,24 +7,24 @@ import java.util.Objects;
 public class User {
     /******* Attributs *******/
 
-   private Long idUser;
-   private String pseudo;
-   private String lastName;
-   private String firstName;
-   private String email;
-   private String phoneNumber;
-   private String street;
-   private String zipCode;
-   private String city;
-   private String password;
-   private int credit;
-   private boolean admin = false;
+    private Long idUser;
+    private String pseudo;
+    private String lastName;
+    private String firstName;
+    private String email;
+    private String phoneNumber;
+    private String street;
+    private String zipCode;
+    private String city;
+    private String password;
+    private int credit;
+    private boolean admin = false;
 
-   List<Article> soldArticles = new ArrayList<Article>();
-   List<Article> boughtArticles = new ArrayList<Article>();
-   List<Auction> auctions = new ArrayList<Auction>();
+    List<Article> soldArticles = new ArrayList<Article>();
+    List<Article> boughtArticles = new ArrayList<Article>();
+    List<Auction> auctions = new ArrayList<Auction>();
 
-   /************** Constructor *********/
+    /************** Constructor *********/
 
     public User() {
     }
