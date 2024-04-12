@@ -3,6 +3,7 @@ package fr.eni.enchere.configuration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -32,13 +33,30 @@ public class AppSecurityConfiguration  {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         http.authorizeHttpRequests(auth -> {
+
             auth
-                    .requestMatchers("/").permitAll();
+                    .requestMatchers(HttpMethod.GET,"/register").permitAll()
+                    .requestMatchers(HttpMethod.POST,"/register").permitAll()
+                    .requestMatchers(HttpMethod.GET,"/profil").authenticated()
+                    .requestMatchers(HttpMethod.POST,"/profil").authenticated()
+                    .requestMatchers(HttpMethod.GET,"/profil/details").authenticated()
+                    .requestMatchers(HttpMethod.POST,"/profil/details").authenticated()
+                    .requestMatchers("/profil").authenticated()
+                    .requestMatchers(HttpMethod.GET,"/profil/details").authenticated()
+                    .requestMatchers(HttpMethod.POST,"/profil/details").authenticated();
+
+            auth.requestMatchers("/").permitAll();
+            auth.requestMatchers("/css/*").permitAll();
+            auth.requestMatchers("/images/*").permitAll();
+            auth.requestMatchers("/js/*").permitAll();
+            auth.anyRequest().authenticated();
+
         });
+
 
         http.formLogin(form -> {
             form.loginPage("/login").permitAll();
-            form.defaultSuccessUrl("/");
+            form.defaultSuccessUrl("/session");
             form.failureUrl("/login?error=true");
         });
 
@@ -86,6 +104,6 @@ public class AppSecurityConfiguration  {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(); // Configure BCryptPasswordEncoder
+        return new BCryptPasswordEncoder();
     }
 }

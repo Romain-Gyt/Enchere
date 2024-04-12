@@ -1,0 +1,59 @@
+.my-form
+{
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+}
+
+.my-form .row
+{
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.login-form
+{
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+}
+
+.login-form .row
+{
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.card-header h2{
+    font-size: 1.5rem;
+    color: black;
+    font-weight: bold;
+}
+
+.card-body{
+    background-color: rgba(33, 37, 41, 1);
+}
+
+.card-body label{
+    color: white;
+}
+
+.card-body input{
+    color: black;
+    margin-bottom: 5px;
+}
+
+
+
+
+.card-header{
+    border-left: 1px solid rgba(33, 37, 41, 1) ;
+    border-top: 1px solid rgba(33, 37, 41, 1) ;
+    border-right: 1px solid rgba(33, 37, 41, 1) ;
+}
+
+.flex{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+

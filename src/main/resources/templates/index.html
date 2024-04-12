@@ -4,14 +4,14 @@
         th:replace="~{layouts/layout :: layout(
             pageContent=~{:: .main-content},
             pageTitle=~{:: title},
-            additionalCss=~{}
+            additionalCss=~{},
+            additionalJs=~{}
         )}"
 >
+    <title th:text="Accueil">Test</title>
 
-<title th:text="Accueil">Test</title>
-
-<main class="main-content">
-    <h1>Bienvenue sur la page d'accueil</h1>
-    <p>Ceci est un exemple de contenu pour la page d'accueil.</p>
-</main>
+    <main class="main-content">
+        <h1>Bienvenue sur la page d'accueil</h1>
+        <p>Ceci est un exemple de contenu pour la page d'accueil.</p>
+    </main>
 </html>
