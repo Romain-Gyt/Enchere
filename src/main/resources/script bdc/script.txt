@@ -1,5 +1,4 @@
 /********** Script pour la gestion des roles **********/
-
 /******* A lancer avant ********/
 
 
