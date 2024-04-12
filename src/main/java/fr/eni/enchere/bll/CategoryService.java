@@ -9,36 +9,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
-public class CategoryService {
+public interface CategoryService {
 
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
-    @Autowired
-    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-    private static final String SELECT_BY_ID = "SELECT label FROM categories WHERE category_id = :id";
-
-    public List<Category> getAllCategories() {
-        String sql = "SELECT * FROM categories";
-        return jdbcTemplate.query(sql, (rs, rowNum) -> {
-            Category category = new Category();
-            category.setCategoryId(rs.getInt("category_id"));
-            category.setLabel(rs.getString("label"));
-            return category;
-        });
-    }
-
-    public String getCategorieById(int id) {
-        MapSqlParameterSource namedParameters = new MapSqlParameterSource();
-        namedParameters.addValue("id", id);
-        return namedParameterJdbcTemplate.queryForObject(SELECT_BY_ID, namedParameters, String.class);
-
-//        String sql = "SELECT label FROM categories WHERE id = :id";
-//
-//        return jdbcTemplate.query(sql, (rs, rowNum) -> {
-//            Category category = new Category();
-//            category.setLabel(rs.getString("label"));
-//            return category;
-//        });
-    }
+    List<Category> getAllCategories();
+    String getCategorieById(int id);
 }

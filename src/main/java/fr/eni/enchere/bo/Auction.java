@@ -7,9 +7,6 @@ public class Auction {
     private int itemId;
     private Date bidDate;
     private int bidAmount;
-    private String itemName;
-    private int initialPrice;
-    private String username;
 
     public int getUserId() {
         return userId;
@@ -41,29 +38,5 @@ public class Auction {
 
     public void setBidAmount(int bidAmount) {
         this.bidAmount = bidAmount;
-    }
-
-    public String getItemName() {
-        return itemName;
-    }
-
-    public void setItemName(String itemName) {
-        this.itemName = itemName;
-    }
-
-    public int getInitialPrice() {
-        return initialPrice;
-    }
-
-    public void setInitialPrice(int initialPrice) {
-        this.initialPrice = initialPrice;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 }
