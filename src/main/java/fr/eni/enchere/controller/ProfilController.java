@@ -26,7 +26,7 @@ public class ProfilController {
     }
 
     @GetMapping("/profil")
-    public String displayProfil() {
+    public String displayProfil(@ModelAttribute("memberSession") User user) {
         return "profil/profil.html";
     }
 

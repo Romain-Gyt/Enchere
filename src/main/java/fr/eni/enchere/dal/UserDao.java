@@ -9,6 +9,7 @@ public interface UserDao {
     User read(String email);
     List<User> findAll();
     User update(User user);
+    void updateCredit(User user, int credit);
     void create(User user);
     void delete(long id);
 }

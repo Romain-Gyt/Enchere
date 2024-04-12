@@ -4,7 +4,8 @@
         th:replace="~{layouts/layout :: layout(
             pageContent=~{:: .main-content},
             pageTitle=~{:: title},
-            additionalCss=~{}
+            additionalCss=~{},
+            additionalJs=~{}
         )}"
 >
 <title th:text="#{view-bidDetails.title}"></title>
@@ -41,12 +42,19 @@
                 <p class="card-text">Vendeur : <span th:text="${user.pseudo}"></span></p>
                 <form th:action="@{/addBid}" method="post">
                     <label class="card-text">Ma proposition :
-                        <input type="number" name="bidAmount" th:min="${bid.bid_amount}" th:max="${user.credit}" th:value="${bid.bid_amount > user.credit ? user.credit : bid.bid_amount + 1}" oninput="this.value = Math.min(this.value, this.getAttribute('max'))"/>
+                        <input type="number" name="bidAmount"
+                               th:min="${bid.bid_amount + 1}"
+                               th:max="${memberSession.credit}"
+                               th:value="${bid.bid_amount > memberSession.credit ? memberSession.credit : bid.bid_amount + 1}"
+                               oninput="validateBid(this)"/>
                     </label>
                     <input type="hidden" id="itemId" name="itemId" th:value="${soldItem.itemId}" />
-                    <input type="hidden" id="userId" name="userId" th:value="${memberSession.idUser}" />
-                    <button type="submit" th:disabled="${user.credit &lt; bid.bid_amount} ? 'disabled' : null">Enchérir</button>
-                    <span th:if="${user.credit &lt; bid.bid_amount}">Crédit insuffisant</span>
+                    <th:block th:if="${bid.bid_amount > 0}">
+                        <input type="hidden" id="userId" name="userId" th:value="${user.idUser}" />
+                    </th:block>
+                    <input type="hidden" id="lastBidAmount" name="lastBidAmount" th:value="${bid.bid_amount}" />
+                    <button type="submit" id="submitBtn" th:disabled="${memberSession.credit &lt; bid.bid_amount} ? 'disabled' : null">Enchérir</button>
+                    <span th:if="${memberSession.credit &lt; bid.bid_amount}">Crédit insuffisant</span>
                 </form>
             </div>
         </div>
@@ -55,11 +63,17 @@
 
 </html>
 
-<!--                <div class="form-inline">-->
-<!--                    <div class="form-group mr-3">-->
-<!--                        <span th:text="${withdrawals.street}"></span><br>-->
-<!--                    </div>-->
-<!--                    <div class="form-group mr-3">-->
-<!--                        <span th:text="${withdrawals.postal_code + ' ' + withdrawals.city}"></span>-->
-<!--                    </div>-->
-<!--                </div>-->
+<script>
+    function validateBid(input) {
+        var submitBtn = document.getElementById('submitBtn');
+        var minValue = parseInt(input.min);
+        var maxValue = parseInt(input.max);
+        var bidValue = parseInt(input.value);
+
+        if (bidValue < minValue || bidValue > maxValue) {
+            submitBtn.disabled = true;
+        } else {
+            submitBtn.disabled = false;
+        }
+    }
+</script>

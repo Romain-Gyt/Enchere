@@ -11,7 +11,70 @@
     <title th:text="Accueil">Test</title>
 
     <main class="main-content">
-        <h1>Bienvenue sur la page d'accueil</h1>
-        <p>Ceci est un exemple de contenu pour la page d'accueil.</p>
+        <div class="container">
+            <h1 class="text-center">Liste des enchères</h1>
+
+            <form action="/" method="GET">
+                <div class="row my-3">
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" name="searchInput" placeholder="Recherche...">
+                    </div>
+                    <div class="col-md-6">
+                        <button type="submit" class="btn btn-primary float-right">Rechercher</button>
+                    </div>
+                </div>
+            </form>
+
+            <div class="row">
+                <form action="/" method="GET">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <select class="form-control" id="categorySelect" name="categoryId">
+                                <option value="">Catégories</option>
+                                <!-- Boucle pour afficher les libellés des catégories -->
+                                <option th:each="category : ${categories}" th:value="${category.categoryId}" th:text="${category.label}"></option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <button type="submit" class="btn btn-primary">Filtrer</button>
+                        </div>
+                    </div>
+                </form>
+
+
+            </div>
+
+            <div class="row auctions-container">
+                <div class="col-md-6" th:each="articles : ${articles}">
+                    <div class="card mb-3">
+                        <form id="hiddenForm" method="post" action="/showDetails">
+                            <input type="hidden" id="itemId" name="itemId" th:value="${auction.itemId}" />
+                            <input type="hidden" id="userId" name="userId" th:value="${auction.userId}" />
+                        </form>
+                        <div class="row no-gutters">
+                            <div class="col-md-4">
+                                <img src="/pictures/Enchere.jpg" class="card-img" alt="..." >
+                            </div>
+                            <div class="col-md-8">
+                                <div class="card-body">
+                                    <h5 class="card-title" th:text="${articles.itemName}"></h5>
+                                    <p class="card-text">Prix initial : <span th:text="${articles.initialPrice}"></span></p>
+                                    <p class="card-text">Date de début de l'enchère : <span th:text="${#dates.format(articles.startAuctionDate, 'dd/MM/yyyy')}"></span></p>
+                                    <p class="card-text">Date de fin de l'enchère : <span th:text="${#dates.format(articles.endAuctionDate, 'dd/MM/yyyy')}"></span></p>
+                                    <p class="card-text">Vendu par : <span th:text="${articles.username}"></span></p>
+                                    <p class="card-text">Catégorie : <span th:text="${articles.categoryId}"></span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
 </html>
+<script>
+    var divElement = document.getElementById('divBid');
+    divElement.addEventListener('click', function() {
+        document.getElementById('hiddenForm').submit();
+    });
+</script>

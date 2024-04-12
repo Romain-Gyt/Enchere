@@ -32,13 +32,18 @@ public class AppSecurityConfiguration  {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         http.authorizeHttpRequests(auth -> {
-            auth
-                    .requestMatchers("/").permitAll();
+            auth.requestMatchers("/").permitAll();
+            auth.requestMatchers("/css/*").permitAll();
+            auth.requestMatchers("/images/*").permitAll();
+            auth.requestMatchers("/js/*").permitAll();
+            auth.anyRequest().authenticated();
         });
+
+        http.csrf().disable();
 
         http.formLogin(form -> {
             form.loginPage("/login").permitAll();
-            form.defaultSuccessUrl("/");
+            form.defaultSuccessUrl("/session");
             form.failureUrl("/login?error=true");
         });
 

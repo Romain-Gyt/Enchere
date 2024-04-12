@@ -30,6 +30,11 @@ private static final String INSERT_USER = "INSERT INTO users (username, last_nam
 private static final String UPDATE_USER = "UPDATE users " +
                                                 "SET username = :username, last_name = :last_name, first_name = :first_name, email = :email, phone = :phone, street = :street, postal_code = :postal_code, city = :city, password = :password, credit = :credit, administrator = :administrator " +
                                                 "WHERE user_id = :id;";
+
+private static final String UPDATE_CREDIT_USER = "UPDATE users " +
+                                            "SET credit = :credit " +
+                                            "WHERE user_id = :id;";
+
 private static final String DELETE_USER = "DELETE FROM users WHERE user_id = :id;";
 
 private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -92,6 +97,14 @@ private JdbcTemplate jdbcTemplate;
         namedParameters.addValue("administrator", user.isAdmin());
         namedParameterJdbcTemplate.update(UPDATE_USER, namedParameters);
         return user;
+    }
+
+    @Override
+    public void updateCredit(User user, int credit){
+            MapSqlParameterSource namedParameters = new MapSqlParameterSource();
+            namedParameters.addValue("id", user.getIdUser());
+            namedParameters.addValue("credit", credit);
+            namedParameterJdbcTemplate.update(UPDATE_CREDIT_USER, namedParameters);
     }
 
     @Override
