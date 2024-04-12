@@ -4,6 +4,6 @@ import fr.eni.enchere.bo.Auction;
 import java.util.List;
 
 public interface AuctionDAO {
-    List<Auction> getAllAuctions();
+    List<Auction> getAuctionsByItemId(int itemId);
 }
 

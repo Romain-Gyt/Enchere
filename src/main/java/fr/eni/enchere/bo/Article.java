@@ -1,6 +1,7 @@
 package fr.eni.enchere.bo;
 
 import java.sql.Date;
+import java.util.List;
 
 public class Article {
     private int itemId;
@@ -13,6 +14,7 @@ public class Article {
     private int userId;
     private int categoryId;
     private String username;
+    private List<Auction> auctions;
 
     public int getItemId() {
         return itemId;
@@ -36,6 +38,14 @@ public class Article {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public List<Auction> getAuctions() {
+        return auctions;
+    }
+
+    public void setAuctions(List<Auction> auctions) {
+        this.auctions = auctions;
     }
 
     public Date getStartAuctionDate() {
@@ -93,5 +103,7 @@ public class Article {
     public void setUsername(String username) {
         this.username = username;
     }
+
+
 
 }

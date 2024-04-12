@@ -5,6 +5,7 @@ import fr.eni.enchere.bo.Article;
 import java.util.List;
 
 public interface ArticleService {
+    void setAuctions(Article article);
     List<Article> getAllArticles();
-    List<Article> getArticlesByCategory(long categoryId);
+    Article getArticleById(int itemId);
 }
