@@ -11,6 +11,10 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Implémentation du service utilisateur.
+ * Cette classe implémente les méthodes définies dans l'interface UserService.
+ */
 @Service
 public class UserServiceImpl implements UserService {
     /********** Declaration *********/
@@ -216,6 +220,16 @@ public class UserServiceImpl implements UserService {
     }
 
 
+/**
+ * Vérifie et met à jour les informations d'un utilisateur en fonction des informations fournies.
+ * Cette méthode vérifie également la validité des informations de l'utilisateur et du mot de passe.
+ *
+ * @param user L'utilisateur à vérifier et à mettre à jour.
+ * @param userSession L'utilisateur actuellement connecté.
+ * @param password Un Map contenant les informations de mot de passe fournies.
+ * @param registerException Une exception personnalisée pour gérer les erreurs d'enregistrement.
+ * @return L'utilisateur mis à jour si les informations fournies sont valides, sinon l'utilisateur original.
+ */
     private User checkObject(User user,
                              User userSession,
                              Map<String, String> password,
@@ -292,25 +306,13 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-//    private User setPassword(User user,
-//                             User userSession,
-//                             Map<String, String> password,
-//                             RegisterException registerException
-//    ) {
-//        boolean isValid = true;
-//        isValid &= isPasswordValid(password.get("currentPassword"), registerException);
-//        isValid &= isPasswordValid(password.get("newPassword"), registerException);
-//        isValid &= isPasswordValid(password.get("confirmPassword"), registerException);
-//        isValid &= checkPassword(password.get("currentPassword"), userSession.getPassword());
-//        isValid &= password.get("newPassword").equals(password.get("confirmPassword"));
-//        if(isValid){
-//            user.setPassword(encodePassword(password.get("newPassword")));
-//        } else{
-//            user.setPassword(userSession.getPassword());
-//        }
-//        return user;
-//    }
-
+    /**
+     * Vérifie si le mot de passe fourni correspond au mot de passe encodé stocké.
+     *
+     * @param password Le mot de passe en clair à vérifier.
+     * @param encodedPassword Le mot de passe encodé stocké à comparer.
+     * @return true si le mot de passe correspond au mot de passe encodé, false sinon.
+     */
     private boolean checkPassword(String password, String encodedPassword) {
         return passwordEncoder.matches(password, encodedPassword);
     }
