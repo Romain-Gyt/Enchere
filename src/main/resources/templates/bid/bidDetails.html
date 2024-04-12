@@ -20,7 +20,7 @@
                 <h5 class="card-title" th:text="${soldItem.itemName}"></h5>
                 <p class="card-text">Description : <span th:text="${soldItem.description}"></span></p>
                 <p class="card-text">Catégorie : <span th:text="${categorie}"></span></p>
-                <p class="card-text">Meilleur offre : <span th:text="${soldItem.salePrice}"></span></p>
+                <p class="card-text">Meilleur offre : <span th:text="${bid.bid_amount}"></span></p>
                 <p class="card-text">Mise à prix : <span th:text="${soldItem.initialPrice}"></span></p>
                 <p class="card-text">Fin de l'enchère : <span th:text="${#dates.format(soldItem.endAuctionDate, 'dd/MM/yyyy')}"></span></p>
                 <div class="row">
@@ -39,8 +39,15 @@
                     </div>
                 </div>
                 <p class="card-text">Vendeur : <span th:text="${user.pseudo}"></span></p>
-                <label class="card-text">Ma proposition : <input type="number" th:min="${soldItem.salePrice}" th:max="${user.credit}" th:value="${soldItem.salePrice}" oninput="this.value = Math.min(this.value, this.getAttribute('max'))"/> </label>
-                <button type="button">Enchérir</button>
+                <form th:action="@{/addBid}" method="post">
+                    <label class="card-text">Ma proposition :
+                        <input type="number" name="bidAmount" th:min="${bid.bid_amount}" th:max="${user.credit}" th:value="${bid.bid_amount > user.credit ? user.credit : bid.bid_amount + 1}" oninput="this.value = Math.min(this.value, this.getAttribute('max'))"/>
+                    </label>
+                    <input type="hidden" id="itemId" name="itemId" th:value="${soldItem.itemId}" />
+                    <input type="hidden" id="userId" name="userId" th:value="${memberSession.idUser}" />
+                    <button type="submit" th:disabled="${user.credit &lt; bid.bid_amount} ? 'disabled' : null">Enchérir</button>
+                    <span th:if="${user.credit &lt; bid.bid_amount}">Crédit insuffisant</span>
+                </form>
             </div>
         </div>
     </div>

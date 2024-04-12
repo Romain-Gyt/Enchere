@@ -18,7 +18,7 @@ public class SoldItemService {
     private JdbcTemplate jdbcTemplate; // Utilisation de JdbcTemplate pour exécuter des requêtes SQL
     @Autowired
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-    private static final String SELECT_BY_ID = "SELECT item_name, description, end_auction_date, initial_price, sale_price, user_id, category_id FROM sold_items WHERE item_id = :item_id";
+    private static final String SELECT_BY_ID = "SELECT item_id, item_name, description, end_auction_date, initial_price, sale_price, user_id, category_id FROM sold_items WHERE item_id = :item_id";
 
     public List<SoldItem> getSoldItemsEnCours() {
         String sql = "SELECT * FROM sold_items WHERE end_auction_date >= CURDATE()"; // Sélection des éléments de la base de données en cours
@@ -45,6 +45,7 @@ public class SoldItemService {
                 namedParameters,
                 (resultSet, rowNum) -> {
                     SoldItem item = new SoldItem();
+                    item.setItemId(resultSet.getInt("item_id"));
                     item.setItemName(resultSet.getString("item_name"));
                     item.setDescription(resultSet.getString("description"));
                     item.setEndAuctionDate(resultSet.getDate("end_auction_date"));

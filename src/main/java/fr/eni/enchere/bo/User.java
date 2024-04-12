@@ -7,7 +7,7 @@ import java.util.Objects;
 public class User {
     /******* Attributs *******/
 
-    private Long idUser;
+    private int idUser;
     private String pseudo;
     private String lastName;
     private String firstName;
@@ -29,7 +29,7 @@ public class User {
     public User() {
     }
 
-    public User(Long idUser,
+    public User(int idUser,
                 String pseudo,
                 String lastName,
                 String firstName,
@@ -58,11 +58,11 @@ public class User {
 
     /********** Accesseur *********/
 
-    public Long getIdUser() {
+    public int getIdUser() {
         return idUser;
     }
 
-    public void setIdUser(Long idUser) {
+    public void setIdUser(int idUser) {
         this.idUser = idUser;
     }
 

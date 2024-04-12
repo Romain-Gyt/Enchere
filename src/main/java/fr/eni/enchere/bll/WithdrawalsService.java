@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class WithdrawalsService {
-
     @Autowired
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private static final String SELECT_BY_ID = "SELECT street, postal_code, city FROM withdrawals WHERE item_id = :item_id";
@@ -33,4 +32,5 @@ public class WithdrawalsService {
             return null;
         }
     }
+
 }

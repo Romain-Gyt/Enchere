@@ -2,19 +2,18 @@ package fr.eni.enchere.bll.impl;
 
 import fr.eni.enchere.bll.ContextService;
 import fr.eni.enchere.bo.User;
-import fr.eni.enchere.dal.UsersDAO;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ContextServiceImpl implements ContextService {
-    private UsersDAO usersDAO;
+    private UserDAO userDAO;
 
-    public ContextServiceImpl(UsersDAO usersDAO) {
-        this.usersDAO = usersDAO;
+    public ContextServiceImpl(UserDAO userDAO) {
+        this.userDAO = userDAO;
     }
 
     @Override
     public User load(String username) {
-        return usersDAO.read(username);
+        return userDAO.read(username);
     }
 }

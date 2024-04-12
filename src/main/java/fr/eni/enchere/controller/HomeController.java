@@ -2,11 +2,15 @@ package fr.eni.enchere.controller;
 
 import fr.eni.enchere.bll.AuctionService;
 import fr.eni.enchere.bll.CategoryService;
+import fr.eni.enchere.bll.SoldItemService;
 import fr.eni.enchere.bo.Category;
+import fr.eni.enchere.bo.SoldItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 

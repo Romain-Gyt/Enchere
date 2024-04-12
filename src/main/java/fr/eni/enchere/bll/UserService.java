@@ -18,7 +18,6 @@ public class UserService {
     private static final String SELECT_BY_ID = "SELECT username, street, postal_code, city, credit FROM users WHERE user_id = :id";
 
     public User getUserById(int id) {
-        System.out.println(id);
         MapSqlParameterSource namedParameters = new MapSqlParameterSource();
         namedParameters.addValue("id", id);
         return namedParameterJdbcTemplate.queryForObject(SELECT_BY_ID,
