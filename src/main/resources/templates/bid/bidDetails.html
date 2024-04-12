@@ -23,6 +23,7 @@
                 <p class="card-text">Catégorie : <span th:text="${categorie}"></span></p>
                 <p class="card-text">Meilleur offre : <span th:text="${bid.bid_amount}"></span></p>
                 <p class="card-text">Mise à prix : <span th:text="${soldItem.initialPrice}"></span></p>
+                <p class="card-text">Début de l'enchère : <span th:text="${#dates.format(soldItem.startAuctionDate, 'dd/MM/yyyy')}"></span></p>
                 <p class="card-text">Fin de l'enchère : <span th:text="${#dates.format(soldItem.endAuctionDate, 'dd/MM/yyyy')}"></span></p>
                 <div class="row">
                     <div class="col-auto">
@@ -53,9 +54,14 @@
                         <input type="hidden" id="userId" name="userId" th:value="${user.idUser}" />
                     </th:block>
                     <input type="hidden" id="lastBidAmount" name="lastBidAmount" th:value="${bid.bid_amount}" />
-                    <button type="submit" id="submitBtn" th:disabled="${memberSession.credit &lt; bid.bid_amount} ? 'disabled' : null">Enchérir</button>
+                    <button type="submit" id="submitBtn"
+                            th:disabled="${soldItem.startAuctionDate.after(#dates.createNow()) or memberSession.credit &lt; bid.bid_amount}">
+                        Enchérir</button>
                     <span th:if="${memberSession.credit &lt; bid.bid_amount}">Crédit insuffisant</span>
                 </form>
+                <th:block th:if="${user.pseudo == memberSession.pseudo && soldItem.startAuctionDate.after(#dates.createNow())}">
+                    <button type="button">Modifier</button>
+                </th:block>
             </div>
         </div>
     </div>
