@@ -1,4 +1,4 @@
-package fr.eni.enchere.dal.impl;
+package fr.eni.enchere.dal.Impl;
 
 import fr.eni.enchere.bo.Article;
 import fr.eni.enchere.dal.ArticleDAO;
@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -19,7 +18,7 @@ public class ArticleDAOImpl implements ArticleDAO {
 
     @Override
     public List<Article> getAllArticles() {
-        String sql = "SELECT sold_items.*, users.username FROM sold_items " +
+        String sql = "SELECT sold_items.*, users.username FROM sold_items  " +
                 "INNER JOIN users ON sold_items.user_id = users.user_id " +
                 "WHERE sold_items.end_auction_date >= CURDATE()";
         return jdbcTemplate.query(sql, (rs, rowNum) -> mapArticle(rs));
