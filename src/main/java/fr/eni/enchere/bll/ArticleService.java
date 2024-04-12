@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface ArticleService {
     List<Article> getAllArticles();
-    List<Article> selectByCategory(int categoryId);
+    List<Article> getArticlesByCategory(long categoryId);
 }
