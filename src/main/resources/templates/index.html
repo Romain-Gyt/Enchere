@@ -46,7 +46,7 @@
         </div>
 
         <div class="row auctions-container">
-            <div class="col-md-6" th:each="articles : ${articles}">
+            <div class="col-md-6" th:each="article : ${articles}">
                 <div class="card mb-3  bg-dark ">
                     <div class="row no-gutters">
                         <div class="col-md-4">
@@ -54,12 +54,12 @@
                         </div>
                         <div class="col-md-8">
                             <div class="card-body">
-                                <h5 class="card-title text-white font-weight-bold" th:text="${articles.itemName}"></h5>
-                                <p class="card-text text-white">Prix initial : <span th:text="${articles.initialPrice}"></span></p>
-                                <p class="card-text text-white">Date de début de l'enchère : <span th:text="${#dates.format(articles.startAuctionDate, 'dd/MM/yyyy')}"></span></p>
-                                <p class="card-text text-white">Date de fin de l'enchère : <span th:text="${#dates.format(articles.endAuctionDate, 'dd/MM/yyyy')}"></span></p>
-<!--                                <p class="card-text text-white">Vendu par : <span th:text="${articles.username}"></span></p>-->
-<!--                                <p class="card-text text-white">Catégorie : <span th:text="${articles.categoryId}"></span></p>-->
+                                <h5 class="card-title text-white font-weight-bold" th:text="${article.itemName}"></h5>
+                                <p class="card-text text-white">Prix initial : <span th:text="${article.initialPrice}"></span></p>
+                                <p class="card-text text-white">Date de début de l'enchère : <span th:text="${#dates.format(article.startAuctionDate, 'dd/MM/yyyy')}"></span></p>
+                                <p class="card-text text-white">Date de fin de l'enchère : <span th:text="${#dates.format(article.endAuctionDate, 'dd/MM/yyyy')}"></span></p>
+                                <p class="card-text text-white">Vendu par : <span th:text="${article.user.getPseudo()}"></span></p>
+                                <p class="card-text text-white">Catégorie : <span th:text="${article.category.getLabel()}"></span></p>
                             </div>
                         </div>
                     </div>

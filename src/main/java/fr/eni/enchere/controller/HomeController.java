@@ -11,14 +11,21 @@ import java.util.List;
 @Controller
 public class HomeController {
 
-    @Autowired
+  /**************** Declaration **************/
     private ArticleService articleService;
 
+    /******** Constructor ********/
+    public HomeController(ArticleService articleService) {
+        this.articleService = articleService;
+    }
+
+
+    /******** Routes **********/
     @GetMapping("/")
     public String home(Model model) {
         List<Article> articles = articleService.getAllArticles();
         model.addAttribute("articles", articles);
-        return "index";
+        return "index.html";
     }
 
 }

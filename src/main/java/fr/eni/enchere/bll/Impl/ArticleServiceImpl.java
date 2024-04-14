@@ -23,7 +23,6 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public List<Article> getAllArticles() {
         List<Article> articles = articleDAO.getAllArticles();
-        System.out.println(articles);
         return articleDAO.getAllArticles();
 //        foreaxch (auction: auctions) {
 //            List<Auction> auctions = auctionDAO.getAllAuctions(articleId);

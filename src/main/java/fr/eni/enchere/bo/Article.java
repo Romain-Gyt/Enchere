@@ -3,8 +3,11 @@ package fr.eni.enchere.bo;
 import org.eclipse.angus.mail.imap.protocol.UIDSet;
 
 import java.sql.Date;
+import java.util.Objects;
 
 public class Article {
+
+    /******** Attributs ********/
     private int itemId;
     private String itemName;
     private String description;
@@ -17,9 +20,12 @@ public class Article {
     private User user;
 
 
+    /******** Constructor ********/
     public Article() {
     }
 
+
+    /******** Methods ********/
     public int getItemId() {
         return itemId;
     }
@@ -100,4 +106,34 @@ public class Article {
         this.user = user;
     }
 
+    /******** toString ********/
+    @Override
+    public String toString() {
+        return "Article{" +
+                "itemId=" + itemId +
+                ", itemName='" + itemName + '\'' +
+                ", description='" + description + '\'' +
+                ", startAuctionDate=" + startAuctionDate +
+                ", endAuctionDate=" + endAuctionDate +
+                ", initialPrice=" + initialPrice +
+                ", salePrice=" + salePrice +
+                ", userId=" + userId +
+                ", category=" + category +
+                ", user=" + user +
+                '}';
+    }
+
+    /******** equals ********/
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Article article = (Article) o;
+        return itemId == article.itemId && initialPrice == article.initialPrice && userId == article.userId && Objects.equals(itemName, article.itemName) && Objects.equals(description, article.description) && Objects.equals(startAuctionDate, article.startAuctionDate) && Objects.equals(endAuctionDate, article.endAuctionDate) && Objects.equals(salePrice, article.salePrice) && Objects.equals(category, article.category) && Objects.equals(user, article.user);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(itemId, itemName, description, startAuctionDate, endAuctionDate, initialPrice, salePrice, userId, category, user);
+    }
 }
