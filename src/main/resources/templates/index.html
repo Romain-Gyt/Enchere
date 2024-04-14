@@ -27,13 +27,13 @@
         </form>
 
         <div class="row">
-            <form action="/" method="GET">
+            <form action="/category" method="GET">
                 <div class="row">
                     <div class="col-md-6">
-                        <select class="form-control" id="categorySelect" name="categoryId">
-                            <option value="">Catégories</option>
-                            <!-- Boucle pour afficher les libellés des catégories -->
-<!--                            <option th:each="category : ${categories}" th:value="${category.categoryId}" th:text="${category.label}"></option>-->
+                        <select class="form-control" id="categorySelect" name="category_id">
+                            <option value=""  selected>---- Catégories ----</option>
+<!--                             Boucle pour afficher les libellés des catégories -->
+                            <option th:each="category : ${categories}"  th:value="${category.categoryId}" th:text="${category.label}"></option>
                         </select>
                     </div>
                     <div class="col-md-6">
@@ -54,7 +54,7 @@
                         </div>
                         <div class="col-md-8">
                             <div class="card-body">
-                                <h5 class="card-title text-white font-weight-bold" th:text="${article.itemName}"></h5>
+                                <a th:if="${#authorization.expression('isAuthenticated()')}" th:href="@{/}"><h5 class="card-title text-white font-weight-bold" th:text="${article.itemName}"></h5></a>
                                 <p class="card-text text-white">Prix initial : <span th:text="${article.initialPrice}"></span></p>
                                 <p class="card-text text-white">Date de début de l'enchère : <span th:text="${#dates.format(article.startAuctionDate, 'dd/MM/yyyy')}"></span></p>
                                 <p class="card-text text-white">Date de fin de l'enchère : <span th:text="${#dates.format(article.endAuctionDate, 'dd/MM/yyyy')}"></span></p>

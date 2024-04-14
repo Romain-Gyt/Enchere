@@ -10,10 +10,14 @@ import java.util.List;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
+    /******** Declaration ********/
 
-    @Autowired
     private CategoryDAO categoryDAO;
 
+    /********* CONSTRUCTOR ********/
+    public CategoryServiceImpl(CategoryDAO categoryDAO){
+        this.categoryDAO = categoryDAO;
+    }
     @Override
     public List<Category> getAllCategories() {
         return categoryDAO.getAllCategories();

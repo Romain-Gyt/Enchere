@@ -24,20 +24,7 @@ public class ArticleServiceImpl implements ArticleService {
     public List<Article> getAllArticles() {
         List<Article> articles = articleDAO.getAllArticles();
         return articleDAO.getAllArticles();
-//        foreaxch (auction: auctions) {
-//            List<Auction> auctions = auctionDAO.getAllAuctions(articleId);
-//            article.setAuctions(auctions);
-//        }
     }
-//
-//    getArticleById(int articleId){
-//        Article article = articleDAO.getArticlesByCategory(articleId);
-//        List<Auction> auctions = auctionDAO.getAllAuctions(articleId);
-//        article.setAuctions(auctions);
-//
-//
-//        return article;
-//    }
 
     @Override
     public List<Article> getArticlesByCategory(long categoryId) {
