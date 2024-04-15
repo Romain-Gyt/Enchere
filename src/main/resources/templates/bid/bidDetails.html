@@ -21,7 +21,7 @@
                 <h5 class="card-title" th:text="${article.itemName}"></h5>
                 <p class="card-text">Description : <span th:text="${article.description}"></span></p>
                 <p class="card-text">Catégorie : <span th:text="${article.category.label}"></span></p>
-                <p class="card-text">Meilleur offre : <span th:text="${bid.bid_amount}"></span></p>
+                <p class="card-text">Meilleur offre : <span th:text="${bid.bid_amount} != 0 ? ${bid.bid_amount} + ' par ' + ${user.pseudo} : ${bid.bid_amount}"></span></p>
                 <p class="card-text">Mise à prix : <span th:text="${article.initialPrice}"></span></p>
                 <p class="card-text">Début de l'enchère : <span th:text="${#dates.format(article.startAuctionDate, 'dd/MM/yyyy')}"></span></p>
                 <p class="card-text">Fin de l'enchère : <span th:text="${#dates.format(article.endAuctionDate, 'dd/MM/yyyy')}"></span></p>
@@ -44,14 +44,14 @@
                 <form th:action="@{/addBid}" method="post">
                     <label class="card-text">Ma proposition :
                         <input type="number" name="bidAmount"
-                               th:min="${bid.bid_amount + 1}"
+                               th:min="${bid.bid_amount > 0 ? bid.bid_amount + 1 : article.initialPrice}"
                                th:max="${memberSession.credit}"
-                               th:value="${bid.bid_amount > memberSession.credit ? memberSession.credit : bid.bid_amount + 1}"
+                               th:value="${bid.bid_amount > 0 ? (bid.bid_amount + 1 < memberSession.credit ? bid.bid_amount + 1 : memberSession.credit) : article.initialPrice}"
                                oninput="validateBid(this)"/>
                     </label>
                     <input type="hidden" id="itemId" name="itemId" th:value="${article.itemId}" />
                     <th:block th:if="${bid.bid_amount > 0}">
-                        <input type="hidden" id="userId" name="userId" th:value="${article.user.idUser}" />
+                        <input type="hidden" id="userId" name="userId" th:value="${bid.user_id}" />
                     </th:block>
                     <input type="hidden" id="lastBidAmount" name="lastBidAmount" th:value="${bid.bid_amount}" />
                     <button type="submit" id="submitBtn"
@@ -82,4 +82,26 @@
             submitBtn.disabled = false;
         }
     }
+
+    window.onload = function() {
+        validateBid(document.querySelector('input[name=bidAmount]'));
+    };
+
+    // function validateBid(input) {
+    //     var submitBtn = document.getElementById('submitBtn');
+    //     var minValue = parseInt(input.min);
+    //     var maxValue = parseInt(input.max);
+    //     var bidValue = parseInt(input.value);
+    //
+    //     if (bidValue <= minValue || bidValue > maxValue) {
+    //         submitBtn.disabled = true;
+    //     } else {
+    //         if (bidValue <= bid.bid_amount || bidValue > memberSession.credit) {
+    //             submitBtn.disabled = true;
+    //         } else {
+    //             submitBtn.disabled = false;
+    //         }
+    //     }
+    // }
+
 </script>

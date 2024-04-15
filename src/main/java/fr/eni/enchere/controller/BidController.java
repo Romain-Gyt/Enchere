@@ -32,7 +32,9 @@ public class BidController {
         Bid bid = bidService.getBidById(itemId);
 
         if (bid != null) {
+            User user = userService.loadUserById(bid.getUser_id());
             model.addAttribute("bid", bid);
+            model.addAttribute("user", user);
         } else {
             Bid bidAmount = new Bid();
             bidAmount.setBid_amount(0);
@@ -48,17 +50,19 @@ public class BidController {
                          @RequestParam("itemId") int itemId,
                          @RequestParam(value = "userId", required = false) Integer userId,
                          @RequestParam("lastBidAmount") int lastBidAmount,
-                         @ModelAttribute("memberSession") User userSession) {
-        bidService.insertBidAmountById(userSession.getIdUser(), itemId, bidAmount);
+                         @ModelAttribute("memberSession") User memberSession) {
+        bidService.insertBidAmountById(memberSession.getIdUser(), itemId, bidAmount);
+
+        User userSession = userService.loadUserById(memberSession.getIdUser());
+
+        int newCreditUser = userSession.getCredit() - bidAmount;
+        userService.updateUserCredit(userSession, newCreditUser);
+
         if(userId != null){
-            System.out.println("user davant");
             User user = userService.loadUserById(userId);
             int returnCreditLastUser = user.getCredit() + lastBidAmount;
             userService.updateUserCredit(user, returnCreditLastUser);
         }
-
-        int newCreditUser = userSession.getCredit() - bidAmount;
-        userService.updateUserCredit(userSession, newCreditUser);
 
         return "index";
     }

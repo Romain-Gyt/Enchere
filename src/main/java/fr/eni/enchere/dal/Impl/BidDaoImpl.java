@@ -13,7 +13,7 @@ import java.util.Date;
 public class BidDaoImpl implements BidDao {
 
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-    private static final String SELECT_BY_ID = "SELECT bid_amount FROM bids WHERE item_id = :item_id ORDER BY bid_amount DESC LIMIT 1;";
+    private static final String SELECT_BY_ID = "SELECT user_id, bid_amount FROM bids WHERE item_id = :item_id ORDER BY bid_amount DESC LIMIT 1;";
     private static final String INSERT_BID_AMOUNT_BY_ID = "INSERT INTO bids (user_id, item_id, bid_date, bid_amount) VALUES (:user_id, :item_id, :bid_date, :bid_amount) ON DUPLICATE KEY UPDATE bid_date = :bid_date, bid_amount = :bid_amount;";
 
     public BidDaoImpl(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
@@ -29,6 +29,7 @@ public class BidDaoImpl implements BidDao {
                     namedParameters,
                     (resultSet, rowNum) -> {
                         Bid bid = new Bid();
+                        bid.setUser_id(resultSet.getInt("user_id"));
                         bid.setBid_amount(resultSet.getInt("bid_amount"));
                         return bid;
                     }
