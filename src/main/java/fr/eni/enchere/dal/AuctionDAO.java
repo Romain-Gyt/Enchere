@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface AuctionDAO {
     List<Auction> getAllAuctions();
+    Auction read(long id);
+    void create(Long userId, int id, int bid_amount);
 }

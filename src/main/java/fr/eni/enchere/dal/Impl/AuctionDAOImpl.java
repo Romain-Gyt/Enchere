@@ -3,15 +3,28 @@ package fr.eni.enchere.dal.Impl;
 import fr.eni.enchere.bo.Auction;
 import fr.eni.enchere.dal.AuctionDAO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 @Repository
 public class AuctionDAOImpl implements AuctionDAO {
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
+
+    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+    private static final String SELECT_BY_ID = "SELECT user_id, bid_amount FROM bids WHERE item_id = :item_id ORDER BY bid_amount DESC LIMIT 1;";
+    private static final String INSERT_BID_AMOUNT_BY_ID = "INSERT INTO bids (user_id, item_id, bid_date, bid_amount) VALUES (:user_id, :item_id, :bid_date, :bid_amount) ON DUPLICATE KEY UPDATE bid_date = :bid_date, bid_amount = :bid_amount;";
+
+    public AuctionDAOImpl(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
+        this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
+    }
 
     @Override
     public List<Auction> getAllAuctions() {
@@ -29,5 +42,34 @@ public class AuctionDAOImpl implements AuctionDAO {
             auction.setBidAmount(rs.getInt("bid_amount"));
             return auction;
         });
+    }
+
+    @Override
+    public Auction read(long id) {
+        MapSqlParameterSource namedParameters = new MapSqlParameterSource();
+        namedParameters.addValue("item_id", id);
+        try{
+            return namedParameterJdbcTemplate.queryForObject(SELECT_BY_ID,
+                    namedParameters,
+                    (resultSet, rowNum) -> {
+                        Auction auction = new Auction();
+                        auction.setUserId(resultSet.getInt("user_id"));
+                        auction.setBidAmount(resultSet.getInt("bid_amount"));
+                        return auction;
+                    }
+            );
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
+
+    @Override
+    public void create(Long userId, int id, int bid_amount) {
+        MapSqlParameterSource namedParameters = new MapSqlParameterSource();
+        namedParameters.addValue("bid_amount", bid_amount);
+        namedParameters.addValue("item_id", id);
+        namedParameters.addValue("user_id", userId);
+        namedParameters.addValue("bid_date", new Date());
+        namedParameterJdbcTemplate.update(INSERT_BID_AMOUNT_BY_ID, namedParameters);
     }
 }

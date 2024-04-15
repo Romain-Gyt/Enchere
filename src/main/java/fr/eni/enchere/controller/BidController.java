@@ -12,33 +12,33 @@ public class BidController {
 
     private WithdrawalsService withdrawalsService;
     private UserService userService;
-    private BidService bidService;
+    private AuctionService auctionService;
     private ArticleService articleService;
 
     public BidController(ArticleService articleService,
                          WithdrawalsService withdrawalsService,
                          UserService userService,
-                         BidService bidService) {
+                         AuctionService auctionService) {
         this.articleService = articleService;
         this.withdrawalsService = withdrawalsService;
         this.userService = userService;
-        this.bidService = bidService;
+        this.auctionService = auctionService;
     }
 
     @PostMapping("/showDetails")
-    public String showDetails(@RequestParam("itemId") int itemId, @ModelAttribute("memberSession") User userSession, Model model) {
+    public String showDetails(@RequestParam("itemId") int itemId, Model model) {
         Article article = articleService.getArticleById(itemId);
         Withdrawals withdrawals = withdrawalsService.getWithdrawalsById(itemId);
-        Bid bid = bidService.getBidById(itemId);
+        Auction auction = auctionService.getAuctionById(itemId);
 
-        if (bid != null) {
-            User user = userService.loadUserById(bid.getUser_id());
-            model.addAttribute("bid", bid);
+        if (auction != null) {
+            User user = userService.loadUserById(auction.getUserId());
+            model.addAttribute("auction", auction);
             model.addAttribute("user", user);
         } else {
-            Bid bidAmount = new Bid();
-            bidAmount.setBid_amount(0);
-            model.addAttribute("bid", bidAmount);
+            Auction bidAmount = new Auction();
+            bidAmount.setBidAmount(0);
+            model.addAttribute("auction", bidAmount);
         }
         model.addAttribute("article", article);
         model.addAttribute("withdrawals", withdrawals);
@@ -51,7 +51,7 @@ public class BidController {
                          @RequestParam(value = "userId", required = false) Integer userId,
                          @RequestParam("lastBidAmount") int lastBidAmount,
                          @ModelAttribute("memberSession") User memberSession) {
-        bidService.insertBidAmountById(memberSession.getIdUser(), itemId, bidAmount);
+        auctionService.insertBidAmountById(memberSession.getIdUser(), itemId, bidAmount);
 
         User userSession = userService.loadUserById(memberSession.getIdUser());
 

@@ -17,4 +17,14 @@ public class AuctionServiceImpl implements AuctionService {
     public List<Auction> getAllAuctions() {
         return auctionDAO.getAllAuctions();
     }
+
+    @Override
+    public Auction getAuctionById(long id) {
+        return auctionDAO.read(id);
+    }
+
+    @Override
+    public void insertBidAmountById(Long userId, int id, int bid_amount) {
+        auctionDAO.create(userId, id, bid_amount);
+    }
 }
