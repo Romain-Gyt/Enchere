@@ -18,13 +18,13 @@
         </div>
         <div class="col-md-8">
             <div class="card-body">
-                <h5 class="card-title" th:text="${soldItem.itemName}"></h5>
-                <p class="card-text">Description : <span th:text="${soldItem.description}"></span></p>
-                <p class="card-text">Catégorie : <span th:text="${categorie}"></span></p>
+                <h5 class="card-title" th:text="${article.itemName}"></h5>
+                <p class="card-text">Description : <span th:text="${article.description}"></span></p>
+                <p class="card-text">Catégorie : <span th:text="${article.category.label}"></span></p>
                 <p class="card-text">Meilleur offre : <span th:text="${bid.bid_amount}"></span></p>
-                <p class="card-text">Mise à prix : <span th:text="${soldItem.initialPrice}"></span></p>
-                <p class="card-text">Début de l'enchère : <span th:text="${#dates.format(soldItem.startAuctionDate, 'dd/MM/yyyy')}"></span></p>
-                <p class="card-text">Fin de l'enchère : <span th:text="${#dates.format(soldItem.endAuctionDate, 'dd/MM/yyyy')}"></span></p>
+                <p class="card-text">Mise à prix : <span th:text="${article.initialPrice}"></span></p>
+                <p class="card-text">Début de l'enchère : <span th:text="${#dates.format(article.startAuctionDate, 'dd/MM/yyyy')}"></span></p>
+                <p class="card-text">Fin de l'enchère : <span th:text="${#dates.format(article.endAuctionDate, 'dd/MM/yyyy')}"></span></p>
                 <div class="row">
                     <div class="col-auto">
                         <p class="card-text mr-3">Retrait :</p>
@@ -40,7 +40,7 @@
                         </div>
                     </div>
                 </div>
-                <p class="card-text">Vendeur : <span th:text="${user.pseudo}"></span></p>
+                <p class="card-text">Vendeur : <span th:text="${article.user.pseudo}"></span></p>
                 <form th:action="@{/addBid}" method="post">
                     <label class="card-text">Ma proposition :
                         <input type="number" name="bidAmount"
@@ -49,17 +49,17 @@
                                th:value="${bid.bid_amount > memberSession.credit ? memberSession.credit : bid.bid_amount + 1}"
                                oninput="validateBid(this)"/>
                     </label>
-                    <input type="hidden" id="itemId" name="itemId" th:value="${soldItem.itemId}" />
+                    <input type="hidden" id="itemId" name="itemId" th:value="${article.itemId}" />
                     <th:block th:if="${bid.bid_amount > 0}">
-                        <input type="hidden" id="userId" name="userId" th:value="${user.idUser}" />
+                        <input type="hidden" id="userId" name="userId" th:value="${article.user.idUser}" />
                     </th:block>
                     <input type="hidden" id="lastBidAmount" name="lastBidAmount" th:value="${bid.bid_amount}" />
                     <button type="submit" id="submitBtn"
-                            th:disabled="${soldItem.startAuctionDate.after(#dates.createNow()) or memberSession.credit &lt; bid.bid_amount}">
+                            th:disabled="${article.startAuctionDate.after(#dates.createNow()) or memberSession.credit &lt; bid.bid_amount}">
                         Enchérir</button>
                     <span th:if="${memberSession.credit &lt; bid.bid_amount}">Crédit insuffisant</span>
                 </form>
-                <th:block th:if="${user.pseudo == memberSession.pseudo && soldItem.startAuctionDate.after(#dates.createNow())}">
+                <th:block th:if="${article.user.pseudo == memberSession.pseudo && article.startAuctionDate.after(#dates.createNow())}">
                     <button type="button">Modifier</button>
                 </th:block>
             </div>

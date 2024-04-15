@@ -1,10 +1,7 @@
 package fr.eni.enchere.controller;
 
 import fr.eni.enchere.bll.*;
-import fr.eni.enchere.bo.Bid;
-import fr.eni.enchere.bo.SoldItem;
-import fr.eni.enchere.bo.User;
-import fr.eni.enchere.bo.Withdrawals;
+import fr.eni.enchere.bo.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -13,28 +10,24 @@ import org.springframework.web.bind.annotation.*;
 @SessionAttributes({"memberSession"})
 public class BidController {
 
-    private CategoryService categoryService;
-    private SoldItemService soldItemService;
     private WithdrawalsService withdrawalsService;
     private UserService userService;
     private BidService bidService;
+    private ArticleService articleService;
 
-    public BidController(CategoryService categoryService,
-                         SoldItemService soldItemService,
+    public BidController(ArticleService articleService,
                          WithdrawalsService withdrawalsService,
                          UserService userService,
                          BidService bidService) {
-        this.categoryService = categoryService;
-        this.soldItemService = soldItemService;
+        this.articleService = articleService;
         this.withdrawalsService = withdrawalsService;
         this.userService = userService;
         this.bidService = bidService;
     }
 
     @PostMapping("/showDetails")
-    public String showDetails(@RequestParam("itemId") int itemId, @RequestParam("userId") int userId, @ModelAttribute("memberSession") User userSession, Model model) {
-        SoldItem soldItem = soldItemService.getSoldItemById(itemId);
-        String categorie = categoryService.getCategorieById(soldItem.getCategoryId());
+    public String showDetails(@RequestParam("itemId") int itemId, @ModelAttribute("memberSession") User userSession, Model model) {
+        Article article = articleService.getArticleById(itemId);
         Withdrawals withdrawals = withdrawalsService.getWithdrawalsById(itemId);
         Bid bid = bidService.getBidById(itemId);
 
@@ -45,11 +38,8 @@ public class BidController {
             bidAmount.setBid_amount(0);
             model.addAttribute("bid", bidAmount);
         }
-        User user = userService.loadUserById(userId);
-        model.addAttribute("soldItem", soldItem);
-        model.addAttribute("categorie", categorie);
+        model.addAttribute("article", article);
         model.addAttribute("withdrawals", withdrawals);
-        model.addAttribute("user", user);
         return "bid/bidDetails";
     }
 
@@ -58,10 +48,8 @@ public class BidController {
                          @RequestParam("itemId") int itemId,
                          @RequestParam(value = "userId", required = false) Integer userId,
                          @RequestParam("lastBidAmount") int lastBidAmount,
-                         @ModelAttribute("memberSession") User userSession,
-                         Model model) {
+                         @ModelAttribute("memberSession") User userSession) {
         bidService.insertBidAmountById(userSession.getIdUser(), itemId, bidAmount);
-        System.out.println(userId);
         if(userId != null){
             System.out.println("user davant");
             User user = userService.loadUserById(userId);

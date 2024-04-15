@@ -1,14 +1,14 @@
 package fr.eni.enchere.bo;
 
 public class Category {
-    private int categoryId;
+    private Long categoryId;
     private String label;
 
-    public int getCategoryId() {
+    public Long getCategoryId() {
         return categoryId;
     }
 
-    public void setCategoryId(int categoryId) {
+    public void setCategoryId(Long categoryId) {
         this.categoryId = categoryId;
     }
 
