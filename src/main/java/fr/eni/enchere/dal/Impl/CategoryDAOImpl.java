@@ -1,4 +1,4 @@
-package fr.eni.enchere.dal.impl;
+package fr.eni.enchere.dal.Impl;
 
 import fr.eni.enchere.bo.Category;
 import fr.eni.enchere.dal.CategoryDAO;

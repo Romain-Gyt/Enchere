@@ -1,4 +1,4 @@
-package fr.eni.enchere.bll.impl;
+package fr.eni.enchere.bll.Impl;
 
 import fr.eni.enchere.bll.CategoryService;
 import fr.eni.enchere.bo.Article;

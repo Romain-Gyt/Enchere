@@ -50,6 +50,7 @@ public class ArticleDAOImpl implements ArticleDAO {
         " FROM sold_items se\n" +
         " INNER JOIN categories cat ON se.category_id = cat.category_id\n" +
         " INNER JOIN users u ON se.user_id = u.user_id\n" +
+        " INNER JOIN bids b ON se.item_id = b.item_id" +
         " WHERE end_auction_date > CURDATE()\n" +
         " AND (se.item_name LIKE :item_name OR :item_name IS NULL)\n" +
         " AND se.user_id = :user_id\n" +
