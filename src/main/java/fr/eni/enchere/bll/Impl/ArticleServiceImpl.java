@@ -4,10 +4,9 @@ import fr.eni.enchere.bll.ArticleService;
 import fr.eni.enchere.bo.Article;
 import fr.eni.enchere.bo.Auction;
 import fr.eni.enchere.dal.ArticleDAO;
+import fr.eni.enchere.dal.AuctionDAO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
-
 
 import java.util.List;
 
@@ -18,30 +17,35 @@ public class ArticleServiceImpl implements ArticleService {
     private ArticleDAO articleDAO;
 
     @Autowired
-    private JdbcTemplate jdbcTemplate;
+    private AuctionDAO auctionDAO;
+
+    @Override
+    public void setAuctions(Article article) {
+        List<Auction> auctions = auctionDAO.getAuctionsByItemId(article.getItemId());
+        article.setAuctions(auctions);
+    }
 
     @Override
     public List<Article> getAllArticles() {
-        return articleDAO.getAllArticles();
-//        foreaxch (auction: auctions) {
-//            List<Auction> auctions = auctionDAO.getAllAuctions(articleId);
-//            article.setAuctions(auctions);
-//        }
+        List<Article> articles = articleDAO.getAllArticles();
+        for (Article article : articles) {
+            List<Auction> auctions = auctionDAO.getAuctionsByItemId(article.getItemId());
+            article.setAuctions(auctions);
+        }
+        return articles;
     }
-//
-//    getArticleById(int articleId){
-//        Article article = articleDAO.getArticlesByCategory(articleId);
-//        List<Auction> auctions = auctionDAO.getAllAuctions(articleId);
-//        article.setAuctions(auctions);
-//
-//
-//        return article;
-//    }
+
+    @Override
+    public Article getArticleById(int itemId) {
+        Article article = articleDAO.getArticleById(itemId);
+        List<Auction> auctions = auctionDAO.getAuctionsByItemId(itemId);
+        article.setAuctions(auctions);
+        return article;
+    }
 
     @Override
     public List<Article> getArticlesByCategory(long categoryId) {
         return articleDAO.getArticlesByCategory(categoryId);
-
     }
 
 }

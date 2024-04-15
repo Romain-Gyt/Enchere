@@ -8,4 +8,6 @@ public interface ArticleService {
     void setAuctions(Article article);
     List<Article> getAllArticles();
     Article getArticleById(int itemId);
+
+    List<Article> getArticlesByCategory(long categoryId);
 }

@@ -14,8 +14,21 @@ public class AuctionDAOImpl implements AuctionDAO {
     private JdbcTemplate jdbcTemplate;
 
     @Override
+    public List<Auction> getAuctionsByItemId(int itemId) {
+        String sql = "SELECT * FROM bids WHERE item_id = ?";
+        return jdbcTemplate.query(sql, new Object[]{itemId}, (rs, rowNum) -> {
+            Auction auction = new Auction();
+            auction.setUserId(rs.getInt("user_id"));
+            auction.setItemId(rs.getInt("item_id"));
+            auction.setBidDate(rs.getDate("bid_date"));
+            auction.setBidAmount(rs.getInt("bid_amount"));
+            return auction;
+        });
+    }
+
+    @Override
     public List<Auction> getAllAuctions() {
-        String sql = "SELECT *, IFNULL((SELECT bid_amount FROM bids WHERE item_id = sold_items.item_id ORDER BY bid_amount DESC LIMIT 1), initial_price) AS bid_amount FROM sold_items";
+        String sql = "SELECT * FROM auctions";
         return jdbcTemplate.query(sql, (rs, rowNum) -> {
             Auction auction = new Auction();
             auction.setUserId(rs.getInt("user_id"));
@@ -25,4 +38,5 @@ public class AuctionDAOImpl implements AuctionDAO {
             return auction;
         });
     }
+
 }
