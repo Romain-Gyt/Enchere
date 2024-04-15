@@ -6,8 +6,7 @@ import fr.eni.enchere.bo.User;
 import fr.eni.enchere.dal.ArticleDAO;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class ArticleServiceImpl implements ArticleService {
@@ -45,17 +44,19 @@ public class ArticleServiceImpl implements ArticleService {
     public List<Article> getArticlesByBuying(User userSession, String nameArticle, Long categoryId, boolean openAuction, boolean currentAuction, boolean closedAuction) {
        nameArticle = checkNameArticle(nameArticle);
        categoryId = checkCategoryId(categoryId);
+       List<Article>articles = new ArrayList<>();
        if(openAuction){
-           return articleDAO.getArticlesByOpenedBuying();
+           articles.addAll(articleDAO.getArticlesByOpenedBuying()) ;
        }
        if(currentAuction){
-           return articleDAO.getArticlesByCurrentBuying(nameArticle, categoryId, userSession.getIdUser());
+           articles.addAll(articleDAO.getArticlesByCurrentBuying(nameArticle, categoryId, userSession.getIdUser()));
        }
        if(closedAuction){
-              return articleDAO.getArticlesByClosedBuying(nameArticle, categoryId, userSession.getIdUser());
+              articles.addAll(articleDAO.getArticlesByClosedBuying(nameArticle, categoryId, userSession.getIdUser()));
 
        }
-        return null;
+        articles = removeDuplicates(articles);
+        return articles;
     }
 
     public List<Article> getArticlesBySelling(User userSession, String nameArticle, Long categoryId, boolean currentSelling, boolean nonStartedSelling, boolean closedSelling) {
@@ -79,5 +80,12 @@ public class ArticleServiceImpl implements ArticleService {
         return categoryId;
     }
 
+    public List<Article> removeDuplicates(List<Article> articles) {
+        Map<Integer, Article> uniqueArticles = new LinkedHashMap<>();
+        for (Article article : articles) {
+            uniqueArticles.put(article.getItemId(), article);
+        }
+        return new ArrayList<>(uniqueArticles.values());
+    }
 
 }
