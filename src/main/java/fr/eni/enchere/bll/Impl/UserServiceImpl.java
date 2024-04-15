@@ -39,7 +39,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User loadUserByPseudo(String pseudo) {
-        System.out.println("test user");
         return userDao.read(pseudo);
     }
 

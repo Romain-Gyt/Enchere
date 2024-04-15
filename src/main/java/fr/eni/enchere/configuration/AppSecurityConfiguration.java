@@ -49,10 +49,12 @@ public class AppSecurityConfiguration  {
                     .requestMatchers(HttpMethod.POST,"/register").permitAll()
                     .requestMatchers(HttpMethod.GET,"/profil").authenticated()
                     .requestMatchers(HttpMethod.POST,"/profil").authenticated()
+                    .requestMatchers(HttpMethod.GET,"/profil/{id}").authenticated()
                     .requestMatchers(HttpMethod.GET,"/profil/details").authenticated()
                     .requestMatchers(HttpMethod.POST,"/profil/details").authenticated()
-                    .requestMatchers("/profil").authenticated()
-                    .requestMatchers(HttpMethod.GET,"/profil/delete").authenticated();
+                    .requestMatchers(HttpMethod.GET,"/profil/delete").authenticated()
+                    .requestMatchers(HttpMethod.GET,"/category").authenticated();
+
 
             auth.requestMatchers("/").permitAll();
             auth.requestMatchers("/css/*").permitAll();

@@ -10,6 +10,27 @@ footer{
     right: 0;
 }
 
+.searchbar{
+    margin: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.searchbar input, .searchbar select{
+   margin: 5px;
+}
+
+.filter-container{
+    display: flex;
+    flex-direction: row;
+}
+
+.filter-buying,.filter-selling{
+    margin: 10px;
+    flex-direction: column;
+}
+
 .card-img{
     margin: 10px 0 0 10px;
 }

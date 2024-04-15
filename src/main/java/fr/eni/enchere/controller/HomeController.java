@@ -4,14 +4,18 @@ import fr.eni.enchere.bll.ArticleService;
 import fr.eni.enchere.bll.CategoryService;
 import fr.eni.enchere.bo.Article;
 import fr.eni.enchere.bo.Category;
-import org.springframework.beans.factory.annotation.Autowired;
+import fr.eni.enchere.bo.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import java.util.List;
 
 @Controller
+@SessionAttributes({"memberSession"})
 public class HomeController {
 
   /**************** Declaration **************/
@@ -55,6 +59,41 @@ public class HomeController {
         System.out.println(articles);
 
         return "index.html";
+    }
+
+    @GetMapping("/search")
+    public String filterSearch(
+            @ModelAttribute("memberSession") User userSession,
+            @RequestParam(value="searchInput", required = false,defaultValue = "false") String searchInput,
+            @RequestParam(value="category_id", required = false,defaultValue = "false") String category_id,
+            @RequestParam(value="buying", required = false,defaultValue = "false") String buying,
+            @RequestParam(value="selling", required = false,defaultValue = "false") String selling,
+            @RequestParam(value="open_auction", required = false,defaultValue = "false") String openAuction,
+            @RequestParam(value="won_auction", required = false,defaultValue = "false") String closedAuction,
+            @RequestParam(value="current_auction", required = false,defaultValue = "false") String currentAuction,
+            @RequestParam(value="current_selling", required = false,defaultValue = "false") String currentSelling,
+            @RequestParam(value="non_started_selling", required = false,defaultValue = "false") String non_started_selling,
+            @RequestParam(value="finished_selling", required = false,defaultValue = "false") String finished_selling,
+            Model model
+
+    ) {
+        List<Article> articles = null;
+        System.out.println("buying " + buying);
+        if(buying.toLowerCase().equals("true") ) {
+           articles = articleService.getArticlesByBuying(
+                   userSession,
+                   searchInput,
+                   Long.parseLong(category_id),
+                   Boolean.parseBoolean(openAuction),
+                   Boolean.parseBoolean(currentAuction),
+                   Boolean.parseBoolean(closedAuction));
+        }
+        articles = articleService.getAllArticles();
+//        articles = articleService.filterSearch(searchInput, category_id, buying, selling, auction, closedAuction, currentAuction, currentSelling, non_started_selling, finished_selling);
+//            List<Category> categories = categoryService.getAllCategories();
+//            model.addAttribute("categories", categories);
+//            model.addAttribute("articles", articles);
+            return "index.html";
     }
 
 }

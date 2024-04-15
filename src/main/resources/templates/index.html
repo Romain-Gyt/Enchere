@@ -15,29 +15,88 @@
     <div class="container">
         <h1 class="text-center">Liste des enchères</h1>
 
-        <form action="/" method="GET">
-            <div class="row my-3">
-                <div class="col-md-6">
-                    <input type="text" class="form-control" name="searchInput" placeholder="Recherche...">
-                </div>
-                <div class="col-md-6">
-                    <button type="submit" class="btn btn-primary float-right btn-form">Rechercher</button>
-                </div>
-            </div>
-        </form>
+<!--        <form action="/" method="GET">-->
+<!--            <div class="row my-3">-->
+<!--                <div class="col-md-6">-->
+<!--                    <input type="text" class="form-control" name="searchInput" placeholder="Recherche...">-->
+<!--                </div>-->
+<!--                <div class="col-md-6">-->
+<!--                    <button type="submit" class="btn btn-primary float-right btn-form">Rechercher</button>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </form>-->
 
         <div class="row">
-            <form action="/category" method="GET">
+            <form action="/search" method="GET">
                 <div class="row">
-                    <div class="col-md-6">
+                    <label>Filtres: </label>
+                    <div class="col-md-6 searchbar">
+                        <div class="col-md-6">
+                            <input type="text" class="form-control" name="searchInput" placeholder="Le nom contient...">
+                        </div>
+                        <label for="categorySelect">Catégories: </label>
                         <select class="form-control" id="categorySelect" name="category_id">
-                            <option value=""  selected>---- Catégories ----</option>
+                            <option value="">Toutes</option>
 <!--                             Boucle pour afficher les libellés des catégories -->
                             <option th:each="category : ${categories}"  th:value="${category.categoryId}" th:text="${category.label}"></option>
                         </select>
                     </div>
+                    <div class="filter-container">
+                        <div class="filter-buying">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="buying" id="radio_buying" value="true">
+                                <label class="form-check-label" for="radio_buying">
+                                    Achats
+                                </label>
+                                <div class="form-check">
+                                    <input class="form-check-input" name="true" type="checkbox" value="open_auction"  id="open_auction">
+                                    <label class="form-check-label" for="open_auction">
+                                        Enchères ouvertes
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" name="true" type="checkbox" value="current_auction" id="current_auction">
+                                    <label class="form-check-label" for="current_auction">
+                                       Mes enchères en cours
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" name="true" type="checkbox" value="won_auction" id="won_auction">
+                                    <label class="form-check-label" for="won_auction">
+                                       Mes enchères remportées
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="filter-selling">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="selling" id="selling_radio">
+                                <label class="form-check-label" for="selling_radio">
+                                    Mes ventes
+                                </label>
+                                <div class="form-check">
+                                    <input class="form-check-input" name="current_selling" type="checkbox" value="" id="current_selling">
+                                    <label class="form-check-label" for="current_selling">
+                                       Mes ventes en cours
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" name="non_started_selling" type="checkbox" value="" id="non_started_selling">
+                                    <label class="form-check-label" for="non_started_selling">
+                                       Ventes non débutées
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" name="finished_selling" type="checkbox" value="" id="finished_selling">
+                                    <label class="form-check-label" for="finished_selling">
+                                        Ventes terminées
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="col-md-6">
-                        <button type="submit" class="btn btn-primary btn-form">Filtrer</button>
+                        <button type="submit" class="btn btn-primary btn-form">Rechercher</button>
                     </div>
                 </div>
             </form>
@@ -55,10 +114,16 @@
                         <div class="col-md-8">
                             <div class="card-body">
                                 <a th:if="${#authorization.expression('isAuthenticated()')}" th:href="@{/}"><h5 class="card-title text-white font-weight-bold" th:text="${article.itemName}"></h5></a>
+                                <p class="card-text text-white">Prix initial : <span th:text="${article.itemName}"></span></p>
                                 <p class="card-text text-white">Prix initial : <span th:text="${article.initialPrice}"></span></p>
                                 <p class="card-text text-white">Date de début de l'enchère : <span th:text="${#dates.format(article.startAuctionDate, 'dd/MM/yyyy')}"></span></p>
                                 <p class="card-text text-white">Date de fin de l'enchère : <span th:text="${#dates.format(article.endAuctionDate, 'dd/MM/yyyy')}"></span></p>
-                                <p class="card-text text-white">Vendu par : <span th:text="${article.user.getPseudo()}"></span></p>
+                                <p class="card-text text-white">Vendu par :
+                                    <a th:if="${#authorization.expression('isAuthenticated()')}" th:href="@{/profil/{id}(id=${article.user.getIdUser()})}">
+                                    <span th:text="${article.user.getPseudo()}"></span>
+                                    </a>
+                                    <span th:unless="${#authorization.expression('isAuthenticated()')}" th:text="${article.user.getPseudo()}"></span>
+                                </p>
                                 <p class="card-text text-white">Catégorie : <span th:text="${article.category.getLabel()}"></span></p>
                             </div>
                         </div>
