@@ -46,13 +46,13 @@ public class RegisterController {
         System.out.println(bindingResult.getAllErrors());
             try{
                 userService.createUser(user,passwordMap);
-                return "redirect:/login";
+                return "/register/login";
             } catch(RegisterException e){
                 e.getKeys().forEach(key -> {
                     ObjectError error = new ObjectError("globalError", key);
                     bindingResult.addError(error);
                 });
-                return "redirect:/register";
+                return "redirect:/register/register.html";
             }
         }
 }

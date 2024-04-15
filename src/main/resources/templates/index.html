@@ -21,23 +21,23 @@
                     <input type="text" class="form-control" name="searchInput" placeholder="Recherche...">
                 </div>
                 <div class="col-md-6">
-                    <button type="submit" class="btn btn-primary float-right">Rechercher</button>
+                    <button type="submit" class="btn btn-primary float-right btn-form">Rechercher</button>
                 </div>
             </div>
         </form>
 
         <div class="row">
-            <form action="/" method="GET">
+            <form action="/category" method="GET">
                 <div class="row">
                     <div class="col-md-6">
-                        <select class="form-control" id="categorySelect" name="categoryId">
-                            <option value="">Catégories</option>
-                            <!-- Boucle pour afficher les libellés des catégories -->
-                            <option th:each="category : ${categories}" th:value="${category.categoryId}" th:text="${category.label}"></option>
+                        <select class="form-control" id="categorySelect" name="category_id">
+                            <option value=""  selected>---- Catégories ----</option>
+<!--                             Boucle pour afficher les libellés des catégories -->
+                            <option th:each="category : ${categories}"  th:value="${category.categoryId}" th:text="${category.label}"></option>
                         </select>
                     </div>
                     <div class="col-md-6">
-                        <button type="submit" class="btn btn-primary">Filtrer</button>
+                        <button type="submit" class="btn btn-primary btn-form">Filtrer</button>
                     </div>
                 </div>
             </form>
@@ -46,20 +46,25 @@
         </div>
 
         <div class="row auctions-container">
-            <div class="col-md-6" th:each="articles : ${articles}">
-                <div class="card mb-3">
+            <div class="col-md-6" th:each="article : ${articles}">
+                <div class="card mb-3  bg-dark ">
                     <div class="row no-gutters">
                         <div class="col-md-4">
-                            <img src="/images/Enchere.jpg" class="card-img" alt="..." >
+                            <img th:src="@{${'/images/' + article.itemId +'.jpg'}}" class="card-img" alt="/images/Enchere.jpg" >
                         </div>
                         <div class="col-md-8">
                             <div class="card-body">
-                                <h5 class="card-title" th:text="${articles.itemName}"></h5>
-                                <p class="card-text">Prix initial : <span th:text="${articles.initialPrice}"></span></p>
-                                <p class="card-text">Date de début de l'enchère : <span th:text="${#dates.format(articles.startAuctionDate, 'dd/MM/yyyy')}"></span></p>
-                                <p class="card-text">Date de fin de l'enchère : <span th:text="${#dates.format(articles.endAuctionDate, 'dd/MM/yyyy')}"></span></p>
-                                <p class="card-text">Vendu par : <span th:text="${articles.username}"></span></p>
-                                <p class="card-text">Catégorie : <span th:text="${articles.categoryId}"></span></p>
+                                <a th:if="${#authorization.expression('isAuthenticated()')}" th:href="@{/}"><h5 class="card-title text-white font-weight-bold" th:text="${article.itemName}"></h5></a>
+                                <div th:if="${article.auctions.size() > 0}">
+                                    Prix : <span th:text="${latestBidAmount}"></span>
+                                </div>
+                                <div th:unless="${article.auctions.size() > 0}">
+                                    Prix : <span th:text="${article.initialPrice}"></span>
+                                </div>
+                                <p class="card-text text-white">Date de début de l'enchère : <span th:text="${#dates.format(article.startAuctionDate, 'dd/MM/yyyy')}"></span></p>
+                                <p class="card-text text-white">Date de fin de l'enchère : <span th:text="${#dates.format(article.endAuctionDate, 'dd/MM/yyyy')}"></span></p>
+                                <p class="card-text text-white">Vendu par : <span th:text="${article.user.getPseudo()}"></span></p>
+                                <p class="card-text text-white">Catégorie : <span th:text="${article.category.getLabel()}"></span></p>
                             </div>
                         </div>
                     </div>

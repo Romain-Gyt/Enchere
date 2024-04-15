@@ -1,4 +1,4 @@
-package fr.eni.enchere.bll.impl;
+package fr.eni.enchere.bll.Impl;
 
 import fr.eni.enchere.bll.CategoryService;
 import fr.eni.enchere.bo.Article;
@@ -10,10 +10,14 @@ import java.util.List;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
+    /******** Declaration ********/
 
-    @Autowired
     private CategoryDAO categoryDAO;
 
+    /********* CONSTRUCTOR ********/
+    public CategoryServiceImpl(CategoryDAO categoryDAO){
+        this.categoryDAO = categoryDAO;
+    }
     @Override
     public List<Category> getAllCategories() {
         return categoryDAO.getAllCategories();

@@ -1,21 +1,36 @@
 package fr.eni.enchere.bo;
 
+import org.eclipse.angus.mail.imap.protocol.UIDSet;
+
 import java.sql.Date;
 import java.util.List;
+import java.util.Objects;
 
 public class Article {
+
+    /******** Attributs ********/
     private int itemId;
     private String itemName;
     private String description;
     private Date startAuctionDate;
     private Date endAuctionDate;
     private int initialPrice;
-    private Integer salePrice; // Peut être nul si l'enchère n'est pas encore terminée
+    private Integer salePrice;
     private int userId;
-    private int categoryId;
-    private String username;
+    private String Status;
+    private Integer latestBidAmount;
+
+    private Category category;
+    private User user;
     private List<Auction> auctions;
 
+
+    /******** Constructor ********/
+    public Article() {
+    }
+
+
+    /******** Methods ********/
     public int getItemId() {
         return itemId;
     }
@@ -38,14 +53,6 @@ public class Article {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public List<Auction> getAuctions() {
-        return auctions;
-    }
-
-    public void setAuctions(List<Auction> auctions) {
-        this.auctions = auctions;
     }
 
     public Date getStartAuctionDate() {
@@ -88,22 +95,85 @@ public class Article {
         this.userId = userId;
     }
 
-    public int getCategoryId() {
-        return categoryId;
+    public Category getCategory() {
+        return category;
     }
 
-    public void setCategoryId(int categoryId) {
-        this.categoryId = categoryId;
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
-    public String getUsername() {
-        return username;
+    public User getUser() {
+        return user;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUser(User user) {
+        this.user = user;
     }
 
+    public String getStatus() {
+        return Status;
+    }
+
+    public void setStatus(String Status) {
+        this.Status = Status;
+    }
+
+    public Integer getLatestBidAmount() {
+        return latestBidAmount;
+    }
+
+    public void setLatestBidAmount(Integer latestBidAmount) {
+        this.latestBidAmount = latestBidAmount;
+    }
+
+
+    public List<Auction> getAuctions() {
+        return auctions;
+    }
+
+    public void setAuctions(List<Auction> auctions) {
+        this.auctions = auctions;
+    }
+
+    public void addAuction(Auction auction) {
+        this.auctions.add(auction);
+    }
+
+    public void removeAuction(Auction auction) {
+        this.auctions.remove(auction);
+    }
+
+    /******** toString ********/
+    @Override
+    public String toString() {
+        return "Article{" +
+                "itemId=" + itemId +
+                ", itemName='" + itemName + '\'' +
+                ", description='" + description + '\'' +
+                ", startAuctionDate=" + startAuctionDate +
+                ", endAuctionDate=" + endAuctionDate +
+                ", initialPrice=" + initialPrice +
+                ", salePrice=" + salePrice +
+                ", userId=" + userId +
+                ", category=" + category +
+                ", user=" + user +
+                '}';
+    }
+
+    /******** equals ********/
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Article article = (Article) o;
+        return itemId == article.itemId && initialPrice == article.initialPrice && userId == article.userId && Objects.equals(itemName, article.itemName) && Objects.equals(description, article.description) && Objects.equals(startAuctionDate, article.startAuctionDate) && Objects.equals(endAuctionDate, article.endAuctionDate) && Objects.equals(salePrice, article.salePrice) && Objects.equals(category, article.category) && Objects.equals(user, article.user);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(itemId, itemName, description, startAuctionDate, endAuctionDate, initialPrice, salePrice, userId, category, user);
+    }
 
 
 }

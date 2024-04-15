@@ -1,4 +1,4 @@
-package fr.eni.enchere.dal.impl;
+package fr.eni.enchere.dal.Impl;
 
 import fr.eni.enchere.bo.Auction;
 import fr.eni.enchere.dal.AuctionDAO;
@@ -27,8 +27,14 @@ public class AuctionDAOImpl implements AuctionDAO {
     }
 
     @Override
+    public int getBidAmountByItemId(int itemId) {
+        String sql = "SELECT bid_amount FROM bids WHERE item_id = ?";
+        return jdbcTemplate.queryForObject(sql, new Object[]{itemId}, Integer.class);
+    }
+
+    @Override
     public List<Auction> getAllAuctions() {
-        String sql = "SELECT * FROM auctions";
+        String sql = "SELECT * FROM bids";
         return jdbcTemplate.query(sql, (rs, rowNum) -> {
             Auction auction = new Auction();
             auction.setUserId(rs.getInt("user_id"));
