@@ -18,33 +18,41 @@ import java.util.List;
 @Repository
 public class ArticleDAOImpl implements ArticleDAO {
 
-   /******** Declaration ********/
-   private static final String SELECT_ALL = "SELECT se.item_id,se.item_name,se.description,se.start_auction_date,se.end_auction_date,se.initial_price,se.sale_price,\n" +
-           "        cat.category_id as cat_id,cat.label,\n" +
-           "        u.user_id as id_user,u.username,u.last_name,u.first_name,u.email,u.phone,u.street,u.postal_code,u.city,u.credit,u.administrator\n" +
-           "       FROM sold_items se\n" +
-           "       INNER JOIN categories cat ON se.category_id = cat.category_id\n" +
-           "       INNER JOIN users u ON se.user_id = u.user_id\n" +
-           "       WHERE end_auction_date > CURDATE();";
+    /******** Requêtes ********/
+    private static final String SELECT_ALL = "SELECT se.item_id,se.item_name,se.description,se.start_auction_date,se.end_auction_date,se.initial_price,se.sale_price,\n" +
+            "        cat.category_id as cat_id,cat.label,\n" +
+            "        u.user_id as id_user,u.username,u.last_name,u.first_name,u.email,u.phone,u.street,u.postal_code,u.city,u.credit,u.administrator\n" +
+            "       FROM sold_items se\n" +
+            "       INNER JOIN categories cat ON se.category_id = cat.category_id\n" +
+            "       INNER JOIN users u ON se.user_id = u.user_id\n" +
+            "       WHERE end_auction_date > CURDATE();";
 
-   private static final String SELECT_BY_CATEGORY = "SELECT se.item_id,se.item_name,se.description,se.start_auction_date,se.end_auction_date,se.initial_price,se.sale_price,\n" +
-           "        cat.category_id as cat_id,cat.label,\n" +
-           "        u.user_id as id_user,u.username,u.last_name,u.first_name,u.email,u.phone,u.street,u.postal_code,u.city,u.credit,u.administrator\n" +
-           "       FROM sold_items se\n" +
-           "       INNER JOIN categories cat ON se.category_id = cat.category_id\n" +
-           "       INNER JOIN users u ON se.user_id = u.user_id\n" +
-           "       WHERE end_auction_date > CURDATE() AND cat.category_id = :category_id;";
+    private static final String SELECT_BY_CATEGORY = "SELECT se.item_id,se.item_name,se.description,se.start_auction_date,se.end_auction_date,se.initial_price,se.sale_price,\n" +
+            "        cat.category_id as cat_id,cat.label,\n" +
+            "        u.user_id as id_user,u.username,u.last_name,u.first_name,u.email,u.phone,u.street,u.postal_code,u.city,u.credit,u.administrator\n" +
+            "       FROM sold_items se\n" +
+            "       INNER JOIN categories cat ON se.category_id = cat.category_id\n" +
+            "       INNER JOIN users u ON se.user_id = u.user_id\n" +
+            "       WHERE end_auction_date > CURDATE() AND cat.category_id = :category_id;";
 
+    /******** Déclaration ********/
     private JdbcTemplate jdbcTemplate;
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    /******** Constructor ********/
+    /******** Constructeur ********/
+    @Autowired
     public ArticleDAOImpl(
             JdbcTemplate jdbcTemplate,
             NamedParameterJdbcTemplate namedParameterJdbcTemplate
     ) {
         this.jdbcTemplate = jdbcTemplate;
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
+    }
+
+    @Override
+    public void createArticle(Article article) {
+        String sql = "INSERT INTO sold_items (item_name, description, start_auction_date, end_auction_date, initial_price, sale_price, category_id, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        jdbcTemplate.update(sql, article.getItemName(), article.getDescription(), article.getStartAuctionDate(), article.getEndAuctionDate(), article.getInitialPrice(), article.getSalePrice(), article.getCategory().getCategoryId(), article.getUser().getIdUser());
     }
 
     @Override
@@ -69,8 +77,6 @@ public class ArticleDAOImpl implements ArticleDAO {
             return article;
         });
     }
-
-
 
     class ArticleRowMapper implements RowMapper<Article> {
         @Override

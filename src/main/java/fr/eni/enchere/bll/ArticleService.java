@@ -6,6 +6,9 @@ import java.util.List;
 
 public interface ArticleService {
     void setAuctions(Article article);
+
+    void createArticle(Article article);
+
     List<Article> getAllArticles();
     Article getArticleById(int itemId);
 

@@ -1,7 +1,5 @@
 package fr.eni.enchere.bo;
 
-import org.eclipse.angus.mail.imap.protocol.UIDSet;
-
 import java.sql.Date;
 import java.util.List;
 import java.util.Objects;
@@ -19,6 +17,7 @@ public class Article {
     private int userId;
     private String Status;
     private Integer latestBidAmount;
+    private String image;
 
     private Category category;
     private User user;
@@ -117,6 +116,14 @@ public class Article {
 
     public void setStatus(String Status) {
         this.Status = Status;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public Integer getLatestBidAmount() {

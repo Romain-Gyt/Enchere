@@ -8,4 +8,5 @@ public interface ArticleDAO {
     List<Article> getAllArticles();
     List<Article> getArticlesByCategory(Long categoryId);
     Article getArticleById(int itemId);
+    void createArticle(Article article);
 }

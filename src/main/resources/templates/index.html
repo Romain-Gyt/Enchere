@@ -55,12 +55,14 @@
                         <div class="col-md-8">
                             <div class="card-body">
                                 <a th:if="${#authorization.expression('isAuthenticated()')}" th:href="@{/}"><h5 class="card-title text-white font-weight-bold" th:text="${article.itemName}"></h5></a>
+                                <h5 class="card-title text-white font-weight-bold" th:unless="${#authorization.expression('isAuthenticated()')}" th:text="${article.itemName}"></h5>
                                 <div th:if="${article.auctions.size() > 0}">
-                                    Prix : <span th:text="${latestBidAmount}"></span>
+                                    Prix : <span th:text="${article.auctions.get(article.auctions.size() - 1).getBidAmount()}"></span>
                                 </div>
                                 <div th:unless="${article.auctions.size() > 0}">
                                     Prix : <span th:text="${article.initialPrice}"></span>
                                 </div>
+
                                 <p class="card-text text-white">Date de début de l'enchère : <span th:text="${#dates.format(article.startAuctionDate, 'dd/MM/yyyy')}"></span></p>
                                 <p class="card-text text-white">Date de fin de l'enchère : <span th:text="${#dates.format(article.endAuctionDate, 'dd/MM/yyyy')}"></span></p>
                                 <p class="card-text text-white">Vendu par : <span th:text="${article.user.getPseudo()}"></span></p>
