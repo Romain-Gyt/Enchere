@@ -65,5 +65,15 @@ $(document).ready(function() {
             $('.filter_selling input[type="checkbox"]').prop('disabled', false);
         }
     });
+    $('.filter_buying input[type="checkbox"], .filter_selling input[type="checkbox"]').on('change', function() {
+        // Si la case à cocher est cochée
+        if($(this).is(':checked')) {
+            // Trouve toutes les autres cases à cocher dans le même div et les désactive
+            $(this).closest('.filter_buying, .filter_selling').find('input[type="checkbox"]').not(this).prop('disabled', true);
+        } else {
+            // Si la case à cocher est décochée, réactive toutes les autres cases à cocher dans le même div
+            $(this).closest('.filter_buying, .filter_selling').find('input[type="checkbox"]').prop('disabled', false);
+        }
+    });
 
 });
