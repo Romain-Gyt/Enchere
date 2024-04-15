@@ -33,6 +33,12 @@ public class ArticleServiceImpl implements ArticleService {
         return articleDAO.getArticlesByCategory(categoryId);
     }
 
+    public List<Article> getAllArticleByNameAndCategory(String nameArticle, Long categoryId) {
+        nameArticle = checkNameArticle(nameArticle);
+        categoryId = checkCategoryId(categoryId);
+        return articleDAO.getAllArticleByNameAndCategory(nameArticle, categoryId);
+    }
+
     @Override
     public List<Article> getArticlesByBuying(User userSession, String nameArticle, Long categoryId, boolean openAuction, boolean currentAuction, boolean closedAuction) {
        nameArticle = checkNameArticle(nameArticle);
@@ -44,6 +50,14 @@ public class ArticleServiceImpl implements ArticleService {
 //        return articleDAO.getArticlesByBuying(nameArticle, categoryId, openAuction, currentAuction, closedAuction);
         return null;
     }
+
+    public List<Article> getArticlesBySelling(User userSession, String nameArticle, Long categoryId, boolean currentSelling, boolean nonStartedSelling, boolean closedSelling) {
+        nameArticle = checkNameArticle(nameArticle);
+        categoryId = checkCategoryId(categoryId);
+        long idUser = checkCurrentAuction(userSession,currentSelling);
+        return null;
+    }
+
 
     private String checkNameArticle(String nameArticle) {
         if(nameArticle.isEmpty()){

@@ -8,12 +8,18 @@ import java.util.List;
 public interface ArticleService {
     List<Article> getAllArticles();
     List<Article> getArticlesByCategory(long categoryId);
-    List<Article> getArticlesByBuying(
-            User userSession,
-            String nameArticle,
-            Long categoryId,
-            boolean openAuction,
-            boolean currentAuction,
-            boolean closedAuction
+    List<Article> getAllArticleByNameAndCategory(String nameArticle, Long categoryId);
+    List<Article> getArticlesByBuying  (User userSession,
+                                        String nameArticle,
+                                        Long categoryId,
+                                        boolean openAuction,
+                                        boolean currentAuction,
+                                        boolean closedAuction
     );
+    List<Article> getArticlesBySelling(  User userSession,
+                                         String nameArticle,
+                                         Long categoryId,
+                                         boolean currentSelling,
+                                         boolean nonStartedSelling,
+                                         boolean closedSelling);
 }

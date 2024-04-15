@@ -78,7 +78,10 @@ public class HomeController {
 
     ) {
         List<Article> articles = null;
-        System.out.println("buying " + buying);
+        if(buying.toLowerCase().equals("false") && selling.toLowerCase().equals("false")) {
+            articles = articleService.getAllArticleByNameAndCategory(searchInput, Long.parseLong(category_id));
+        }
+
         if(buying.toLowerCase().equals("true") ) {
            articles = articleService.getArticlesByBuying(
                    userSession,
@@ -88,11 +91,17 @@ public class HomeController {
                    Boolean.parseBoolean(currentAuction),
                    Boolean.parseBoolean(closedAuction));
         }
-        articles = articleService.getAllArticles();
-//        articles = articleService.filterSearch(searchInput, category_id, buying, selling, auction, closedAuction, currentAuction, currentSelling, non_started_selling, finished_selling);
-//            List<Category> categories = categoryService.getAllCategories();
-//            model.addAttribute("categories", categories);
-//            model.addAttribute("articles", articles);
+        if(selling.toLowerCase().equals("true")) {
+            articles = articleService.getArticlesBySelling(
+                    userSession,
+                    searchInput,
+                    Long.parseLong(category_id),
+                    Boolean.parseBoolean(currentSelling),
+                    Boolean.parseBoolean(non_started_selling),
+                    Boolean.parseBoolean(finished_selling));
+        }
+        model.addAttribute("articles", articles);
+
             return "index.html";
     }
 

@@ -7,4 +7,5 @@ import java.util.List;
 public interface ArticleDAO {
     List<Article> getAllArticles();
     List<Article> getArticlesByCategory(Long categoryId);
+    List<Article> getAllArticleByNameAndCategory(String nameArticle, Long categoryId);
 }

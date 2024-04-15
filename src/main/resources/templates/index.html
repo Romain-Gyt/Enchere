@@ -4,7 +4,7 @@
             pageContent=~{:: .main-content},
             pageTitle=~{:: title},
             additionalCss=~{},
-            additionalJs=~{}
+            additionalJs=~{:: script}
         )}">
 <head>
     <title th:text="Accueil">Home</title>
@@ -14,18 +14,6 @@
 <main class="main-content">
     <div class="container">
         <h1 class="text-center">Liste des enchères</h1>
-
-<!--        <form action="/" method="GET">-->
-<!--            <div class="row my-3">-->
-<!--                <div class="col-md-6">-->
-<!--                    <input type="text" class="form-control" name="searchInput" placeholder="Recherche...">-->
-<!--                </div>-->
-<!--                <div class="col-md-6">-->
-<!--                    <button type="submit" class="btn btn-primary float-right btn-form">Rechercher</button>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </form>-->
-
         <div class="row">
             <form action="/search" method="GET">
                 <div class="row">
@@ -41,10 +29,10 @@
                             <option th:each="category : ${categories}"  th:value="${category.categoryId}" th:text="${category.label}"></option>
                         </select>
                     </div>
-                    <div class="filter-container">
-                        <div class="filter-buying">
+                    <div th:if="${#authorization.expression('isAuthenticated()')}" class="filter-container">
+                        <div class="filter_buying">
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="buying" id="radio_buying" value="true">
+                                <input class="form-check-input" type="radio" name="transactionType" id="radio_buying" value="">
                                 <label class="form-check-label" for="radio_buying">
                                     Achats
                                 </label>
@@ -68,10 +56,10 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="filter-selling">
+                        <div class="filter_selling">
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="selling" id="selling_radio">
-                                <label class="form-check-label" for="selling_radio">
+                                <input class="form-check-input" type="radio" name="transactionType" id="radio_selling">
+                                <label class="form-check-label" for="radio_selling">
                                     Mes ventes
                                 </label>
                                 <div class="form-check">
@@ -124,7 +112,7 @@
                                     </a>
                                     <span th:unless="${#authorization.expression('isAuthenticated()')}" th:text="${article.user.getPseudo()}"></span>
                                 </p>
-                                <p class="card-text text-white">Catégorie : <span th:text="${article.category.getLabel()}"></span></p>
+                                <p class="card-text text-white">Catégorie : <span name="id_category" th:data-category-id="${article.category.getCategoryId()}" th:text="${article.category.getLabel()}"></span></p>
                             </div>
                         </div>
                     </div>
