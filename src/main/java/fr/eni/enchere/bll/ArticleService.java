@@ -7,8 +7,8 @@ import java.util.List;
 
 public interface ArticleService {
     List<Article> getAllArticles();
-    List<Article> getArticlesByCategory(long categoryId);
     List<Article> getAllArticleByNameAndCategory(String nameArticle, Long categoryId);
+    List<Article>getArticlesByOpenedBuying();
     List<Article> getArticlesByBuying  (User userSession,
                                         String nameArticle,
                                         Long categoryId,

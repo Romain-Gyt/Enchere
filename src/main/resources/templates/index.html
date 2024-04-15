@@ -32,24 +32,24 @@
                     <div th:if="${#authorization.expression('isAuthenticated()')}" class="filter-container">
                         <div class="filter_buying">
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="transactionType" id="radio_buying" value="">
+                                <input class="form-check-input" type="radio" name="transactionType" id="radio_buying" value="buying">
                                 <label class="form-check-label" for="radio_buying">
                                     Achats
                                 </label>
                                 <div class="form-check">
-                                    <input class="form-check-input" name="true" type="checkbox" value="open_auction"  id="open_auction">
+                                    <input class="form-check-input" name="open_auction" type="checkbox" value="true"  id="open_auction">
                                     <label class="form-check-label" for="open_auction">
                                         Enchères ouvertes
                                     </label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" name="true" type="checkbox" value="current_auction" id="current_auction">
+                                    <input class="form-check-input" name="current_auction" type="checkbox" value="true" id="current_auction">
                                     <label class="form-check-label" for="current_auction">
                                        Mes enchères en cours
                                     </label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" name="true" type="checkbox" value="won_auction" id="won_auction">
+                                    <input class="form-check-input" name="won_auction" type="checkbox" value="true" id="won_auction">
                                     <label class="form-check-label" for="won_auction">
                                        Mes enchères remportées
                                     </label>
@@ -58,7 +58,7 @@
                         </div>
                         <div class="filter_selling">
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="transactionType" id="radio_selling">
+                                <input class="form-check-input" type="radio" name="transactionType" id="radio_selling" value="selling">
                                 <label class="form-check-label" for="radio_selling">
                                     Mes ventes
                                 </label>
@@ -84,7 +84,7 @@
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <button type="submit" class="btn btn-primary btn-form">Rechercher</button>
+                        <button type="submit" class="btn btn-primary btn-form" id="search_form">Rechercher</button>
                     </div>
                 </div>
             </form>
@@ -98,6 +98,7 @@
                     <div class="row no-gutters">
                         <div class="col-md-4">
                             <img src="/images/Enchere.jpg" class="card-img" alt="..." >
+                            <label class="text-white font-weight-bold">Statut: <span class="text-danger font-weight-bold" th:text="${article.status}"></span></label>
                         </div>
                         <div class="col-md-8">
                             <div class="card-body">

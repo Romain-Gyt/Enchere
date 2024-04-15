@@ -53,7 +53,8 @@ public class AppSecurityConfiguration  {
                     .requestMatchers(HttpMethod.GET,"/profil/details").authenticated()
                     .requestMatchers(HttpMethod.POST,"/profil/details").authenticated()
                     .requestMatchers(HttpMethod.GET,"/profil/delete").authenticated()
-                    .requestMatchers(HttpMethod.GET,"/category").authenticated();
+                    .requestMatchers(HttpMethod.GET,"/category").authenticated()
+                    .requestMatchers(HttpMethod.GET,"/search").permitAll();
 
 
             auth.requestMatchers("/").permitAll();

@@ -28,10 +28,7 @@ public class ArticleServiceImpl implements ArticleService {
         return articleDAO.getAllArticles();
     }
 
-    @Override
-    public List<Article> getArticlesByCategory(long categoryId) {
-        return articleDAO.getArticlesByCategory(categoryId);
-    }
+
 
     public List<Article> getAllArticleByNameAndCategory(String nameArticle, Long categoryId) {
         nameArticle = checkNameArticle(nameArticle);
@@ -40,21 +37,30 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
+    public List<Article> getArticlesByOpenedBuying() {
+        return articleDAO.getArticlesByOpenedBuying();
+    }
+
+    @Override
     public List<Article> getArticlesByBuying(User userSession, String nameArticle, Long categoryId, boolean openAuction, boolean currentAuction, boolean closedAuction) {
        nameArticle = checkNameArticle(nameArticle);
        categoryId = checkCategoryId(categoryId);
-       Date dateOpenAuction = checkOpenAuction(openAuction);
-       long idUser = checkCurrentAuction(userSession,currentAuction);
+       if(openAuction){
+           return articleDAO.getArticlesByOpenedBuying();
+       }
+       if(currentAuction){
+           return articleDAO.getArticlesByCurrentBuying(nameArticle, categoryId, userSession.getIdUser());
+       }
+       if(closedAuction){
+              return articleDAO.getArticlesByClosedBuying(nameArticle, categoryId, userSession.getIdUser());
 
-
-//        return articleDAO.getArticlesByBuying(nameArticle, categoryId, openAuction, currentAuction, closedAuction);
+       }
         return null;
     }
 
     public List<Article> getArticlesBySelling(User userSession, String nameArticle, Long categoryId, boolean currentSelling, boolean nonStartedSelling, boolean closedSelling) {
         nameArticle = checkNameArticle(nameArticle);
         categoryId = checkCategoryId(categoryId);
-        long idUser = checkCurrentAuction(userSession,currentSelling);
         return null;
     }
 
@@ -67,24 +73,11 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     private Long checkCategoryId(Long categoryId) {
-        if(categoryId == null){
+        if(categoryId == 0){
             return null;
         }
         return categoryId;
     }
 
-    private Date checkOpenAuction(boolean openAuction) {
-        if(openAuction){
-            return new Date(System.currentTimeMillis());
-        }
-        return null;
-    }
-
-    private Long checkCurrentAuction(User userSession,boolean currentAuction) {
-        if(currentAuction){
-            return userSession.getIdUser() ;
-        }
-        return null;
-    }
 
 }

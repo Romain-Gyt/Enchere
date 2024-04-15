@@ -22,4 +22,17 @@ public class CategoryServiceImpl implements CategoryService {
     public List<Category> getAllCategories() {
         return categoryDAO.getAllCategories();
     }
+
+    @Override
+    public List<Category> getCategoryById(Long id) {
+        id = checkCategoryId(id);
+        return categoryDAO.getCategoryById(id);
+    }
+
+    private Long checkCategoryId(Long categoryId) {
+        if(categoryId == 0){
+            return null;
+        }
+        return categoryId;
+    }
 }

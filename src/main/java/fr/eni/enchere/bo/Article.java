@@ -18,6 +18,7 @@ public class Article {
     private int userId;
     private Category category;
     private User user;
+    private String status;
 
 
     /******** Constructor ********/
@@ -104,6 +105,24 @@ public class Article {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public void updateStatus() {
+        Date currentDate = new Date(System.currentTimeMillis());
+        if(currentDate.before(this.endAuctionDate)) {
+            this.status = "En cours";
+        } else {
+            this.status = "Terminé";
+        }
     }
 
     /******** toString ********/
