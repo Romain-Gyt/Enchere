@@ -1,6 +1,8 @@
 package fr.eni.enchere.bo;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class Article {
@@ -17,6 +19,7 @@ public class Article {
     private Category category;
     private User user;
     private String status;
+    private List<Auction> auctions = new ArrayList<>();
 
 
 
@@ -113,6 +116,14 @@ public class Article {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public List<Auction> getAuctions() {
+        return auctions;
+    }
+
+    public void setAuctions(List<Auction> auctions) {
+        this.auctions = auctions;
     }
 
     public void updateStatus() {

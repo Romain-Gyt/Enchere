@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface ArticleDAO {
     List<Article> getAllArticles();
+    Article getArticleById(Long idArticle);
     List<Article> getArticlesByOpenedBuying();
     List<Article> getAllArticleByNameAndCategory(String nameArticle, Long categoryId);
     List<Article> getArticlesByCurrentBuying(String nameArticle, Long categoryId, Long userId);

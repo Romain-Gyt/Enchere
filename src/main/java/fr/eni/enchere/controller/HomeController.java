@@ -81,8 +81,7 @@ public class HomeController {
                         Boolean.parseBoolean(finished_selling));
             }
         }
-
-
+        
         List<Category> categories = categoryService.getCategoryById(Long.parseLong(category_id));
         model.addAttribute("articles", articles);
         model.addAttribute("categories", categories);
