@@ -46,6 +46,7 @@ public class LoginController {
         memberSession.setCredit(user.getCredit());
         memberSession.setPassword(user.getPassword());
         memberSession.setAdmin(user.isAdmin());
+        memberSession.setDisabled(user.isDisabled());
         return "redirect:/";
     }
 
