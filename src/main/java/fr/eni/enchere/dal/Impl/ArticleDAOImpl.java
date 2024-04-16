@@ -56,6 +56,12 @@ public class ArticleDAOImpl implements ArticleDAO {
     }
 
     @Override
+    public void updateArticle(Article article) {
+        String sql = "UPDATE sold_items SET item_name = ?, description = ?, start_auction_date = ?, end_auction_date = ?, initial_price = ?, sale_price = ?, category_id = ? WHERE item_id = ?";
+        jdbcTemplate.update(sql, article.getItemName(), article.getDescription(), article.getStartAuctionDate(), article.getEndAuctionDate(), article.getInitialPrice(), article.getSalePrice(), article.getCategory().getCategoryId(), article.getItemId());
+    }
+
+    @Override
     public List<Article> getAllArticles() {
         return jdbcTemplate.query(SELECT_ALL, new ArticleRowMapper());
     }
@@ -69,13 +75,14 @@ public class ArticleDAOImpl implements ArticleDAO {
 
     @Override
     public Article getArticleById(int itemId) {
-        String sql = "SELECT * FROM bids WHERE item_id = ?";
-        return jdbcTemplate.queryForObject(sql, new Object[]{itemId}, (rs, rowNum) -> {
-            Article article = new Article();
-            article.setItemId(rs.getInt("item_id"));
-            article.setItemName(rs.getString("item_name"));
-            return article;
-        });
+        String sql = "SELECT se.item_id, se.item_name, se.description, se.start_auction_date, se.end_auction_date, se.initial_price, se.sale_price, " +
+                "cat.category_id as cat_id, cat.label, " +
+                "u.user_id as id_user, u.username, u.last_name, u.first_name, u.email, u.phone, u.street, u.postal_code, u.city, u.credit, u.administrator " +
+                "FROM sold_items se " +
+                "INNER JOIN categories cat ON se.category_id = cat.category_id " +
+                "INNER JOIN users u ON se.user_id = u.user_id " +
+                "WHERE se.item_id = ?";
+        return jdbcTemplate.queryForObject(sql, new Object[]{itemId}, new ArticleRowMapper());
     }
 
     class ArticleRowMapper implements RowMapper<Article> {

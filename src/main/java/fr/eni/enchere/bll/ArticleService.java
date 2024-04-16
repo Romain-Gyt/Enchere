@@ -13,4 +13,6 @@ public interface ArticleService {
     Article getArticleById(int itemId);
 
     List<Article> getArticlesByCategory(long categoryId);
+
+    void updateArticle(Article existingArticle);
 }

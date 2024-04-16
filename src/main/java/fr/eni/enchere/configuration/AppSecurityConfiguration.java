@@ -48,12 +48,18 @@ public class AppSecurityConfiguration  {
                     .requestMatchers(HttpMethod.GET,"/register").permitAll()
                     .requestMatchers(HttpMethod.POST,"/register").permitAll()
                     .requestMatchers(HttpMethod.GET,"/profil").authenticated()
+                    .requestMatchers(HttpMethod.POST,"/profil").authenticated()
+                    .requestMatchers(HttpMethod.GET,"/profil/{id}").authenticated()
                     .requestMatchers(HttpMethod.GET,"/profil/details").authenticated()
                     .requestMatchers(HttpMethod.POST,"/profil/details").authenticated()
-                    .requestMatchers(HttpMethod.GET,"/profil/delete").authenticated();
+                    .requestMatchers(HttpMethod.GET,"/profil/delete").authenticated()
+                    .requestMatchers(HttpMethod.GET,"/article/create").authenticated()
+                    .requestMatchers(HttpMethod.POST,"/article/create").authenticated()
+                    .requestMatchers(HttpMethod.GET,"/category").authenticated()
+                    .requestMatchers(HttpMethod.GET,"/search").permitAll();
+
 
             auth.requestMatchers("/").permitAll();
-            auth.requestMatchers("/category").permitAll();
             auth.requestMatchers("/css/*").permitAll();
             auth.requestMatchers("/images/*").permitAll();
             auth.requestMatchers("/js/*").permitAll();

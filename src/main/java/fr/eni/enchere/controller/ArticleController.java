@@ -1,9 +1,7 @@
 package fr.eni.enchere.controller;
 
-import fr.eni.enchere.bll.ArticleService;
-import fr.eni.enchere.bll.CategoryService;
-import fr.eni.enchere.bo.Article;
-import fr.eni.enchere.bo.User;
+import fr.eni.enchere.bll.*;
+import fr.eni.enchere.bo.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,42 +22,113 @@ public class ArticleController {
         this.categoryService = categoryService;
     }
 
-    @GetMapping("/auction/create")
-    public String showAuctionCreationForm(Model model) {
+    @GetMapping("/article/create")
+    public String showArticleCreationForm(Model model) {
         model.addAttribute("article", new Article());
         model.addAttribute("categories", categoryService.getAllCategories());
-        return "bidCreate";
+        return "article/articleCreate";
     }
 
-    @PostMapping("/auction/create")
-    public String createAuction(@ModelAttribute("memberSession") User userSession,
+    @PostMapping("/article/create")
+    public String createArticle(@ModelAttribute("memberSession") User userSession,
                                 @ModelAttribute("article") Article article,
                                 BindingResult result,
                                 Model model,
                                 @RequestParam("image") MultipartFile imageFile) throws IOException {
         if (result.hasErrors()) {
             model.addAttribute("categories", categoryService.getAllCategories());
-            return "bidCreate";
+            model.addAttribute("errorMessage", "Le formulaire n'a pas été soumis correctement");
+            return "article/articleCreate";
         }
 
+        article.setUser(userSession);
 
-        String image = article.getImage();
         if (imageFile != null && !imageFile.isEmpty()) {
-            String fileName = article.getItemId() + ".jpg";
+            String fileName = UUID.randomUUID().toString() + ".jpg";
             article.setImage(fileName);
         }
 
-        // Set user as the seller
-        article.setUser(userSession);
-
-        // Save the article
         articleService.createArticle(article);
 
-        return "redirect:/auction/success";
+        return "redirect:/article/success";
     }
 
-    @GetMapping("/auction/success")
-    public String showSuccessPage() {
-        return "successPage";
+    @GetMapping("/article/success")
+    public String showSuccessPage(Model model) {
+        model.addAttribute("successMessage", "L'enchère a été créée avec succès");
+        return "article/success";
     }
+
+    @GetMapping("/article/error")
+    public String showErrorPage(Model model) {
+        model.addAttribute("errorMessage", "Une erreur s'est produite lors de la création de l'enchère");
+        return "article/error";
+    }
+
+    @GetMapping("/article/edit/{itemId}")
+    public String showArticleEditForm(@PathVariable int itemId, Model model) {
+        Article article = articleService.getArticleById(itemId);
+        model.addAttribute("article", article);
+        model.addAttribute("categories", categoryService.getAllCategories());
+        return "article/articleEdit";
+    }
+
+    @PostMapping("/article/edit/{itemId}")
+    public String editArticle(@PathVariable int itemId,
+                              @ModelAttribute("article") Article article,
+                              BindingResult result,
+                              Model model,
+                              @RequestParam(value = "image", required = false) MultipartFile imageFile) throws IOException {
+        if (result.hasErrors()) {
+            model.addAttribute("categories", categoryService.getAllCategories());
+            model.addAttribute("errorMessage", "Le formulaire n'a pas été soumis correctement");
+            return "article/articleEdit";
+        }
+
+        Article existingArticle = articleService.getArticleById(itemId);
+        if (existingArticle == null) {
+            model.addAttribute("errorMessage", "Article introuvable");
+            return "error";
+        }
+
+        existingArticle.setItemName(article.getItemName());
+        existingArticle.setDescription(article.getDescription());
+        existingArticle.setCategory(article.getCategory());
+        existingArticle.setInitialPrice(article.getInitialPrice());
+        existingArticle.setStartAuctionDate(article.getStartAuctionDate());
+        existingArticle.setEndAuctionDate(article.getEndAuctionDate());
+
+        if (imageFile != null && !imageFile.isEmpty()) {
+            String fileName = UUID.randomUUID().toString() + ".jpg";
+            existingArticle.setImage(fileName);
+        }
+
+        articleService.updateArticle(existingArticle);
+
+        return "redirect:/article/details/" + itemId;
+    }
+
+    @GetMapping("/article/details/{itemId}")
+    public String showArticleDetails(@PathVariable int itemId, Model model) {
+        Article article = articleService.getArticleById(itemId);
+        model.addAttribute("article", article);
+        return "article/articleDetails";
+    }
+
+    // Mapping pour ajouter une enchère
+    @PostMapping("/article/addBid")
+    public String addBid(@RequestParam("bidAmount") int bidAmount,
+                         @RequestParam("itemId") int itemId,
+                         @ModelAttribute("memberSession") User memberSession) {
+        // Insérer l'enchère dans la base de données
+        articleService.insertBidAmountById(memberSession.getIdUser(), itemId, bidAmount);
+
+        // Mettre à jour le crédit de l'utilisateur
+        User userSession = userService.loadUserById(memberSession.getIdUser());
+        int newCreditUser = userSession.getCredit() - bidAmount;
+        userService.updateUserCredit(userSession, newCreditUser);
+
+        return "redirect:/";
+    }
+
 }

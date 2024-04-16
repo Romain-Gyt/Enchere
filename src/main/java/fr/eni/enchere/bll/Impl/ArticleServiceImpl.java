@@ -43,6 +43,11 @@
         }
 
         @Override
+        public void updateArticle(Article article) {
+            articleDAO.updateArticle(article);
+        }
+
+        @Override
         public void createArticle(Article article) {
             articleDAO.createArticle(article);
         }

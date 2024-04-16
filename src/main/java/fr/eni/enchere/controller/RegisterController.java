@@ -52,7 +52,7 @@ public class RegisterController {
                     ObjectError error = new ObjectError("globalError", key);
                     bindingResult.addError(error);
                 });
-                return "redirect:/register/register.html";
+                return "/register/register.html";
             }
         }
 }
