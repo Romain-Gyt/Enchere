@@ -1,0 +1,75 @@
+<div th:fragment="frag-form-article(article, action)" xmlns:th="http://www.thymeleaf.org">
+    <div class="my-form">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div th:if="${#strings.isEmpty(article.itemId)}" class="card-header">
+                            <h2>Création d'une enchère</h2>
+                        </div>
+                        <div th:unless="${#strings.isEmpty(article.itemId)}" class="card-header">
+                            <h2>Détails de l'article</h2>
+                        </div>
+                        <div class="card-body">
+                            <form th:action="${action}" method="POST" enctype="multipart/form-data" th:object="${article}">
+                                <div class="alert alert-danger errors" role="alert">
+                                    <div th:replace="~{fragments/fragment-errors :: frag-errors}"></div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="itemName" class="col-md-4 col-form-label text-md-right">Nom de l'article</label>
+                                    <div class="col-md-6">
+                                        <input type="text" id="itemName" class="form-control" name="itemName" th:placeholder="Titre" th:field="*{itemName}" th:readonly="${!#strings.isEmpty(article.itemId)}">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="description" class="col-md-4 col-form-label text-md-right">Description</label>
+                                    <div class="col-md-6">
+                                        <textarea id="description" class="form-control" name="description" th:placeholder="Description" th:field="*{description}" th:readonly="${!#strings.isEmpty(article.itemId)}"></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="categoryId" class="col-md-4 col-form-label text-md-right">Catégorie</label>
+                                    <div class="col-md-6">
+                                        <select id="categoryId" class="form-control" name="categoryId" th:field="*{category.categoryId}" th:disabled="${!#strings.isEmpty(article.itemId)}">
+                                            <option th:each="category : ${categories}" th:value="${category.categoryId}" th:text="${category.label}"></option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="initialPrice" class="col-md-4 col-form-label text-md-right">Mise à prix</label>
+                                    <div class="col-md-6">
+                                        <input type="number" id="initialPrice" class="form-control" name="initialPrice" th:placeholder="Prix" th:field="*{initialPrice}" th:readonly="${!#strings.isEmpty(article.itemId)}">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="startAuctionDate" class="col-md-4 col-form-label text-md-right">Date de début de l'enchère</label>
+                                    <div class="col-md-6">
+                                        <input type="text" id="startAuctionDate" class="form-control" th:value="${#dates.format(article.startAuctionDate, 'dd/MM/yyyy')}" th:readonly="true">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="endAuctionDate" class="col-md-4 col-form-label text-md-right">Date de fin de l'enchère</label>
+                                    <div class="col-md-6">
+                                        <input type="text" id="endAuctionDate" class="form-control" th:value="${#dates.format(article.endAuctionDate, 'dd/MM/yyyy')}" th:readonly="true">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="image" class="col-md-4 col-form-label text-md-right">Image</label>
+                                    <div class="col-md-6">
+                                        <img th:src="@{${'/images/' + article.itemId +'.jpg'}}" class="img-fluid" alt="Image de l'article">
+                                    </div>
+                                </div>
+                                <div th:if="${#strings.isEmpty(article.itemId)}" class="col-md-6 offset-md-4">
+                                    <button type="submit" class="btn btn-primary">Créer l'enchère</button>
+                                </div>
+                                <div th:unless="${#strings.isEmpty(article.itemId)}" class="col-md-6 offset-md-4">
+                                    <a href="/" class="btn btn-secondary">Retour à l'accueil</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
