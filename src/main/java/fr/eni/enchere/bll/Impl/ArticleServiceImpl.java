@@ -2,8 +2,10 @@ package fr.eni.enchere.bll.Impl;
 
 import fr.eni.enchere.bll.ArticleService;
 import fr.eni.enchere.bo.Article;
+import fr.eni.enchere.bo.Auction;
 import fr.eni.enchere.bo.User;
 import fr.eni.enchere.dal.ArticleDAO;
+import fr.eni.enchere.dal.AuctionDAO;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -12,10 +14,14 @@ import java.util.*;
 public class ArticleServiceImpl implements ArticleService {
 /******** Declaration ********/
     private ArticleDAO articleDAO;
+    private AuctionDAO auctionDAO;
 
     /********** Constructor ********/
 
-    public ArticleServiceImpl(ArticleDAO articleDAO) {
+    public ArticleServiceImpl(
+            ArticleDAO articleDAO,
+            AuctionDAO auctionDAO) {
+        this.auctionDAO = auctionDAO;
         this.articleDAO = articleDAO;
     }
 
@@ -27,17 +33,19 @@ public class ArticleServiceImpl implements ArticleService {
         return articleDAO.getAllArticles();
     }
 
+    @Override
+    public Article getArticleById(Long idArticle) {
+        Article article = articleDAO.getArticleById(idArticle);
+        List<Auction> auctions = auctionDAO.getAllAuctions(article.getItemId());
+        article.setAuctions(auctions);
+        return article;
+    }
 
 
     public List<Article> getAllArticleByNameAndCategory(String nameArticle, Long categoryId) {
         nameArticle = checkNameArticle(nameArticle);
         categoryId = checkCategoryId(categoryId);
         return articleDAO.getAllArticleByNameAndCategory(nameArticle, categoryId);
-    }
-
-    @Override
-    public List<Article> getArticlesByOpenedBuying() {
-        return articleDAO.getArticlesByOpenedBuying();
     }
 
     @Override

@@ -102,7 +102,7 @@
                         </div>
                         <div class="col-md-8">
                             <div class="card-body">
-                                <a th:if="${#authorization.expression('isAuthenticated()')}" th:href="@{/}"><h5 class="card-title text-white font-weight-bold" th:text="${article.itemName}"></h5></a>
+                                <a th:if="${#authorization.expression('isAuthenticated()')}" th:href="@{/article(idArticle=${article.getItemId()})}"><h5 class="card-title text-white font-weight-bold" th:text="${article.itemName}"></h5></a>
                                 <p class="card-text text-white">Prix initial : <span th:text="${article.itemName}"></span></p>
                                 <p class="card-text text-white">Prix initial : <span th:text="${article.initialPrice}"></span></p>
                                 <p class="card-text text-white">Date de début de l'enchère : <span th:text="${#dates.format(article.startAuctionDate, 'dd/MM/yyyy')}"></span></p>

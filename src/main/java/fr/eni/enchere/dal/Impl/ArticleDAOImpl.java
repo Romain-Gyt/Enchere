@@ -27,6 +27,14 @@ public class ArticleDAOImpl implements ArticleDAO {
            "WHERE se.end_auction_date > CURDATE()\n"+
            "ORDER BY se.end_auction_date;";
 
+   private static final String SELECT_ARTICLE_BY_ID = "SELECT se.item_id,se.item_name,se.description,se.start_auction_date,se.end_auction_date,se.initial_price,se.sale_price,\n" +
+           "        cat.category_id as cat_id,cat.label,\n" +
+           "        u.user_id as id_user,u.username,u.last_name,u.first_name,u.email,u.phone,u.street,u.postal_code,u.city,u.credit,u.administrator\n" +
+           "FROM sold_items se\n" +
+           "INNER JOIN categories cat ON se.category_id = cat.category_id\n" +
+           "INNER JOIN users u ON se.user_id = u.user_id\n" +
+           "WHERE se.item_id = :item_id;";
+
 
     private static final String SELECT_BY_NAME_AND_CATEGORY = "SELECT se.item_id,se.item_name,se.description,se.start_auction_date,se.end_auction_date,se.initial_price,se.sale_price,\n" +
             "        cat.category_id as cat_id,cat.label,\n" +
@@ -125,6 +133,13 @@ public class ArticleDAOImpl implements ArticleDAO {
     @Override
     public List<Article> getAllArticles() {
         return jdbcTemplate.query(SELECT_ALL, new ArticleRowMapper());
+    }
+
+    @Override
+    public Article getArticleById(Long idArticle) {
+        MapSqlParameterSource namedParameters = new MapSqlParameterSource();
+        namedParameters.addValue("item_id", idArticle);
+        return namedParameterJdbcTemplate.queryForObject(SELECT_ARTICLE_BY_ID, namedParameters, new ArticleRowMapper());
     }
 
 
