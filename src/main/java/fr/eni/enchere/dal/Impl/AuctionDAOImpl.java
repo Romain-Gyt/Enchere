@@ -2,16 +2,20 @@ package fr.eni.enchere.dal.impl;
 
 import fr.eni.enchere.bo.Auction;
 import fr.eni.enchere.dal.AuctionDAO;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+
 import java.util.List;
 
 @Repository
 public class AuctionDAOImpl implements AuctionDAO {
 
-    @Autowired
     private JdbcTemplate jdbcTemplate;
+
+
+    public AuctionDAOImpl(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
     @Override
     public List<Auction> getAllAuctions() {
