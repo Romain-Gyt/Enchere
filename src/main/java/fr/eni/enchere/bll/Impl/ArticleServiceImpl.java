@@ -53,6 +53,11 @@
         }
 
         @Override
+        public void insertBidAmountById(Long userId, int id, int bid_amount) {
+            auctionDAO.create(userId, id, bid_amount);
+        }
+
+        @Override
         public List<Article> getAllArticles() {
             List<Article> articles = articleDAO.getAllArticles();
             LocalDate now = LocalDate.now();

@@ -9,6 +9,8 @@ public interface ArticleService {
 
     void createArticle(Article article);
 
+    void insertBidAmountById(Long userId, int id, int bid_amount);
+
     List<Article> getAllArticles();
     Article getArticleById(int itemId);
 
