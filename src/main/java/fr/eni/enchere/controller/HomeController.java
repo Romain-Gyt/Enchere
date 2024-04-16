@@ -5,6 +5,7 @@ import fr.eni.enchere.bll.CategoryService;
 import fr.eni.enchere.bo.Article;
 import fr.eni.enchere.bo.Category;
 import fr.eni.enchere.bo.User;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -41,7 +42,7 @@ public class HomeController {
 
     @GetMapping("/search")
     public String filterSearch(
-            @ModelAttribute("memberSession")User userSession,
+            HttpSession session,
             @RequestParam(value="searchInput", required = false,defaultValue = "") String searchInput,
             @RequestParam(value="category_id", required = false,defaultValue = "0") String category_id,
             @RequestParam(value="transactionType", required = false,defaultValue = "false") String buying,
@@ -59,6 +60,7 @@ public class HomeController {
         if(buying.equals("false") && selling.equals("false")) {
             articles = articleService.getAllArticleByNameAndCategory(searchInput, Long.parseLong(category_id));
         }
+        User userSession = (User) session.getAttribute("memberSession");
         if(userSession != null) {
             if(buying.toLowerCase().equals("buying") ) {
                 articles = articleService.getArticlesByBuying(

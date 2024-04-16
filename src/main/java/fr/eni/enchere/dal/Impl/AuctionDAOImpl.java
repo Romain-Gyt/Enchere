@@ -18,7 +18,7 @@ public class AuctionDAOImpl implements AuctionDAO {
     }
 
     @Override
-    public List<Auction> getAllAuctions() {
+    public List<Auction> getAllAuctions(int itemId) {
         String sql = "SELECT *, IFNULL((SELECT bid_amount FROM bids WHERE item_id = sold_items.item_id ORDER BY bid_amount DESC LIMIT 1), initial_price) AS bid_amount FROM sold_items";
         return jdbcTemplate.query(sql, (rs, rowNum) -> {
             Auction auction = new Auction();

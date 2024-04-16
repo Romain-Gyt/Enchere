@@ -43,6 +43,7 @@ public class ArticleDAOImpl implements ArticleDAO {
             "INNER JOIN categories cat ON se.category_id = cat.category_id\n" +
             "INNER JOIN users u ON se.user_id = u.user_id\n" +
             "WHERE(cat.category_id = :category_id OR :category_id IS NULL)\n" +
+            "AND se.end_auction_date > CURDATE()\n"+
             "AND (se.item_name LIKE :item_name OR :item_name IS NULL);";
 
     private static final String SELECT_OPENED_AUCTION ="SELECT se.item_id,se.item_name,se.description,se.start_auction_date,se.end_auction_date,se.initial_price,se.sale_price,\n" +

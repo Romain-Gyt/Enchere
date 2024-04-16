@@ -2,13 +2,15 @@ package fr.eni.enchere.bll.Impl;
 
 import fr.eni.enchere.bll.ArticleService;
 import fr.eni.enchere.bo.Article;
-import fr.eni.enchere.bo.Auction;
 import fr.eni.enchere.bo.User;
 import fr.eni.enchere.dal.ArticleDAO;
 import fr.eni.enchere.dal.AuctionDAO;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class ArticleServiceImpl implements ArticleService {
@@ -36,8 +38,8 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public Article getArticleById(Long idArticle) {
         Article article = articleDAO.getArticleById(idArticle);
-        List<Auction> auctions = auctionDAO.getAllAuctions(article.getItemId());
-        article.setAuctions(auctions);
+//        List<Auction> auctions = auctionDAO.getAllAuctions(article.getItemId());
+//        article.setAuctions(auctions);
         return article;
     }
 

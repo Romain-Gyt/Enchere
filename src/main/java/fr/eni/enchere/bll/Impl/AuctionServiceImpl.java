@@ -1,4 +1,4 @@
-package fr.eni.enchere.bll.impl;
+package fr.eni.enchere.bll.Impl;
 
 import fr.eni.enchere.bll.AuctionService;
 import fr.eni.enchere.bo.Auction;
@@ -19,4 +19,3 @@ public class AuctionServiceImpl implements AuctionService {
     }
 
 }
-
