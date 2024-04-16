@@ -21,20 +21,20 @@ public class ArticleDAOImpl implements ArticleDAO {
    private static final String SELECT_ALL = "SELECT se.item_id,se.item_name,se.description,se.start_auction_date,se.end_auction_date,se.initial_price,se.sale_price,\n" +
            "        cat.category_id as cat_id,cat.label,\n" +
            "        u.user_id as id_user,u.username,u.last_name,u.first_name,u.email,u.phone,u.street,u.postal_code,u.city,u.credit,u.administrator\n" +
-           "       FROM sold_items se\n" +
-           "       INNER JOIN categories cat ON se.category_id = cat.category_id\n" +
-           "       INNER JOIN users u ON se.user_id = u.user_id\n" +
-           "      ORDER BY se.end_auction_date;";
+           "FROM sold_items se\n" +
+           "INNER JOIN categories cat ON se.category_id = cat.category_id\n" +
+           "INNER JOIN users u ON se.user_id = u.user_id\n" +
+           "ORDER BY se.end_auction_date;";
 
 
-    private static final String SELECT_BY_NAME_AND_CATEGORY = "SELECT se.item_id,se.item_name,se.description,se.start_auction_date,"
-            + "se.end_auction_date,se.initial_price,se.sale_price,"
-            + "cat.category_id as cat_id,cat.label,"
-            + "u.user_id as id_user,u.username,u.last_name,u.first_name,u.email,u.phone,u.street,u.postal_code,u.city,u.credit,u.administrator "
-        + "FROM sold_items se "
-        + "INNER JOIN categories cat ON se.category_id = cat.category_id "
-        + "INNER JOIN users u ON se.user_id = u.user_id "
-        + "WHERE end_auction_date > CURDATE() AND (cat.category_id = :category_id OR :category_id IS NULL) AND se.item_name LIKE :item_name;";
+    private static final String SELECT_BY_NAME_AND_CATEGORY = "SELECT se.item_id,se.item_name,se.description,se.start_auction_date,se.end_auction_date,se.initial_price,se.sale_price,\n" +
+            "        cat.category_id as cat_id,cat.label,\n" +
+            "        u.user_id as id_user,u.username,u.last_name,u.first_name,u.email,u.phone,u.street,u.postal_code,u.city,u.credit,u.administrator\n" +
+            "FROM sold_items se\n" +
+            "INNER JOIN categories cat ON se.category_id = cat.category_id\n" +
+            "INNER JOIN users u ON se.user_id = u.user_id\n" +
+            "WHERE(cat.category_id = :category_id OR :category_id IS NULL)\n" +
+            "AND (se.item_name LIKE :item_name OR :item_name IS NULL);";
 
     private static final String SELECT_OPENED_AUCTION ="SELECT se.item_id,se.item_name,se.description,se.start_auction_date,se.end_auction_date,se.initial_price,se.sale_price,\n" +
             "        cat.category_id as cat_id,cat.label,\n" +
@@ -42,31 +42,73 @@ public class ArticleDAOImpl implements ArticleDAO {
             "       FROM sold_items se\n" +
             "       INNER JOIN categories cat ON se.category_id = cat.category_id\n" +
             "       INNER JOIN users u ON se.user_id = u.user_id\n" +
-            "     WHERE se.end_auction_date > CURDATE();";
+            " WHERE se.end_auction_date > CURDATE();";
 
     public static final String SELECT_BY_BUYING_CURRENT_AUCTIONS = "SELECT se.item_id,se.item_name,se.description,se.start_auction_date,se.end_auction_date,se.initial_price,se.sale_price,\n" +
-            " cat.category_id as cat_id,cat.label,\n" +
-            " u.user_id as id_user,u.username,u.last_name,u.first_name,u.email,u.phone,u.street,u.postal_code,u.city,u.credit,u.administrator\n" +
-        " FROM sold_items se\n" +
-        " INNER JOIN categories cat ON se.category_id = cat.category_id\n" +
-        " INNER JOIN users u ON se.user_id = u.user_id\n" +
-        " INNER JOIN bids b ON se.item_id = b.item_id" +
-        " WHERE end_auction_date > CURDATE()\n" +
-        " AND (se.item_name LIKE :item_name OR :item_name IS NULL)\n" +
-        " AND se.user_id = :user_id\n" +
-        " AND (cat.category_id = :category_id  OR :category_id IS NULL);";
+            "        cat.category_id as cat_id,cat.label,\n" +
+            "        u.user_id as id_user,u.username,u.last_name,u.first_name,u.email,u.phone,u.street,u.postal_code,u.city,u.credit,u.administrator,\n" +
+            "        b.user_id as id_bidder,b.item_id as bid_item,b.bid_date,b.bid_amount\n" +
+            "FROM sold_items se\n" +
+            "INNER JOIN categories cat ON se.category_id = cat.category_id\n" +
+            "INNER JOIN users u ON se.user_id = u.user_id\n" +
+            "INNER JOIN bids b ON se.item_id = b.item_id\n" +
+            "WHERE se.end_auction_date > CURDATE()\n" +
+            "AND (se.item_name LIKE :item_name OR :item_name IS NULL)\n" +
+            "AND b.user_id = :user_id\n" +
+            "AND (cat.category_id = :category_id  OR :category_id IS NULL);";
 
     public static final String SELECT_BY_BUYING_CLOSED_AUCTIONS = "SELECT se.item_id,se.item_name,se.description,se.start_auction_date,se.end_auction_date,se.initial_price,se.sale_price,\n" +
+            "        cat.category_id as cat_id,cat.label,\n" +
+            "        u.user_id as id_user,u.username,u.last_name,u.first_name,u.email,u.phone,u.street,u.postal_code,u.city,u.credit,u.administrator,\n" +
+            "        b.user_id as id_bidder,b.item_id as bid_item,b.bid_date,b.bid_amount\n" +
+            "FROM sold_items se\n" +
+            "INNER JOIN categories cat ON se.category_id = cat.category_id\n" +
+            "INNER JOIN users u ON se.user_id = u.user_id\n" +
+            "INNER JOIN bids b ON se.item_id = b.item_id\n" +
+            "WHERE end_auction_date < CURDATE()\n" +
+            "AND se.sale_price = b.bid_amount\n" +
+            "AND (se.item_name LIKE :item_name OR :item_name IS NULL)\n" +
+            "AND b.user_id = :user_id\n" +
+            "AND (cat.category_id = :category_id  OR :category_id IS NULL)\n" +
+            "AND se.sale_price IS NOT NULL;";
+
+    public static final String SELECT_CURRENT_SELLING = "SELECT se.item_id,se.item_name,se.description,se.start_auction_date,se.end_auction_date,se.initial_price,se.sale_price,\n" +
             " cat.category_id as cat_id,cat.label,\n" +
             " u.user_id as id_user,u.username,u.last_name,u.first_name,u.email,u.phone,u.street,u.postal_code,u.city,u.credit,u.administrator\n" +
-        " FROM sold_items se\n" +
-        " INNER JOIN categories cat ON se.category_id = cat.category_id\n" +
-        " INNER JOIN users u ON se.user_id = u.user_id\n" +
-        " WHERE end_auction_date < CURDATE()\n" +
-        " AND (se.item_name LIKE :item_name OR :item_name IS NULL)\n" +
-        " AND se.user_id = :user_id\n" +
-        " AND (cat.category_id = :category_id  OR :category_id IS NULL)" +
-        " AND se.sale_price IS NOT NULL;";
+            "FROM sold_items se\n" +
+            " INNER JOIN categories cat ON se.category_id = cat.category_id\n" +
+            " INNER JOIN users u ON se.user_id = u.user_id\n" +
+            "WHERE se.end_auction_date > CURDATE()\n" +
+            "AND (se.item_name LIKE :item_name OR :item_name IS NULL)\n" +
+            "AND (cat.category_id = :category_id  OR :category_id IS NULL)\n" +
+            "AND se.user_id = :user_id\n" +
+            "ORDER BY se.end_auction_date;";
+
+    public static final String SELECT_NON_STARTED_SELLING = "SELECT se.item_id,se.item_name,se.description,se.start_auction_date,se.end_auction_date,se.initial_price,se.sale_price,\n" +
+            "cat.category_id as cat_id,cat.label,\n" +
+            "u.user_id as id_user,u.username,u.last_name,u.first_name,u.email,u.phone,u.street,u.postal_code,u.city,u.credit,u.administrator\n" +
+                " FROM sold_items se\n" +
+                " INNER JOIN categories cat ON se.category_id = cat.category_id\n" +
+                " INNER JOIN users u ON se.user_id = u.user_id\n" +
+                " WHERE se.end_auction_date > CURDATE()\n" +
+                " AND (se.item_name LIKE :item_name OR :item_name IS NULL)\n" +
+                " AND (cat.category_id = :category_id  OR :category_id IS NULL)\n" +
+                " AND se.user_id = :user_id\n" +
+                " AND se.start_auction_date > CURDATE()\n" +
+                " ORDER BY se.end_auction_date;";
+
+    public static final String SELECT_CLOSED_SELLING = "SELECT se.item_id,se.item_name,se.description,se.start_auction_date,se.end_auction_date,se.initial_price,se.sale_price,\n" +
+            "cat.category_id as cat_id,cat.label,\n" +
+            "u.user_id as id_user,u.username,u.last_name,u.first_name,u.email,u.phone,u.street,u.postal_code,u.city,u.credit,u.administrator\n" +
+            " FROM sold_items se\n" +
+            " INNER JOIN categories cat ON se.category_id = cat.category_id\n" +
+            " INNER JOIN users u ON se.user_id = u.user_id\n" +
+            " WHERE se.end_auction_date < CURDATE()\n" +
+            " AND (se.item_name LIKE :item_name OR :item_name IS NULL)\n" +
+            " AND (cat.category_id = :category_id  OR :category_id IS NULL)\n" +
+            " AND se.user_id = :user_id\n" +
+            " ORDER BY se.end_auction_date;";
+
     private JdbcTemplate jdbcTemplate;
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
@@ -114,6 +156,29 @@ public class ArticleDAOImpl implements ArticleDAO {
         return namedParameterJdbcTemplate.query(SELECT_BY_BUYING_CLOSED_AUCTIONS, namedParameters, new ArticleRowMapper());
     }
 
+    public List<Article> getArticlesByCurrentSelling(String nameArticle, Long categoryId, Long userId) {
+        MapSqlParameterSource namedParameters = new MapSqlParameterSource();
+        namedParameters.addValue("category_id", categoryId);
+        namedParameters.addValue("item_name", nameArticle);
+        namedParameters.addValue("user_id", userId);
+        return namedParameterJdbcTemplate.query(SELECT_CURRENT_SELLING, namedParameters, new ArticleRowMapper());
+    }
+
+    public List<Article> getArticlesByNonStartedSelling(String nameArticle, Long categoryId, Long userId) {
+        MapSqlParameterSource namedParameters = new MapSqlParameterSource();
+        namedParameters.addValue("category_id", categoryId);
+        namedParameters.addValue("item_name", nameArticle);
+        namedParameters.addValue("user_id", userId);
+        return namedParameterJdbcTemplate.query(SELECT_NON_STARTED_SELLING, namedParameters, new ArticleRowMapper());
+    }
+
+    public List<Article> getArticlesByClosedSelling(String nameArticle, Long categoryId, Long userId) {
+        MapSqlParameterSource namedParameters = new MapSqlParameterSource();
+        namedParameters.addValue("category_id", categoryId);
+        namedParameters.addValue("item_name", nameArticle);
+        namedParameters.addValue("user_id", userId);
+        return namedParameterJdbcTemplate.query(SELECT_CLOSED_SELLING, namedParameters, new ArticleRowMapper());
+    }
 
     class ArticleRowMapper implements RowMapper<Article> {
         @Override

@@ -62,7 +62,19 @@ public class ArticleServiceImpl implements ArticleService {
     public List<Article> getArticlesBySelling(User userSession, String nameArticle, Long categoryId, boolean currentSelling, boolean nonStartedSelling, boolean closedSelling) {
         nameArticle = checkNameArticle(nameArticle);
         categoryId = checkCategoryId(categoryId);
-        return null;
+        System.out.println(nonStartedSelling);
+       List<Article> articles = new ArrayList<>();
+        if(currentSelling){
+            articles.addAll(articleDAO.getArticlesByCurrentSelling(nameArticle, categoryId, userSession.getIdUser()));
+        }
+
+        if(nonStartedSelling){
+            articles.addAll(articleDAO.getArticlesByNonStartedSelling(nameArticle, categoryId, userSession.getIdUser()));
+        }
+        if(closedSelling){
+            articles.addAll(articleDAO.getArticlesByClosedSelling(nameArticle, categoryId, userSession.getIdUser()));
+        }
+        return articles;
     }
 
 

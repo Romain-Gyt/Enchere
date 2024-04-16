@@ -1,7 +1,5 @@
 package fr.eni.enchere.bo;
 
-import org.eclipse.angus.mail.imap.protocol.UIDSet;
-
 import java.sql.Date;
 import java.util.Objects;
 
@@ -19,6 +17,7 @@ public class Article {
     private Category category;
     private User user;
     private String status;
+
 
 
     /******** Constructor ********/

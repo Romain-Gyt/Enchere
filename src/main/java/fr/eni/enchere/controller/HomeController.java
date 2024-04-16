@@ -45,13 +45,13 @@ public class HomeController {
             @RequestParam(value="searchInput", required = false,defaultValue = "") String searchInput,
             @RequestParam(value="category_id", required = false,defaultValue = "0") String category_id,
             @RequestParam(value="transactionType", required = false,defaultValue = "false") String buying,
-            @RequestParam(value="selling", required = false,defaultValue = "false") String selling,
+            @RequestParam(value="transactionType", required = false,defaultValue = "false") String selling,
             @RequestParam(value="open_auction", required = false,defaultValue = "false") String openAuction,
             @RequestParam(value="won_auction", required = false,defaultValue = "false") String closedAuction,
             @RequestParam(value="current_auction", required = false,defaultValue = "false") String currentAuction,
-//            @RequestParam(value="current_selling", required = false,defaultValue = "false") String currentSelling,
-//            @RequestParam(value="non_started_selling", required = false,defaultValue = "false") String non_started_selling,
-//            @RequestParam(value="finished_selling", required = false,defaultValue = "false") String finished_selling,
+            @RequestParam(value="current_selling", required = false,defaultValue = "false") String currentSelling,
+            @RequestParam(value="non_started_selling", required = false,defaultValue = "false") String non_started_selling,
+            @RequestParam(value="finished_selling", required = false,defaultValue = "false") String finished_selling,
             Model model
 
     ) {
@@ -59,8 +59,6 @@ public class HomeController {
         if(buying.equals("false") && selling.equals("false")) {
             articles = articleService.getAllArticleByNameAndCategory(searchInput, Long.parseLong(category_id));
         }
-
-        System.out.println("buying: " + buying);
         if(userSession != null) {
             if(buying.toLowerCase().equals("buying") ) {
                 articles = articleService.getArticlesByBuying(
@@ -71,17 +69,20 @@ public class HomeController {
                         Boolean.parseBoolean(currentAuction),
                         Boolean.parseBoolean(closedAuction));
             }
+            System.out.println(selling);
+            if(selling.toLowerCase().equals("selling")) {
+                System.out.println(non_started_selling);
+                articles = articleService.getArticlesBySelling(
+                        userSession,
+                        searchInput,
+                        Long.parseLong(category_id),
+                        Boolean.parseBoolean(currentSelling),
+                        Boolean.parseBoolean(non_started_selling),
+                        Boolean.parseBoolean(finished_selling));
+            }
         }
 
-//        if(selling.toLowerCase().equals("true")) {
-//            articles = articleService.getArticlesBySelling(
-//                    userSession,
-//                    searchInput,
-//                    Long.parseLong(category_id),
-//                    Boolean.parseBoolean(currentSelling),
-//                    Boolean.parseBoolean(non_started_selling),
-//                    Boolean.parseBoolean(finished_selling));
-//        }
+
         List<Category> categories = categoryService.getCategoryById(Long.parseLong(category_id));
         model.addAttribute("articles", articles);
         model.addAttribute("categories", categories);
