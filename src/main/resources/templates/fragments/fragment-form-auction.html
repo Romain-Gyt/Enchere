@@ -14,7 +14,7 @@
                             <h4 th:unless="${#strings.isEmpty(action)}" class="text-center" >Vente d'un article</h4>
                         </div>
                         <div class="row mt-3">
-                            <h5 class="card-title" th:text="${article.itemName} != null ? ${article.itemName} : 'Nom de l\'article'"></h5
+                            <h5 class="card-title" th:text="${article.itemName} != null ? ${article.itemName} : 'Nom de l\'article'"></h5>
                             <div class="col-md-12">
                                 <label class="labels">Description : </label>
                                 <input th:if="${#strings.isEmpty(action)}" type="text" class="form-control" th:value="${article.description}" disabled>
