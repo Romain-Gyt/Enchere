@@ -1,0 +1,58 @@
+<div xmlns:th="http://www.thymeleaf.org" th:fragment="frag-form-user(action,vue)">
+    <div class="container rounded bg-white mt-5 mb-5">
+        <div class="row">
+            <div class="col-md-3 border-right">
+                <div class="d-flex flex-column align-items-center text-center p-3 py-5">
+                    <img src="/pictures/Enchere.jpg" class="card-img" alt="..." >
+                </div>
+            </div>
+            <div class="col-md-5 border-right">
+                <div class="p-3 py-5">
+                    <form th:action="${action}" th:object="${article}">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h4 th:if="${#strings.isEmpty(action)}" class="text-center" >Detail de l'article</h4>
+                            <h4 th:unless="${#strings.isEmpty(action)}" class="text-center" >Vente d'un article</h4>
+                        </div>
+                        <div class="row mt-3">
+                            <h5 class="card-title" th:text="${article.itemName} != null ? ${article.itemName} : 'Nom de l\'article'"></h5
+                            <div class="col-md-12">
+                                <label class="labels">Description : </label>
+                                <input th:if="${#strings.isEmpty(action)}" type="text" class="form-control" th:value="${article.description}" disabled>
+                                <input th:unless="${#strings.isEmpty(action)}" type="text" class="form-control" th:field="*{article.description}" disabled>
+                            </div>
+                            <div class="col-md-12">
+                                <label class="labels">Catégorie : </label>
+                                <input th:if="${#strings.isEmpty(action)}" type="text" class="form-control" th:value="${article.category.label}" disabled>
+                                <input th:unless="${#strings.isEmpty(action)}" type="text" class="form-control" th:field="*{article.category.label}" disabled>
+                            </div>
+                            <div class="col-md-12">
+                                <label class="labels">Meilleur offre : </label>
+                                <input type="text" class="form-control" th:value="${auction.bidAmount} != 0 ? ${auction.bidAmount} + ' par ' + ${user.pseudo} : ${auction.bidAmount}" disabled>
+                            </div>
+                            <div class="col-md-12">
+                                <label class="labels">Mise à prix : </label>
+                                <input type="text" class="form-control" th:value="${article.initialPrice}" disabled>
+                            </div>
+                            <div class="col-md-12">
+                                <label class="labels">Début de l'enchère : </label>
+                                <input type="text" class="form-control" th:value="${#dates.format(article.startAuctionDate, 'dd/MM/yyyy')}" disabled>
+                            </div>
+                            <div class="col-md-12">
+                                <label class="labels">Fin de l'enchère : </label>
+                                <input type="text" class="form-control" th:value="${#dates.format(article.endAuctionDate, 'dd/MM/yyyy')}" disabled>
+                            </div>
+                            <div class="col-md-12">
+                                <label class="labels">Retrait : </label>
+                                <input type="text" class="form-control" th:value="${withdrawals.street + ', ' + (withdrawals.postal_code + ' ' + withdrawals.city)}" disabled>
+                            </div>
+                            <div class="col-md-12">
+                                <label class="labels">Vendeur : </label>
+                                <input type="text" class="form-control" th:value="${article.user.pseudo}" disabled>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

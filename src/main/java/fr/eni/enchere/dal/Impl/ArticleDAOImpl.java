@@ -24,6 +24,7 @@ public class ArticleDAOImpl implements ArticleDAO {
            "FROM sold_items se\n" +
            "INNER JOIN categories cat ON se.category_id = cat.category_id\n" +
            "INNER JOIN users u ON se.user_id = u.user_id\n" +
+           "WHERE se.end_auction_date > CURDATE()\n"+
            "ORDER BY se.end_auction_date;";
 
 
