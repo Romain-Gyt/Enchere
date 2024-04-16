@@ -1,4 +1,4 @@
-package fr.eni.enchere.dal.impl;
+package fr.eni.enchere.dal.Impl;
 
 import fr.eni.enchere.bo.Auction;
 import fr.eni.enchere.dal.AuctionDAO;
