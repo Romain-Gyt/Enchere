@@ -1,0 +1,112 @@
+<div
+        xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html"
+        th:fragment="fragment-profil(mode)">
+
+        <div class="container rounded bg-white mt-5 mb-5">
+            <div class="row">
+                <div class="col-md-3 border-right">
+                    <div class="d-flex flex-column align-items-center text-center p-3 py-5">
+                        <img class="rounded-circle mt-5" width="150px" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg">
+                        <div th:if="${#strings.isEmpty(mode)}">
+                            <span class="font-weight-bold" th:text="${memberSession.pseudo}"></span></br>
+                            <span class="text-white-50" th:text="${memberSession.email}"></span>
+                        </div>
+                        <div th:unless="${#strings.isEmpty(mode)}">
+                            <span class="font-weight-bold" th:text="${user.pseudo}"></span></br>
+                            <span class="text-white-50" th:text="${user.email}"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-5 border-right">
+                    <div class="p-3 py-5">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h4 class="text-right">Mes informations</h4>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-md-6">
+                                <label class="labels">Pseudo</label>
+                                <div th:if="${#strings.isEmpty(mode)}">
+                                    <input type="text" class="form-control" th:value="${memberSession.pseudo}" disabled>
+                                </div>
+                                <div th:unless="${#strings.isEmpty(mode)}">
+                                    <input type="text" class="form-control" th:value="${user.pseudo}" disabled>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="labels">Nom</label>
+                                <div th:if="${#strings.isEmpty(mode)}">
+                                    <input type="text" class="form-control" th:value="${memberSession.lastName}" disabled>
+                                </div>
+                                <div th:unless="${#strings.isEmpty(mode)}">
+                                    <input type="text" class="form-control" th:value="${user.lastName}" disabled>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="labels">Prenom</label>
+                                <div th:if="${#strings.isEmpty(mode)}">
+                                    <input type="text" class="form-control" th:value="${memberSession.firstName}"disabled >
+                                </div>
+                                <div th:unless="${#strings.isEmpty(mode)}">
+                                    <input type="text" class="form-control" th:value="${user.firstName}"disabled >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-md-12">
+                                <label class="labels">email</label>
+                                <div th:if="${#strings.isEmpty(mode)}">
+                                    <input type="text" class="form-control" th:value="${memberSession.email}" disabled>
+                                </div>
+                                <div th:unless="${#strings.isEmpty(mode)}">
+                                    <input type="text" class="form-control" th:value="${user.email}" disabled>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <label class="labels">Téléphone</label>
+                                <div th:if="${#strings.isEmpty(mode)}">
+                                    <input type="text" class="form-control" th:value="${memberSession.phoneNumber}" disabled>
+                                </div>
+                                <div th:unless="${#strings.isEmpty(mode)}">
+                                    <input type="text" class="form-control" th:value="${user.phoneNumber}" disabled>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <label class="labels">Rue</label>
+                                <div th:if="${#strings.isEmpty(mode)}">
+                                    <input type="text" class="form-control" th:value="${memberSession.street}" disabled>
+                                </div>
+                                <div th:unless="${#strings.isEmpty(mode)}">
+                                    <input type="text" class="form-control" th:value="${user.street}" disabled>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <label class="labels">Code Postal</label>
+                                <div th:if="${#strings.isEmpty(mode)}">
+                                    <input type="text" class="form-control" th:value="${memberSession.zipCode}" disabled>
+                                </div>
+                                <div th:unless="${#strings.isEmpty(mode)}">
+                                    <input type="text" class="form-control" th:value="${user.zipCode}" disabled>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <label class="labels">Ville</label>
+                                <div th:if="${#strings.isEmpty(mode)}">
+                                    <input type="text" class="form-control" th:value="${memberSession.city}"disabled>
+                                </div>
+                                <div th:unless="${#strings.isEmpty(mode)}">
+                                    <input type="text" class="form-control" th:value="${user.city}"disabled>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-5 text-center">
+                            <div th:if="${#strings.isEmpty(mode)}">
+                                <a th:href="@{/profil/details}">
+                                    <button class="btn btn-primary profile-button btn-form" type="button">Modifier</button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

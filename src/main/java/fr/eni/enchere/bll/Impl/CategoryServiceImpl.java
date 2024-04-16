@@ -1,4 +1,4 @@
-package fr.eni.enchere.bll.impl;
+package fr.eni.enchere.bll.Impl;
 
 import fr.eni.enchere.bll.CategoryService;
 import fr.eni.enchere.bo.Article;
@@ -21,5 +21,18 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public List<Category> getAllCategories() {
         return categoryDAO.getAllCategories();
+    }
+
+    @Override
+    public List<Category> getCategoryById(Long id) {
+        id = checkCategoryId(id);
+        return categoryDAO.getCategoryById(id);
+    }
+
+    private Long checkCategoryId(Long categoryId) {
+        if(categoryId == 0){
+            return null;
+        }
+        return categoryId;
     }
 }
