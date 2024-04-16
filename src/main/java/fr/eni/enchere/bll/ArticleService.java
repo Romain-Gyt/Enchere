@@ -22,4 +22,6 @@ public interface ArticleService {
                                          boolean currentSelling,
                                          boolean nonStartedSelling,
                                          boolean closedSelling);
+
+    void deleteArticle(Long idArticle);
 }

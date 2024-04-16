@@ -87,7 +87,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUser(Long id) {
-         userDao.delete(id);
+        userDao.delete(id);
+    }
+
+    @Override
+    public void disableUser(Long id) {
+        userDao.disable(id);
+    }
+
+    @Override
+    public void enableUser(Long id) {
+        userDao.enable(id);
     }
 
     private boolean isUserNull(User user,RegisterException registerException) {

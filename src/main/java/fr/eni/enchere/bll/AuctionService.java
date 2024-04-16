@@ -5,4 +5,5 @@ import java.util.List;
 
 public interface AuctionService {
     List<Auction> getAllAuctions(int itemId);
+    void deleteAuction(int userID);
 }

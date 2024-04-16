@@ -133,6 +133,9 @@ public class Article {
         } else {
             this.status = "Terminé";
         }
+        if(user.isDisabled()){
+            this.status = "Vente suspendue";
+        }
     }
 
     /******** toString ********/

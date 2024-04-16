@@ -14,4 +14,5 @@ public interface ArticleDAO {
     List<Article> getArticlesByCurrentSelling(String nameArticle, Long categoryId, Long userId);
     List<Article> getArticlesByNonStartedSelling(String nameArticle, Long categoryId, Long userId);
     List<Article> getArticlesByClosedSelling(String nameArticle, Long categoryId, Long userId);
+    void deleteArticle(Long idArticle);
 }

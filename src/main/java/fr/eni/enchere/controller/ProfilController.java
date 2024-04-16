@@ -1,5 +1,7 @@
 package fr.eni.enchere.controller;
 
+import fr.eni.enchere.bll.ArticleService;
+import fr.eni.enchere.bll.AuctionService;
 import fr.eni.enchere.bll.UserService;
 import fr.eni.enchere.bo.User;
 import fr.eni.enchere.exception.RegisterException;
@@ -19,10 +21,18 @@ public class ProfilController {
 
     /********* DECLARATION *********/
     private UserService userService;
+    private AuctionService auctionService;
+    private ArticleService articleService;
 
     /********* CONSTRUCTOR *********/
-    public ProfilController(UserService userService) {
+    public ProfilController(
+            UserService userService,
+            AuctionService auctionService,
+            ArticleService articleService
+    ) {
         this.userService = userService;
+        this.auctionService = auctionService;
+        this.articleService = articleService;
     }
 
     @GetMapping("/profil")
@@ -82,7 +92,9 @@ public class ProfilController {
     @GetMapping("/profil/delete")
     public String deleteProfil(
             @RequestParam("user_id") String id) {
+        auctionService.deleteAuction(Integer.parseInt(id));
+        articleService.deleteArticle(Long.parseLong(id));
         userService.deleteUser(Long.parseLong(id));
-        return "redirect:/logout";
+        return "redirect:/";
     }
 }

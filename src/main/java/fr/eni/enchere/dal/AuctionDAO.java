@@ -5,5 +5,6 @@ import java.util.List;
 
 public interface AuctionDAO {
     List<Auction> getAllAuctions(int itemId);
+    void deleteAuction(int userID);
 }
 

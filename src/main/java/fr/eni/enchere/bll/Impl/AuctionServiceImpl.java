@@ -18,4 +18,9 @@ public class AuctionServiceImpl implements AuctionService {
         return auctionDAO.getAllAuctions(itemId);
     }
 
+    @Override
+    public void deleteAuction(int userID) {
+        auctionDAO.deleteAuction(userID);
+    }
+
 }
