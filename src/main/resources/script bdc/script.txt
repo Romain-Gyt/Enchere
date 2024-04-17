@@ -19,3 +19,20 @@ INSERT INTO USERS (username, last_name, first_name, email, phone, street, postal
 INSERT INTO ROLES (role, is_admin) VALUES ('ROLE_MEMBER',0);
 INSERT INTO ROLES (role, is_admin) VALUES ('ROLE_MEMBER',1);
 INSERT INTO ROLES (role, is_admin) VALUES ('ROLE_ADMIN',1);
+
+CREATE TABLE deleted_account
+(
+    user_id       INT          NOT NULL,
+    username      VARCHAR(30)  NOT NULL,
+    last_name     VARCHAR(30)  NOT NULL,
+    first_name    VARCHAR(30)  NOT NULL,
+    email         VARCHAR(50)  NOT NULL,
+    phone         VARCHAR(10)  NOT NULL,
+    street        VARCHAR(50)  NOT NULL,
+    postal_code   VARCHAR(5)   NOT NULL,
+    city          VARCHAR(30)  NOT NULL,
+    password      VARCHAR(255) NOT NULL,
+    credit        INT          NOT NULL,
+    administrator INT          NOT NULL,
+    disabled      INT          NOT NULL,
+);

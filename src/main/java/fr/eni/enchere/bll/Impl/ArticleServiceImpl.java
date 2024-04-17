@@ -87,6 +87,11 @@ public class ArticleServiceImpl implements ArticleService {
         return articles;
     }
 
+    @Override
+    public void deleteArticle(Long idArticle) {
+        articleDAO.deleteArticle(idArticle);
+    }
+
 
     private String checkNameArticle(String nameArticle) {
         if(nameArticle.isEmpty()){

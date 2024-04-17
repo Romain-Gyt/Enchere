@@ -3,6 +3,8 @@ package fr.eni.enchere.dal.Impl;
 import fr.eni.enchere.bo.Auction;
 import fr.eni.enchere.dal.AuctionDAO;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -10,11 +12,17 @@ import java.util.List;
 @Repository
 public class AuctionDAOImpl implements AuctionDAO {
 
+    private static  final String DELETE_AUCTION = "DELETE FROM sold_items WHERE user_id = :user_id";
     private JdbcTemplate jdbcTemplate;
+    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
 
-    public AuctionDAOImpl(JdbcTemplate jdbcTemplate) {
+    public AuctionDAOImpl(
+            JdbcTemplate jdbcTemplate,
+            NamedParameterJdbcTemplate namedParameterJdbcTemplate
+    ) {
         this.jdbcTemplate = jdbcTemplate;
+        this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
     }
 
     @Override
@@ -28,5 +36,12 @@ public class AuctionDAOImpl implements AuctionDAO {
             auction.setBidAmount(rs.getInt("bid_amount"));
             return auction;
         });
+    }
+
+    @Override
+    public void deleteAuction(int userID) {
+        MapSqlParameterSource namedParameters = new MapSqlParameterSource();
+        namedParameters.addValue("user_id", userID);
+        namedParameterJdbcTemplate.update(DELETE_AUCTION, namedParameters);
     }
 }

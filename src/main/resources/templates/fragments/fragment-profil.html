@@ -98,8 +98,15 @@
                             </div>
                         </div>
                         <div class="mt-5 text-center">
-                            <div  th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
-                                <button class="btn btn-danger profile-button btn-form" type="button" th:href="@{/profil/delete(user_id=${user.idUser})}">Supprimer</button>
+                            <div th:if="${memberSession != null and user != null and ((#authorization.expression('hasRole(''ADMIN'')') and user.idUser != memberSession.idUser) or memberSession == null)}">
+                                <input id="user_id" type="hidden" th:value="${user.idUser}">
+                                <button id="btn-delete-admin" class="btn btn-danger profile-button btn-form" type="button">Supprimer</button>
+                                <div th:if="${user.disabled}">
+                                    <button id="enable-btn" class="btn btn-primary profile-button btn-form" type="button" th:href="@{/}">Activer</button>
+                                </div>
+                                <div th:unless="${user.disabled}">
+                                    <button id="disabled-btn" class="btn btn-primary profile-button btn-form" type="button" th:href="@{/}">Desactiver</button>
+                                </div>
                             </div>
                             <div th:if="${#strings.isEmpty(mode)}">
                                 <a th:href="@{/profil/details}">

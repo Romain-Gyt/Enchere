@@ -62,6 +62,7 @@ public class HomeController {
         }
         User userSession = (User) session.getAttribute("memberSession");
         if(userSession != null) {
+            System.out.println(buying);
             if(buying.toLowerCase().equals("buying") ) {
                 articles = articleService.getArticlesByBuying(
                         userSession,
@@ -89,5 +90,4 @@ public class HomeController {
         model.addAttribute("categories", categories);
         return "index.html";
     }
-
 }
