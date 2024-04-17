@@ -3,6 +3,7 @@ package fr.eni.enchere.dal.Impl;
 import fr.eni.enchere.bo.Article;
 import fr.eni.enchere.bo.Category;
 import fr.eni.enchere.bo.User;
+import fr.eni.enchere.bo.Withdrawals;
 import fr.eni.enchere.dal.ArticleDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;

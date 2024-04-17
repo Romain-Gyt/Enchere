@@ -12,7 +12,9 @@
 </head>
 <body>
 <main class="main-content">
-<div th:replace="fragments/fragment-form-article :: frag-form-article(${article}, ${action}, ${errors})"></div>
+    <div th:with="action='detail'">
+        <div th:replace="fragments/fragment-form-article :: frag-form-article(${article}, ${action}, ${errors})"></div>
+    </div>
 </main>
 </body>
 </html>

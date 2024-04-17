@@ -3,8 +3,10 @@
     import fr.eni.enchere.bll.ArticleService;
     import fr.eni.enchere.bo.Article;
     import fr.eni.enchere.bo.Auction;
+    import fr.eni.enchere.bo.Withdrawals;
     import fr.eni.enchere.dal.ArticleDAO;
     import fr.eni.enchere.dal.AuctionDAO;
+    import fr.eni.enchere.dal.WithdrawalsDAO;
     import org.springframework.beans.factory.annotation.Autowired;
     import org.springframework.jdbc.core.JdbcTemplate;
     import org.springframework.stereotype.Service;
@@ -25,6 +27,9 @@
         private AuctionDAO auctionDAO;
 
         @Autowired
+        private WithdrawalsDAO withdrawalsDAO;
+
+        @Autowired
         private JdbcTemplate jdbcTemplate;
 
         /********** Constructor ********/
@@ -43,13 +48,17 @@
         }
 
         @Override
-        public void updateArticle(Article article) {
+        public void updateArticle(Article article, Withdrawals withdrawals) {
+
             articleDAO.updateArticle(article);
+            withdrawalsDAO.updateWithdrawals(withdrawals);
         }
 
         @Override
-        public void createArticle(Article article) {
+        public void createArticle(Article article, Withdrawals withdrawals) {
+
             articleDAO.createArticle(article);
+            withdrawalsDAO.createWithdrawals(withdrawals);
         }
 
         @Override
@@ -88,6 +97,9 @@
             if (article != null) {
                 List<Auction> auctions = auctionDAO.getAuctionsByItemId(itemId);
                 article.setAuctions(auctions);
+
+                Withdrawals withdrawals = withdrawalsDAO.getWithdrawalsByArticleId(itemId);
+                article.setWithdrawals(withdrawals);
 
                 if (auctions != null && !auctions.isEmpty()) {
                     // Trouver l'offre la plus récente

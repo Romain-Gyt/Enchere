@@ -1,51 +1,144 @@
-<div th:fragment="frag-form-article(article, action, errors)" xmlns:th="http://www.thymeleaf.org">
+<div
+        xmlns:th="http://www.thymeleaf.org"
+        th:fragment="frag-form-user(action,vue)"
+>
     <div class="my-form">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-md-8">
                     <div class="card">
-                        <div class="card-header">
-                            <h2 th:if="${action == 'create'}">Création d'une enchère</h2>
-                            <h2 th:if="${action == 'edit'}">Modification de l'article</h2>
-                            <h2 th:if="${action == 'detail'}">Détails de l'article</h2>
+                        <div th:if="${#strings.isEmpty(vue)}" class="card-header">
+                            <h2>Modifier Mon profil</h2>
+                            <h3 >Crédits: <span th:text="${memberSession.credit}"></span></h3>
+                        </div>
+                        <div th:unless="${#strings.isEmpty(vue)}" class="card-header">
+                            <h2>S'inscrire</h2>
                         </div>
                         <div class="card-body">
-                            <form th:action="${action}" method="POST" enctype="multipart/form-data" th:object="${article}">
-                                <div class="alert alert-danger" th:if="${errors}" role="alert">
-                                    <div th:each="error : ${errors}" th:text="${error}"></div>
+                            <form name="form_profil" id="form_profil" th:action="${action}" method="POST" th:object="${user}">
+                                <div class="alert alert-danger errors" role="alert">
+                                    <div th:replace="~{fragments/fragment-errors :: frag-errors}"></div>
                                 </div>
-                                <input type="hidden" name="itemId" th:field="*{itemId}" th:unless="${action == 'create' or action == 'edit'}" />
+                                <div class="alert alert-secondary error_list" role="alert">
+                                    <p class="error-input" th:each="error : ${#fields.errors('global')}" th:text="${error}"></p>
+                                </div>
+                                <div th:if="${#strings.isEmpty(vue)}">
+                                    <input name="user_id" id="user_id"  type="hidden" th:value="${memberSession.idUser}">
+                                </div>
                                 <div class="form-group row">
-                                    <label for="itemName" class="col-md-4 col-form-label text-md-right">Nom de l'article</label>
+                                    <label for="pseudo" class="col-md-4 col-form-label text-md-right">Pseudo</label>
                                     <div class="col-md-6">
-                                        <input type="text" id="itemName" class="form-control" name="itemName"
-                                               th:placeholder="Nom de l'article"
-                                               th:field="*{itemName}"
-                                               th:readonly="${action == 'detail'}">
+                                        <input type="text" id="pseudo" class="form-control" name="username"
+                                               th:placeholder="${#strings.isEmpty(memberSession?.pseudo)} ? 'Pseudo' : ${memberSession.pseudo}"
+                                               th:field="*{pseudo}">
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="description" class="col-md-4 col-form-label text-md-right">Description</label>
+                                    <label for="last_name" class="col-md-4 col-form-label text-md-right">Nom</label>
                                     <div class="col-md-6">
-                                        <textarea id="description" class="form-control" name="description"
-                                                  th:placeholder="Description de l'article"
-                                                  th:field="*{description}"
-                                                  th:readonly="${action == 'detail'}"></textarea>
+                                        <input type="text" id="last_name" class="form-control" name="last_name"
+                                               th:placeholder="${#strings.isEmpty(memberSession?.lastName)} ? 'Nom' : ${memberSession.lastName}"
+                                               th:field="*{lastName}">
                                     </div>
                                 </div>
-                                <!-- Ajoutez ici d'autres champs de formulaire pour l'article -->
-                                <div class="form-group row" th:if="${action == 'create'}">
-                                    <label for="image" class="col-md-4 col-form-label text-md-right">Image</label>
-                                    <div class="col-md-6">
-                                        <input type="file" id="image" class="form-control" name="image">
-                                    </div>
-                                </div>
-                                <!-- Boutons d'action -->
                                 <div class="form-group row">
-                                    <div class="col-md-6 offset-md-4">
-                                        <button type="submit" class="btn btn-primary" th:if="${action == 'create'}">Créer</button>
-                                        <button type="submit" class="btn btn-primary" th:if="${action == 'edit'}">Modifier</button>
-                                        <button type="button" class="btn btn-secondary" th:if="${action == 'detail'}">Retour</button>
+                                    <label for="first_name" class="col-md-4 col-form-label text-md-right">Prenom</label>
+                                    <div class="col-md-6">
+                                        <input type="text" id="first_name" class="form-control" name="first_name"
+                                               th:placeholder="${#strings.isEmpty(memberSession?.firstName)} ? 'Prénom' : ${memberSession.firstName}"
+                                               th:field="*{firstName}">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="email" class="col-md-4 col-form-label text-md-right">Email</label>
+                                    <div class="col-md-6">
+                                        <input type="email" id="email" class="form-control" name="email"
+                                               th:placeholder="${#strings.isEmpty(memberSession?.email)} ? 'Email' : ${memberSession.email}"
+                                               th:field="*{email}">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="phone_number" class="col-md-4 col-form-label text-md-right">Téléphone</label>
+                                    <div class="col-md-6">
+                                        <input type="text" id="phone_number" class="form-control" name="phone_number"
+                                               th:placeholder="${#strings.isEmpty(memberSession?.phoneNumber)} ? 'Téléphone' : ${memberSession.phoneNumber}"
+                                               th:field="*{phoneNumber}">
+                                    </div>
+                                </div>
+                                <div  class="form-group row">
+                                    <label for="street" class="col-md-4 col-form-label text-md-right">Rue</label>
+                                    <div class="col-md-6">
+                                        <input type="text" id="street" class="form-control" name="street"
+                                               th:placeholder="${#strings.isEmpty(memberSession?.street)} ? 'Rue' : ${memberSession.street}"
+                                               th:field="*{street}">
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="postal_code" class="col-md-4 col-form-label text-md-right">Code postal</label>
+                                    <div class="col-md-6">
+                                        <input type="text" id="postal_code" class="form-control" name="postal_code"
+                                               th:placeholder="${#strings.isEmpty(memberSession?.zipCode)} ? 'Code postal' : ${memberSession.zipCode}"
+                                               th:field="*{zipCode}">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="city" class="col-md-4 col-form-label text-md-right">Ville</label>
+                                    <div class="col-md-6">
+                                        <input type="text" id="city" class="form-control" name="city"
+                                               th:placeholder="${#strings.isEmpty(memberSession?.city)} ? 'Ville' : ${memberSession.city}"
+                                               th:field="*{city}">
+                                    </div>
+                                </div>
+                                <div class="password">
+                                    <div th:if="${#strings.isEmpty(vue)}">
+                                        <div class="form-group row">
+                                            <label for="current_password" class="col-md-4 col-form-label text-md-right">Mot de passe actuel</label>
+                                            <div class="col-md-6">
+                                                <input type="password" id="current_password" class="form-control" name="current_password" th:field="*{password}" >
+                                            </div>
+                                        </div>
+                                        <div  class="form-group row">
+                                            <label for="new_password" class="col-md-4 col-form-label text-md-right">Nouveau de mot de passe</label>
+                                            <div class="col-md-6">
+                                                <input type="password" id="new_password" class="form-control" name="new_password" >
+                                            </div>
+                                        </div>
+                                        <div  class="form-group row">
+                                            <label for="password" class="col-md-4 col-form-label text-md-right">Confirmation</label>
+                                            <div class="col-md-6">
+                                                <input type="password" id="confirm_password" class="form-control" name="confirm_password" >
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div th:unless="${#strings.isEmpty(vue)}">
+                                        <div  class="form-group row">
+                                            <label for="new_password" class="col-md-4 col-form-label text-md-right">Mot de passe</label>
+                                            <div class="col-md-6">
+                                                <input type="password" id="password" class="form-control" name="password" th:field="*{password}" >
+                                            </div>
+                                        </div>
+                                        <div  class="form-group row">
+                                            <label for="password" class="col-md-4 col-form-label text-md-right">Confirmation</label>
+                                            <div class="col-md-6">
+                                                <input type="password" id="confirm_password" class="form-control" name="confirm_password" >
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div th:if="${#strings.isEmpty(vue)}" class="col-md-6 offset-md-4">
+                                        <div class="flex">
+                                            <button type="submit" name="modify_btn" id="modify_btn" class="btn btn-primary btn-form">
+                                                Enregistrer
+                                            </button>
+                                            <button type ="button" name="delete_btn" id="delete_btn" class="btn btn-primary btn-form ">
+                                                Supprimer Compte
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div th:unless="${#strings.isEmpty(vue)}" class="col-md-6 offset-md-4">
+                                        <button type="submit" name="submit_form" id="submit_form" class="btn btn-primary btn-form">
+                                            S'incrire
+                                        </button>
                                     </div>
                                 </div>
                             </form>

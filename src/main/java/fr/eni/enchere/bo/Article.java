@@ -19,6 +19,7 @@ public class Article {
     private Integer latestBidAmount;
     private String image;
 
+    private Withdrawals withdrawals;
     private Category category;
     private User user;
     private List<Auction> auctions;
@@ -134,6 +135,13 @@ public class Article {
         this.latestBidAmount = latestBidAmount;
     }
 
+    public Withdrawals getWithdrawals() {
+        return withdrawals;
+    }
+
+    public void setWithdrawals(Withdrawals withdrawals) {
+        this.withdrawals = withdrawals;
+    }
 
     public List<Auction> getAuctions() {
         return auctions;

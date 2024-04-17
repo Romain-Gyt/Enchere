@@ -1,6 +1,7 @@
 package fr.eni.enchere.dal;
 
 import fr.eni.enchere.bo.Article;
+import fr.eni.enchere.bo.Withdrawals;
 
 import java.util.List;
 

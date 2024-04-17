@@ -17,16 +17,19 @@ public class ArticleController {
     private final ArticleService articleService;
     private final CategoryService categoryService;
     private final UserService userService;
+    private final WithdrawalsService withdrawalsService;
 
-    public ArticleController(ArticleService articleService, CategoryService categoryService, UserService userService) {
+    public ArticleController(ArticleService articleService, CategoryService categoryService, UserService userService, WithdrawalsService withdrawalsService) {
         this.articleService = articleService;
         this.categoryService = categoryService;
         this.userService = userService;
+        this.withdrawalsService = withdrawalsService;
     }
 
     @GetMapping("/article/create")
     public String showArticleCreationForm(Model model) {
         model.addAttribute("article", new Article());
+        model.addAttribute("withdrawals", new Withdrawals());
         model.addAttribute("categories", categoryService.getAllCategories());
         return "article/articleCreate";
     }
@@ -34,6 +37,7 @@ public class ArticleController {
     @PostMapping("/article/create")
     public String createArticle(@ModelAttribute("memberSession") User userSession,
                                 @ModelAttribute("article") Article article,
+                                @ModelAttribute("withdrawals") Withdrawals withdrawals,
                                 BindingResult result,
                                 Model model,
                                 @RequestParam("image") MultipartFile imageFile) throws IOException {
@@ -50,7 +54,7 @@ public class ArticleController {
             article.setImage(fileName);
         }
 
-        articleService.createArticle(article);
+        articleService.createArticle(article, withdrawals);
 
         return "redirect:/article/success";
     }
@@ -59,6 +63,7 @@ public class ArticleController {
     public String showArticleEditForm(@PathVariable int itemId, Model model) {
         Article article = articleService.getArticleById(itemId);
         model.addAttribute("article", article);
+        model.addAttribute("withdrawals", new Withdrawals());
         model.addAttribute("categories", categoryService.getAllCategories());
         return "article/articleEdit";
     }
@@ -66,6 +71,7 @@ public class ArticleController {
     @PostMapping("/article/edit/{itemId}")
     public String editArticle(@PathVariable int itemId,
                               @ModelAttribute("article") Article article,
+                              @ModelAttribute("withdrawals") Withdrawals withdrawals,
                               BindingResult result,
                               Model model,
                               @RequestParam(value = "image", required = false) MultipartFile imageFile) throws IOException {
@@ -93,19 +99,22 @@ public class ArticleController {
             existingArticle.setImage(fileName);
         }
 
-        articleService.updateArticle(existingArticle);
+        articleService.updateArticle(existingArticle, withdrawals);
 
         return "redirect:/article/details/" + itemId;
     }
 
+
     @GetMapping("/article/detail/{itemId}")
     public String showArticleDetails(@PathVariable int itemId, Model model) {
         Article article = articleService.getArticleById(itemId);
+        Withdrawals withdrawals = withdrawalsService.getWithdrawalsByArticleId(itemId); // Récupérer les informations de retrait
         model.addAttribute("article", article);
+        model.addAttribute("withdrawals", withdrawals); // Ajouter les informations de retrait au modèle
         return "article/articleDetail";
     }
 
-    // Mapping pour ajouter une enchère
+
     @PostMapping("/article/addBid")
     public String addBid(@RequestParam("bidAmount") int bidAmount,
                          @RequestParam("itemId") int itemId,
