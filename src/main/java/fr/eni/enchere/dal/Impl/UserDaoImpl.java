@@ -36,6 +36,13 @@ private static final String DELETE_USER = "DELETE FROM users WHERE user_id = :id
 private static final String DISABLE_USER = "UPDATE users SET disabled = 1 WHERE user_id = :id;";
 private static final String ENABLE_USER = "UPDATE users SET disabled = 0 WHERE user_id = :id;";
 
+private static final String LOAD_ACTIVE_ACCOUNT = "SELECT user_id,username,last_name,first_name,email,phone,street,postal_code,city,password,credit,administrator,disabled\n" +
+                                                    "FROM users\n" +
+                                                    "WHERE  disabled = 0;";
+private static final String LOAD_DISABLED_ACCOUNT = "SELECT user_id,username,last_name,first_name,email,phone,street,postal_code,city,password,credit,administrator,disabled\n" +
+                                                    "FROM users\n" +
+                                                    "WHERE  disabled = 1;";
+
 private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 private JdbcTemplate jdbcTemplate;
 
@@ -77,6 +84,22 @@ private JdbcTemplate jdbcTemplate;
     @Override
     public List<User> findAll() {
         return jdbcTemplate.query(SELECT_ALL, new UserRowMapper());
+    }
+
+    @Override
+    public List<User> loadActiveAccount() {
+            return jdbcTemplate.query(
+                LOAD_ACTIVE_ACCOUNT,
+                new UserRowMapper()
+        );
+    }
+
+    @Override
+    public List<User> loadDisabledAccount() {
+       return jdbcTemplate.query(
+                LOAD_DISABLED_ACCOUNT,
+                new UserRowMapper()
+        );
     }
 
     @Override

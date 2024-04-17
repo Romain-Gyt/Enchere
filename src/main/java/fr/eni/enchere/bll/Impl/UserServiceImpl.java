@@ -2,6 +2,7 @@ package fr.eni.enchere.bll.Impl;
 
 import fr.eni.enchere.bll.UserService;
 import fr.eni.enchere.bo.User;
+import fr.eni.enchere.dal.DeletedAccount;
 import fr.eni.enchere.dal.UserDao;
 import fr.eni.enchere.exception.RegisterCode;
 import fr.eni.enchere.exception.RegisterException;
@@ -20,13 +21,16 @@ public class UserServiceImpl implements UserService {
     /********** Declaration *********/
     private UserDao userDao;
     private PasswordEncoder passwordEncoder;
+    private DeletedAccount deletedAccount;
 
 /********** Constructor *********/
     public UserServiceImpl(UserDao userDao,
-                           PasswordEncoder passwordEncoder
+                           PasswordEncoder passwordEncoder,
+                            DeletedAccount deletedAccount
     ) {
         this.userDao = userDao;
         this.passwordEncoder = passwordEncoder;
+        this.deletedAccount = deletedAccount;
     }
 
 
@@ -41,6 +45,7 @@ public class UserServiceImpl implements UserService {
     public User loadUserByPseudo(String pseudo) {
         return userDao.read(pseudo);
     }
+
 
     @Override
     public List<User> loadAll() {
@@ -91,13 +96,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void disableUser(Long id) {
-        userDao.disable(id);
-    }
-
-    @Override
-    public void enableUser(Long id) {
-        userDao.enable(id);
+    public void insertDeleteAccount(User user) {
+        deletedAccount.insertDeleteAccount(user);
     }
 
     private boolean isUserNull(User user,RegisterException registerException) {

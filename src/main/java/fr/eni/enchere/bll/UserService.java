@@ -13,6 +13,5 @@ public interface UserService {
     void createUser(User user,Map<String,String> passwords);
     User udpadeUser(User user, User userSession, Map<String,String> password);
     void deleteUser(Long id);
-    void disableUser(Long id);
-    void enableUser(Long id);
+    void insertDeleteAccount(User user);
 }

@@ -8,6 +8,8 @@ public interface UserDao {
     User read(long id);
     User read(String email);
     List<User> findAll();
+    List<User> loadActiveAccount();
+    List<User> loadDisabledAccount();
     User update(User user);
     void create(User user);
     void delete(long id);

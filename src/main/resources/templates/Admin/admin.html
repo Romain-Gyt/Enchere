@@ -4,12 +4,12 @@
             pageContent=~{:: .main-content},
             pageTitle=~{:: title},
             additionalCss=~{:: link},
-            additionalJs=~{}
+            additionalJs=~{:: script}
         )}">
     <title>Panneau d'administration</title>
     <link rel="stylesheet" href="/css/admin.css">
+    <script language="JavaScript" src="/js/admin.js"></script>
     <main class="main-content">
-        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
         <div class="container mb-4 main-container">
             <div class="row">
                 <div class="col-lg-4 pb-5">
@@ -51,25 +51,25 @@
                 </div>
                 <!-- Orders Table-->
                 <div class="col-lg-8 pb-5">
-<!--                    <div class="d-flex justify-content-end pb-3">-->
-<!--                        <div class="form-inline">-->
-<!--                            <label class="text-muted mr-3" for="order-sort">Sort Orders</label>-->
-<!--                            <select class="form-control" id="order-sort">-->
-<!--                                <option>All</option>-->
-<!--                                <option>Actif</option>-->
-<!--                                <option>Desactivé</option>-->
-<!--                                <option>Supprimer</option>-->
-<!--                            </select>-->
-<!--                        </div>-->
-<!--                    </div>-->
+                    <div class="d-flex justify-content-end pb-3">
+                        <div class="form-inline">
+                            <label class="text-muted mr-3" for="order-sort">Trier compte</label>
+                            <select class="form-control" id="order-sort" onchange="filterData()">
+                                <option value="all">All</option>
+                                <option value="actif"> Actif</option>
+                                <option value="disabled"> Desactivé</option>
+                                <option value="deleted">  Supprimé</option>
+                            </select>
+                        </div>
+                    </div>
                     <div class="table-responsive">
-                        <table class="table table-hover mb-0">
+                        <table id="user-table" class="table table-hover mb-0 admin">
                             <thead>
                             <tr>
                                 <th>Compte ID</th>
                                 <th>Pseudo</th>
                                 <th>Nom/prenom</th>
-                                <th>redirection</th>
+                                <th>Redirection</th>
                                 <th>Suppression</th>
                                 <th>Desactivation</th>
                             </tr>
@@ -85,18 +85,18 @@
                                         </a>
                                     </td>
                                     <td>
-                                        <a th:href="@{/profil/admin(user_id=${user.getIdUser()})}" class="btn btn-primary">
+                                        <a th:href="@{/admin/delete(user_id=${user.getIdUser()})}" class="btn btn-primary" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')">
                                             <button type="button" class="btn btn-danger">Suppression</button>
                                         </a>
                                     </td>
                                     <td th:if="${!user.isDisabled}">
-                                        <a th:href="@{/admin/disable(user_id=${user.getIdUser()})}" class="btn btn-primary">
-                                            <button type="button" class="btn danger">Desactivation</button>
+                                        <a th:href="@{/admin/disable(user_id=${user.getIdUser()})}" class="btn btn-primary" onclick="return confirm('Êtes-vous sûr de vouloir désactiver cet utilisateur ?')">
+                                            <button type="button" class="btn danger">Désactivation</button>
                                         </a>
                                     </td>
                                     <td th:unless="${!user.isDisabled}">
-                                        <a th:href="@{/admin/enable(user_id=${user.getIdUser()})}" class="btn btn-primary">
-                                            <button  type="button" class="btn btn-primary">Reactivation</button>
+                                        <a th:href="@{/admin/enable(user_id=${user.getIdUser()})}" class="btn btn-primary" onclick="return confirm('Êtes-vous sûr de vouloir réactiver cet utilisateur ?')">
+                                            <button  type="button" class="btn btn-primary">Réactivation</button>
                                         </a>
                                     </td>
                                 </tr>

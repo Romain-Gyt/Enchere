@@ -92,6 +92,8 @@ public class ProfilController {
     @GetMapping("/profil/delete")
     public String deleteProfil(
             @RequestParam("user_id") String id) {
+        User user = userService.loadUserById(Long.parseLong(id));
+        userService.insertDeleteAccount(user);
         auctionService.deleteAuction(Integer.parseInt(id));
         articleService.deleteArticle(Long.parseLong(id));
         userService.deleteUser(Long.parseLong(id));
