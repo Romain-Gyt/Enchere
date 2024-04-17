@@ -16,10 +16,12 @@ public class ArticleController {
 
     private final ArticleService articleService;
     private final CategoryService categoryService;
+    private final UserService userService;
 
-    public ArticleController(ArticleService articleService, CategoryService categoryService) {
+    public ArticleController(ArticleService articleService, CategoryService categoryService, UserService userService) {
         this.articleService = articleService;
         this.categoryService = categoryService;
+        this.userService = userService;
     }
 
     @GetMapping("/article/create")
@@ -53,18 +55,6 @@ public class ArticleController {
         return "redirect:/article/success";
     }
 
-    @GetMapping("/article/success")
-    public String showSuccessPage(Model model) {
-        model.addAttribute("successMessage", "L'enchère a été créée avec succès");
-        return "article/success";
-    }
-
-    @GetMapping("/article/error")
-    public String showErrorPage(Model model) {
-        model.addAttribute("errorMessage", "Une erreur s'est produite lors de la création de l'enchère");
-        return "article/error";
-    }
-
     @GetMapping("/article/edit/{itemId}")
     public String showArticleEditForm(@PathVariable int itemId, Model model) {
         Article article = articleService.getArticleById(itemId);
@@ -88,7 +78,7 @@ public class ArticleController {
         Article existingArticle = articleService.getArticleById(itemId);
         if (existingArticle == null) {
             model.addAttribute("errorMessage", "Article introuvable");
-            return "error";
+            return "article/error";
         }
 
         existingArticle.setItemName(article.getItemName());
@@ -108,11 +98,11 @@ public class ArticleController {
         return "redirect:/article/details/" + itemId;
     }
 
-    @GetMapping("/article/details/{itemId}")
+    @GetMapping("/article/detail/{itemId}")
     public String showArticleDetails(@PathVariable int itemId, Model model) {
         Article article = articleService.getArticleById(itemId);
         model.addAttribute("article", article);
-        return "article/articleDetails";
+        return "article/articleDetail";
     }
 
     // Mapping pour ajouter une enchère
@@ -120,10 +110,8 @@ public class ArticleController {
     public String addBid(@RequestParam("bidAmount") int bidAmount,
                          @RequestParam("itemId") int itemId,
                          @ModelAttribute("memberSession") User memberSession) {
-        // Insérer l'enchère dans la base de données
         articleService.insertBidAmountById(memberSession.getIdUser(), itemId, bidAmount);
 
-        // Mettre à jour le crédit de l'utilisateur
         User userSession = userService.loadUserById(memberSession.getIdUser());
         int newCreditUser = userSession.getCredit() - bidAmount;
         userService.updateUserCredit(userSession, newCreditUser);

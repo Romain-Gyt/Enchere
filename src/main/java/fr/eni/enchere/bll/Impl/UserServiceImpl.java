@@ -7,10 +7,8 @@ import fr.eni.enchere.exception.RegisterCode;
 import fr.eni.enchere.exception.RegisterException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Map;
-
 /**
  * Implémentation du service utilisateur.
  * Cette classe implémente les méthodes définies dans l'interface UserService.
@@ -20,8 +18,7 @@ public class UserServiceImpl implements UserService {
     /********** Declaration *********/
     private UserDao userDao;
     private PasswordEncoder passwordEncoder;
-
-/********** Constructor *********/
+    /********** Constructor *********/
     public UserServiceImpl(UserDao userDao,
                            PasswordEncoder passwordEncoder
     ) {
@@ -29,28 +26,23 @@ public class UserServiceImpl implements UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-
     /************ Methods *********/
-
     @Override
     public User loadUserById(long id) {
         return  userDao.read(id);
     }
-
     @Override
     public User loadUserByPseudo(String pseudo) {
         return userDao.read(pseudo);
     }
-
     @Override
     public List<User> loadAll() {
         return userDao.findAll();
     }
-
     @Override
     public void createUser(User user,Map<String,String> password) {
         RegisterException registerException = new RegisterException();
-       boolean isValid = isUserNull(user,registerException);
+        boolean isValid = isUserNull(user,registerException);
         if(isValid){
             isValid = isPeudoValid(user.getPseudo(),registerException);
             isValid &= isLastNameValid(user.getLastName(),registerException);
@@ -73,7 +65,6 @@ public class UserServiceImpl implements UserService {
             throw registerException;
         }
     }
-
     @Override
     public User udpadeUser(User user, User userSession, Map<String,String> password) {
         RegisterException registerException = new RegisterException();
@@ -84,12 +75,14 @@ public class UserServiceImpl implements UserService {
         }
         return userDao.update(user);
     }
-
+    @Override
+    public void updateUserCredit(User user, int credit){
+        userDao.updateCredit(user, credit);
+    }
     @Override
     public void deleteUser(Long id) {
-         userDao.delete(id);
+        userDao.delete(id);
     }
-
     private boolean isUserNull(User user,RegisterException registerException) {
         if (user == null) {
             registerException.addKey(RegisterCode.USER_IS_NULL);
@@ -97,7 +90,6 @@ public class UserServiceImpl implements UserService {
         }
         return true;
     }
-
     private boolean isPeudoValid(String pseudo,RegisterException registerException) {
         if (pseudo == null || pseudo.isEmpty()) {
             registerException.addKey(RegisterCode.PSEUDO_IS_EMPTY);
@@ -109,7 +101,6 @@ public class UserServiceImpl implements UserService {
         }
         return true;
     }
-
     private boolean isLastNameValid(String lastName,RegisterException registerException) {
         if (lastName == null || lastName.isEmpty()) {
             registerException.addKey(RegisterCode.LAST_NAME_IS_EMPTY);
@@ -121,7 +112,6 @@ public class UserServiceImpl implements UserService {
         }
         return true;
     }
-
     private boolean isFirstNameValid(String firstName,RegisterException registerException) {
         if (firstName == null || firstName.isEmpty()) {
             registerException.addKey(RegisterCode.FIRST_NAME_IS_EMPTY);
@@ -133,7 +123,6 @@ public class UserServiceImpl implements UserService {
         }
         return true;
     }
-
     private boolean isEmailValid(String email,RegisterException registerException) {
         if (email == null || email.isEmpty()) {
             registerException.addKey(RegisterCode.EMAIL_IS_EMPTY);
@@ -145,7 +134,6 @@ public class UserServiceImpl implements UserService {
         }
         return true;
     }
-
     private boolean isPhoneNumberValid (String phoneNumber,RegisterException registerException) {
         if (phoneNumber == null || phoneNumber.isEmpty()) {
             registerException.addKey(RegisterCode.PHONE_NUMBER_IS_EMPTY);
@@ -157,7 +145,6 @@ public class UserServiceImpl implements UserService {
         }
         return true;
     }
-
     private boolean isStreetValid(String street,RegisterException registerException) {
         if (street == null || street.isEmpty()) {
             registerException.addKey(RegisterCode.STREET_IS_EMPTY);
@@ -169,7 +156,6 @@ public class UserServiceImpl implements UserService {
         }
         return true;
     }
-
     private boolean isZipCodeValid(String zipCode,RegisterException registerException) {
         if (zipCode == null || zipCode.isEmpty()) {
             registerException.addKey(RegisterCode.POSTAL_CODE_IS_EMPTY);
@@ -181,7 +167,6 @@ public class UserServiceImpl implements UserService {
         }
         return true;
     }
-
     private boolean isCityValid(String city,RegisterException registerException) {
         if (city == null || city.isEmpty()) {
             registerException.addKey(RegisterCode.CITY_IS_EMPTY);
@@ -193,7 +178,6 @@ public class UserServiceImpl implements UserService {
         }
         return true;
     }
-
     private boolean isPasswordValid(String password,RegisterException registerException) {
         if (password == null || password.isEmpty()) {
             registerException.addKey(RegisterCode.PASSWORD_IS_EMPTY);
@@ -205,7 +189,6 @@ public class UserServiceImpl implements UserService {
         }
         return true;
     }
-
     private boolean isPasswordConfirmationValid(Map<String,String> passwords,RegisterException registerException) {
         if (passwords.get("confirmPassword") == null || passwords.get("confirmPassword").isEmpty()) {
             registerException.addKey(RegisterCode.PASSWORD_CONFIRMATION_IS_EMPTY);
@@ -218,17 +201,16 @@ public class UserServiceImpl implements UserService {
         return true;
     }
 
-
-/**
- * Vérifie et met à jour les informations d'un utilisateur en fonction des informations fournies.
- * Cette méthode vérifie également la validité des informations de l'utilisateur et du mot de passe.
- *
- * @param user L'utilisateur à vérifier et à mettre à jour.
- * @param userSession L'utilisateur actuellement connecté.
- * @param password Un Map contenant les informations de mot de passe fournies.
- * @param registerException Une exception personnalisée pour gérer les erreurs d'enregistrement.
- * @return L'utilisateur mis à jour si les informations fournies sont valides, sinon l'utilisateur original.
- */
+    /**
+     * Vérifie et met à jour les informations d'un utilisateur en fonction des informations fournies.
+     * Cette méthode vérifie également la validité des informations de l'utilisateur et du mot de passe.
+     *
+     * @param user L'utilisateur à vérifier et à mettre à jour.
+     * @param userSession L'utilisateur actuellement connecté.
+     * @param password Un Map contenant les informations de mot de passe fournies.
+     * @param registerException Une exception personnalisée pour gérer les erreurs d'enregistrement.
+     * @return L'utilisateur mis à jour si les informations fournies sont valides, sinon l'utilisateur original.
+     */
     private User checkObject(User user,
                              User userSession,
                              Map<String, String> password,
@@ -244,7 +226,6 @@ public class UserServiceImpl implements UserService {
             } else{
                 isValid &=isPeudoValid(user.getPseudo(),registerException);
             }
-
             if (user.getLastName() == null || user.getLastName().isEmpty()) {
                 user.setLastName(userSession.getLastName());
             } else{
@@ -298,13 +279,12 @@ public class UserServiceImpl implements UserService {
                 }
             }
         }
-       if(isValid){
-           user.setPassword(encodePassword(password.get("newPassword")));
-           return user;
-       }
+        if(isValid){
+            user.setPassword(encodePassword(password.get("newPassword")));
+            return user;
+        }
         return user;
     }
-
     /**
      * Vérifie si le mot de passe fourni correspond au mot de passe encodé stocké.
      *
@@ -315,8 +295,8 @@ public class UserServiceImpl implements UserService {
     private boolean checkPassword(String password, String encodedPassword) {
         return passwordEncoder.matches(password, encodedPassword);
     }
-
     private String encodePassword(String password) {
         return passwordEncoder.encode(password);
     }
 }
+ 
