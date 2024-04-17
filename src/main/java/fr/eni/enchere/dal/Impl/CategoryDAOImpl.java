@@ -5,6 +5,7 @@ import fr.eni.enchere.dal.CategoryDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -22,6 +23,10 @@ public class CategoryDAOImpl implements CategoryDAO {
     private static final String SELECT_ALL = "SELECT category_id,label " +
                                             "FROM categories";
 
+    private static final String SELECT_CAT_BY_ID = "SELECT category_id,label " +
+                                                    "FROM categories" +
+                                                    " WHERE category_id=:id";
+
     /********* CONSTRUCTOR *******/
     public CategoryDAOImpl (
             JdbcTemplate jdbcTemplate,
@@ -34,6 +39,13 @@ public class CategoryDAOImpl implements CategoryDAO {
     @Override
     public List<Category> getAllCategories() {
         return jdbcTemplate.query(SELECT_ALL, new CategoryRowMapper());
+    }
+
+    @Override
+    public Category getCategoryById(long id) {
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("id", id);
+        return namedParameterJdbcTemplate.queryForObject(SELECT_CAT_BY_ID,params,new CategoryRowMapper());
     }
 
     class CategoryRowMapper implements RowMapper<Category> {

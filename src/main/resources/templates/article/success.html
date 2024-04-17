@@ -1,13 +1,21 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+       th:replace="~{layouts/layout :: layout(
+            pageContent=~{:: .main-content},
+            pageTitle=~{:: title},
+            additionalCss=~{},
+            additionalJs=~{}
+        )}"
+>
 <head>
     <title>Success</title>
 </head>
 <body>
-<div>
-    <h1>Succès !</h1>
-    <p th:text="${successMessage}"></p>
-    <a href="/">Retour au menu</a>
-</div>
+<main class="main-content">
+    <div>
+        <h1>Succès !</h1>
+        <a href="/">Retour au menu</a>
+    </div>
+</main>
 </body>
 </html>

@@ -10,6 +10,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
@@ -51,10 +53,23 @@ public class ArticleDAOImpl implements ArticleDAO {
     }
 
     @Override
-    public void createArticle(Article article) {
-        String sql = "INSERT INTO sold_items (item_name, description, start_auction_date, end_auction_date, initial_price, sale_price, category_id, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-        jdbcTemplate.update(sql, article.getItemName(), article.getDescription(), article.getStartAuctionDate(), article.getEndAuctionDate(), article.getInitialPrice(), article.getSalePrice(), article.getCategory().getCategoryId(), article.getUser().getIdUser());
+    public int createArticle(Article article) {
+        String sql = "INSERT INTO sold_items (item_name, description, start_auction_date, end_auction_date, initial_price, sale_price, category_id, user_id) VALUES (:itemName, :description, :startAuctionDate, :endAuctionDate, :initialPrice, :salePrice, :categoryId, :userId)";
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("itemName", article.getItemName());
+        params.addValue("description", article.getDescription());
+        params.addValue("startAuctionDate", article.getStartAuctionDate());
+        params.addValue("endAuctionDate", article.getEndAuctionDate());
+        params.addValue("initialPrice", article.getInitialPrice());
+        params.addValue("salePrice", article.getSalePrice());
+        params.addValue("categoryId",article.getCategory().getCategoryId());
+        params.addValue("userId",article.getUser().getIdUser());
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        namedParameterJdbcTemplate.update(sql,params,keyHolder);
+        Number key = keyHolder.getKey();
+        return key.intValue();
     }
+
 
     @Override
     public void updateArticle(Article article) {

@@ -33,7 +33,7 @@
                                 <div class="form-group row">
                                     <label for="categoryId" class="col-md-4 col-form-label text-md-right">Catégorie</label>
                                     <div class="col-md-6">
-                                        <select id="categoryId" class="form-control" name="categoryId" th:field="*{category.categoryId}" th:disabled="${action == 'detail'}">
+                                        <select id="categoryId" class="form-control" name="categoryId" th:field="*{category}" th:disabled="${action == 'detail'}">
                                             <option th:each="category : ${categories}" th:value="${category.categoryId}" th:text="${category.label}"></option>
                                         </select>
                                     </div>
@@ -57,12 +57,17 @@
                                     </div>
                                 </div>
 
-                                <!-- Partie Retrait (pour la page d'édition uniquement) -->
-                                <div class="col-md-12" th:if="${action == 'edit' || action == 'detail'}">
-                                    <!-- Champ de texte pour modifier ou afficher les informations de retrait -->
-                                    <input type="text" class="form-control"
-                                           th:value="${withdrawals != null ? (withdrawals.street + ', ' + (withdrawals.postal_code + ' ' + withdrawals.city)) : ''}"
-                                           name="withdrawals" th:readonly="${action == 'detail'}">
+<!--                                &lt;!&ndash; Partie Retrait &ndash;&gt;-->
+<!--                                <div class="col-md-12" th:if="${action == 'edit' || action == 'detail'}">-->
+<!--                                    <input type="text" class="form-control"-->
+<!--                                           th:value="${article.withdrawals != null ? (article.withdrawals.street + ', ' + (article.withdrawals.postal_code + ' ' + article.withdrawals.city)) : ''}"-->
+<!--                                           name="withdrawals" th:readonly="${action == 'detail'}">-->
+<!--                                </div>-->
+
+                                <div class="col-md-12" th:if="${action == 'create'}">
+                                    <input type="text" class="form-control" th:placeholder="Rue" th:field="*{withdrawals.street}">
+                                    <input type="text" class="form-control" th:placeholder="CP" th:field="*{withdrawals.postal_code}">
+                                    <input type="text" class="form-control" th:placeholder="Ville" th:field="*{withdrawals.city}">
                                 </div>
 
 
@@ -76,13 +81,13 @@
                                 <form th:action="@{/addBid}" method="post" th:if="${action == 'detail'}">
                                     <label class="labels">Ma proposition :
                                         <input class="form-control" type="number" name="bidAmount"
-                                               th:min="${auction.bidAmount > 0 ? auction.bidAmount + 1 : article.initialPrice}"
+                                               th:min="${article.auction.bidAmount > 0 ? article.auction.bidAmount + 1 : article.initialPrice}"
                                                th:max="${memberSession.credit}"
-                                               th:value="${auction.bidAmount > 0 ? (auction.bidAmount + 1 < memberSession.credit ? auction.bidAmount + 1 : memberSession.credit) : article.initialPrice}"
+                                               th:value="${article.auction.bidAmount > 0 ? (article.auction.bidAmount + 1 < memberSession.credit ? article.auction.bidAmount + 1 : memberSession.credit) : article.initialPrice}"
                                                oninput="validateBid(this)"/>
                                     </label>
                                     <input type="hidden" id="itemId" name="itemId" th:value="${article.itemId}" />
-                                    <th:block th:if="${auction.bidAmount > 0}">
+                                    <th:block th:if="${article.auction.bidAmount > 0}">
                                         <input type="hidden" id="userId" name="userId" th:value="${auction.userId}" />
                                     </th:block>
                                     <input type="hidden" id="lastBidAmount" name="lastBidAmount" th:value="${auction.bidAmount}" />
@@ -93,12 +98,12 @@
                                 </form>
 
                                 <div class="form-group row">
-                                    <label for="image" class="col-md-4 col-form-label text-md-right">Image</label>
+<!--                                    <label for="image" class="col-md-4 col-form-label text-md-right">Image</label>-->
                                     <div class="col-md-6">
                                         <!-- Afficher l'image uniquement lors de l'édition et de l'affichage des détails -->
                                         <img th:src="@{${'/images/' + article.itemId +'.jpg'}}" class="img-fluid" alt="Image de l'article" th:unless="${action == 'create'}">
                                         <!-- Afficher le champ d'entrée de fichier uniquement lors de la création de l'article -->
-                                        <input type="file" id="image" class="form-control" name="image" th:if="${action == 'create'}" th:field="*{image}">
+<!--                                        <input type="file" id="image" class="form-control" name="image" th:if="${action == 'create'}">-->
                                     </div>
                                 </div>
 

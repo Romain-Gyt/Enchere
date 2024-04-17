@@ -173,6 +173,7 @@ public class Article {
                 ", userId=" + userId +
                 ", category=" + category +
                 ", user=" + user +
+                ", withdrawals=" + withdrawals +
                 '}';
     }
 

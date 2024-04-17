@@ -1,6 +1,7 @@
 package fr.eni.enchere.controller;
 
 import fr.eni.enchere.bll.*;
+import fr.eni.enchere.bll.Impl.AuctionServiceImpl;
 import fr.eni.enchere.bo.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,18 +19,21 @@ public class ArticleController {
     private final CategoryService categoryService;
     private final UserService userService;
     private final WithdrawalsService withdrawalsService;
+    private final AuctionServiceImpl auctionServiceImpl;
 
-    public ArticleController(ArticleService articleService, CategoryService categoryService, UserService userService, WithdrawalsService withdrawalsService) {
+    public ArticleController(ArticleService articleService, CategoryService categoryService, UserService userService, WithdrawalsService withdrawalsService, AuctionServiceImpl auctionServiceImpl) {
         this.articleService = articleService;
         this.categoryService = categoryService;
         this.userService = userService;
         this.withdrawalsService = withdrawalsService;
+        this.auctionServiceImpl = auctionServiceImpl;
     }
 
     @GetMapping("/article/create")
     public String showArticleCreationForm(Model model) {
-        model.addAttribute("article", new Article());
-        model.addAttribute("withdrawals", new Withdrawals());
+        Article article = new Article();
+        model.addAttribute("article", article);
+
         model.addAttribute("categories", categoryService.getAllCategories());
         return "article/articleCreate";
     }
@@ -37,10 +41,9 @@ public class ArticleController {
     @PostMapping("/article/create")
     public String createArticle(@ModelAttribute("memberSession") User userSession,
                                 @ModelAttribute("article") Article article,
-                                @ModelAttribute("withdrawals") Withdrawals withdrawals,
                                 BindingResult result,
-                                Model model,
-                                @RequestParam("image") MultipartFile imageFile) throws IOException {
+                                Model model
+                                /**@RequestParam("image") MultipartFile imageFile**/) throws IOException {
         if (result.hasErrors()) {
             model.addAttribute("categories", categoryService.getAllCategories());
             model.addAttribute("errorMessage", "Le formulaire n'a pas été soumis correctement");
@@ -49,14 +52,14 @@ public class ArticleController {
 
         article.setUser(userSession);
 
-        if (imageFile != null && !imageFile.isEmpty()) {
-            String fileName = UUID.randomUUID().toString() + ".jpg";
-            article.setImage(fileName);
-        }
+//        if (imageFile != null && !imageFile.isEmpty()) {
+//            String fileName = itemId + ".jpg";
+//            article.setImage(fileName);
+//        }
+        System.out.println(article);
+        articleService.createArticle(article, article.getWithdrawals());
 
-        articleService.createArticle(article, withdrawals);
-
-        return "redirect:/article/success";
+        return "/article/success";
     }
 
     @GetMapping("/article/edit/{itemId}")
@@ -108,7 +111,7 @@ public class ArticleController {
     @GetMapping("/article/detail/{itemId}")
     public String showArticleDetails(@PathVariable int itemId, Model model) {
         Article article = articleService.getArticleById(itemId);
-        Withdrawals withdrawals = withdrawalsService.getWithdrawalsByArticleId(itemId); // Récupérer les informations de retrait
+        Withdrawals withdrawals = withdrawalsService.getWithdrawalsByArticleId(itemId);
         model.addAttribute("article", article);
         model.addAttribute("withdrawals", withdrawals); // Ajouter les informations de retrait au modèle
         return "article/articleDetail";

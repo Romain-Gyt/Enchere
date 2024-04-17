@@ -57,7 +57,9 @@
         @Override
         public void createArticle(Article article, Withdrawals withdrawals) {
 
-            articleDAO.createArticle(article);
+          int itemId = articleDAO.createArticle(article);
+            withdrawals.setItem_id(itemId);
+            System.out.println(itemId);
             withdrawalsDAO.createWithdrawals(withdrawals);
         }
 
