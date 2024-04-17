@@ -2,6 +2,7 @@ package fr.eni.enchere.bll.Impl;
 
 import fr.eni.enchere.bll.AuctionService;
 import fr.eni.enchere.bo.Auction;
+import fr.eni.enchere.bo.Withdrawals;
 import fr.eni.enchere.dal.AuctionDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

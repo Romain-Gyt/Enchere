@@ -56,7 +56,6 @@ public class ArticleController {
 //            String fileName = itemId + ".jpg";
 //            article.setImage(fileName);
 //        }
-        System.out.println(article);
         articleService.createArticle(article, article.getWithdrawals());
 
         return "/article/success";

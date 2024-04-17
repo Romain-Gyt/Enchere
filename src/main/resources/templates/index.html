@@ -54,7 +54,11 @@
                         </div>
                         <div class="col-md-8">
                             <div class="card-body">
-                                <a th:if="${#authorization.expression('isAuthenticated()')}" th:href="@{/}"><h5 class="card-title text-white font-weight-bold" th:text="${article.itemName}"></h5></a>
+                                <th:block th:if="${#authorization.expression('isAuthenticated()')}">
+                                    <a th:href="@{/article/detail/{id}(id=${article.itemId})}">
+                                        <h5 class="card-title text-white font-weight-bold" th:text="${article.itemName}"></h5>
+                                    </a>
+                                </th:block>
                                 <h5 class="card-title text-white font-weight-bold" th:unless="${#authorization.expression('isAuthenticated()')}" th:text="${article.itemName}"></h5>
                                 <div th:if="${article.auctions.size() > 0}">
                                     Prix : <span th:text="${article.auctions.get(article.auctions.size() - 1).getBidAmount()}"></span>
