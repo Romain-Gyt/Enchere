@@ -1,6 +1,7 @@
 package fr.eni.enchere.bo;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 public class Article {
@@ -12,10 +13,16 @@ public class Article {
     private Date startAuctionDate;
     private Date endAuctionDate;
     private int initialPrice;
-    private Integer salePrice; // Peut être nul si l'enchère n'est pas encore terminée
+    private Integer salePrice;
     private int userId;
+    private String Status;
+    private Integer latestBidAmount;
+    private String image;
+
+    private Withdrawals withdrawals;
     private Category category;
     private User user;
+    private List<Auction> auctions;
 
 
     /******** Constructor ********/
@@ -104,6 +111,54 @@ public class Article {
         this.user = user;
     }
 
+    public String getStatus() {
+        return Status;
+    }
+
+    public void setStatus(String Status) {
+        this.Status = Status;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public Integer getLatestBidAmount() {
+        return latestBidAmount;
+    }
+
+    public void setLatestBidAmount(Integer latestBidAmount) {
+        this.latestBidAmount = latestBidAmount;
+    }
+
+    public Withdrawals getWithdrawals() {
+        return withdrawals;
+    }
+
+    public void setWithdrawals(Withdrawals withdrawals) {
+        this.withdrawals = withdrawals;
+    }
+
+    public List<Auction> getAuctions() {
+        return auctions;
+    }
+
+    public void setAuctions(List<Auction> auctions) {
+        this.auctions = auctions;
+    }
+
+    public void addAuction(Auction auction) {
+        this.auctions.add(auction);
+    }
+
+    public void removeAuction(Auction auction) {
+        this.auctions.remove(auction);
+    }
+
     /******** toString ********/
     @Override
     public String toString() {
@@ -118,6 +173,7 @@ public class Article {
                 ", userId=" + userId +
                 ", category=" + category +
                 ", user=" + user +
+                ", withdrawals=" + withdrawals +
                 '}';
     }
 
@@ -134,4 +190,15 @@ public class Article {
     public int hashCode() {
         return Objects.hash(itemId, itemName, description, startAuctionDate, endAuctionDate, initialPrice, salePrice, userId, category, user);
     }
+
+
+    public void updateStatus() {
+        Date currentDate = new Date(System.currentTimeMillis());
+        if(currentDate.before(this.endAuctionDate)) {
+            this.Status = "En cours";
+        } else {
+            this.Status = "Terminé";
+        }
+    }
 }
+

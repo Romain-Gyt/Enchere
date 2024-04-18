@@ -1,7 +1,5 @@
 package fr.eni.enchere.bo;
 
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-
 public class Withdrawals {
     private int item_id;
     private String street;

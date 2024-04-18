@@ -30,6 +30,16 @@ public class ProfilController {
         return "profil/profil.html";
     }
 
+    @GetMapping("/profil/{id}")
+    public String displayViewedProfil(
+            @PathVariable("id") String id,
+            Model model
+    ) {
+        User user = userService.loadUserById(Long.parseLong(id));
+        model.addAttribute("user", user);
+        return "profil/profil-view.html";
+    }
+
     @GetMapping("/profil/details")
     public String displayProfilDetails(
             Model model

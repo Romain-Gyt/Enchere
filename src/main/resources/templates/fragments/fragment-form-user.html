@@ -8,11 +8,11 @@
                 <div class="col-md-8">
                     <div class="card">
                         <div th:if="${#strings.isEmpty(vue)}" class="card-header">
-                            <h2>Modifier Mon profil</h2>
-                            <h3 >Crédits: <span th:text="${memberSession.credit}"></span></h3>
+                            <h2 th:text="#{frag-form-user.profil.modify}"></h2>
+                            <h3 th:text="#{frag-form-user.credit} + ${memberSession.credit}"></h3>
                         </div>
                         <div th:unless="${#strings.isEmpty(vue)}" class="card-header">
-                            <h2>S'inscrire</h2>
+                            <h2 th:text="#{frag-form-user.register}"></h2>
                         </div>
                         <div class="card-body">
                             <form name="form_profil" id="form_profil" th:action="${action}" method="POST" th:object="${user}">
@@ -26,86 +26,86 @@
                                     <input name="user_id" id="user_id"  type="hidden" th:value="${memberSession.idUser}">
                                 </div>
                                 <div class="form-group row">
-                                    <label for="pseudo" class="col-md-4 col-form-label text-md-right">Pseudo</label>
+                                    <label for="pseudo" class="col-md-4 col-form-label text-md-right" th:text="#{frag-form-user.pseudo}"></label>
                                     <div class="col-md-6">
                                        <input type="text" id="pseudo" class="form-control" name="username"
-                                        th:placeholder="${#strings.isEmpty(memberSession?.pseudo)} ? 'Pseudo' : ${memberSession.pseudo}"
+                                        th:placeholder="${#strings.isEmpty(memberSession?.pseudo)} ? #{frag-form-user.pseudo} : ${memberSession.pseudo}"
                                         th:field="*{pseudo}">
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="last_name" class="col-md-4 col-form-label text-md-right">Nom</label>
+                                    <label for="last_name" class="col-md-4 col-form-label text-md-right" th:text="#{frag-form-user.lastName}"></label>
                                     <div class="col-md-6">
                                         <input type="text" id="last_name" class="form-control" name="last_name"
-                                               th:placeholder="${#strings.isEmpty(memberSession?.lastName)} ? 'Nom' : ${memberSession.lastName}"
+                                               th:placeholder="${#strings.isEmpty(memberSession?.lastName)} ? #{frag-form-user.lastName} : ${memberSession.lastName}"
                                                th:field="*{lastName}">
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="first_name" class="col-md-4 col-form-label text-md-right">Prenom</label>
+                                    <label for="first_name" class="col-md-4 col-form-label text-md-right" th:text="#{frag-form-user.firstName}"></label>
                                     <div class="col-md-6">
                                         <input type="text" id="first_name" class="form-control" name="first_name"
-                                               th:placeholder="${#strings.isEmpty(memberSession?.firstName)} ? 'Prénom' : ${memberSession.firstName}"
+                                               th:placeholder="${#strings.isEmpty(memberSession?.firstName)} ? #{frag-form-user.firstName} : ${memberSession.firstName}"
                                                th:field="*{firstName}">
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="email" class="col-md-4 col-form-label text-md-right">Email</label>
+                                    <label for="email" class="col-md-4 col-form-label text-md-right" th:text="#{frag-form-user.email}"></label>
                                     <div class="col-md-6">
                                         <input type="email" id="email" class="form-control" name="email"
-                                               th:placeholder="${#strings.isEmpty(memberSession?.email)} ? 'Email' : ${memberSession.email}"
+                                               th:placeholder="${#strings.isEmpty(memberSession?.email)} ? #{frag-form-user.email} : ${memberSession.email}"
                                                th:field="*{email}">
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="phone_number" class="col-md-4 col-form-label text-md-right">Téléphone</label>
+                                    <label for="phone_number" class="col-md-4 col-form-label text-md-right" th:text="#{frag-form-user.phoneNumber}"></label>
                                     <div class="col-md-6">
                                         <input type="text" id="phone_number" class="form-control" name="phone_number"
-                                               th:placeholder="${#strings.isEmpty(memberSession?.phoneNumber)} ? 'Téléphone' : ${memberSession.phoneNumber}"
+                                               th:placeholder="${#strings.isEmpty(memberSession?.phoneNumber)} ? #{frag-form-user.phoneNumber} : ${memberSession.phoneNumber}"
                                                th:field="*{phoneNumber}">
                                     </div>
                                 </div>
                                 <div  class="form-group row">
-                                    <label for="street" class="col-md-4 col-form-label text-md-right">Rue</label>
+                                    <label for="street" class="col-md-4 col-form-label text-md-right" th:text="#{frag-form-user.streetName}"></label>
                                     <div class="col-md-6">
                                         <input type="text" id="street" class="form-control" name="street"
-                                               th:placeholder="${#strings.isEmpty(memberSession?.street)} ? 'Rue' : ${memberSession.street}"
+                                               th:placeholder="${#strings.isEmpty(memberSession?.street)} ? #{frag-form-user.streetName} : ${memberSession.street}"
                                                th:field="*{street}">
                                     </div>
                                 </div>
 
                                 <div class="form-group row">
-                                    <label for="postal_code" class="col-md-4 col-form-label text-md-right">Code postal</label>
+                                    <label for="postal_code" class="col-md-4 col-form-label text-md-right" th:text="#{frag-form-user.postalCode}"></label>
                                     <div class="col-md-6">
                                         <input type="text" id="postal_code" class="form-control" name="postal_code"
-                                               th:placeholder="${#strings.isEmpty(memberSession?.zipCode)} ? 'Code postal' : ${memberSession.zipCode}"
+                                               th:placeholder="${#strings.isEmpty(memberSession?.zipCode)} ? #{frag-form-user.postalCode} : ${memberSession.zipCode}"
                                                th:field="*{zipCode}">
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="city" class="col-md-4 col-form-label text-md-right">Ville</label>
+                                    <label for="city" class="col-md-4 col-form-label text-md-right" th:text="#{frag-form-user.city}"></label>
                                     <div class="col-md-6">
                                         <input type="text" id="city" class="form-control" name="city"
-                                               th:placeholder="${#strings.isEmpty(memberSession?.city)} ? 'Ville' : ${memberSession.city}"
+                                               th:placeholder="${#strings.isEmpty(memberSession?.city)} ? #{frag-form-user.city} : ${memberSession.city}"
                                                th:field="*{city}">
                                     </div>
                                 </div>
                                 <div class="password">
                                     <div th:if="${#strings.isEmpty(vue)}">
                                         <div class="form-group row">
-                                            <label for="current_password" class="col-md-4 col-form-label text-md-right">Mot de passe actuel</label>
+                                            <label for="current_password" class="col-md-4 col-form-label text-md-right" th:text="#{frag-form-user.currentPassword}"></label>
                                             <div class="col-md-6">
                                                 <input type="password" id="current_password" class="form-control" name="current_password" th:field="*{password}" >
                                             </div>
                                         </div>
                                         <div  class="form-group row">
-                                            <label for="new_password" class="col-md-4 col-form-label text-md-right">Nouveau de mot de passe</label>
+                                            <label for="new_password" class="col-md-4 col-form-label text-md-right" th:text="#{frag-form-user.newPassword}"></label>
                                             <div class="col-md-6">
                                                 <input type="password" id="new_password" class="form-control" name="new_password" >
                                             </div>
                                         </div>
                                         <div  class="form-group row">
-                                            <label for="password" class="col-md-4 col-form-label text-md-right">Confirmation</label>
+                                            <label for="password" class="col-md-4 col-form-label text-md-right" th:text="#{frag-form-user.confirmPassword}"></label>
                                             <div class="col-md-6">
                                                 <input type="password" id="confirm_password" class="form-control" name="confirm_password" >
                                             </div>
@@ -113,13 +113,13 @@
                                     </div>
                                     <div th:unless="${#strings.isEmpty(vue)}">
                                         <div  class="form-group row">
-                                            <label for="new_password" class="col-md-4 col-form-label text-md-right">Mot de passe</label>
+                                            <label for="new_password" class="col-md-4 col-form-label text-md-right" th:text="#{frag-form-user.password}"></label>
                                             <div class="col-md-6">
                                                 <input type="password" id="password" class="form-control" name="password" th:field="*{password}" >
                                             </div>
                                         </div>
                                         <div  class="form-group row">
-                                            <label for="password" class="col-md-4 col-form-label text-md-right">Confirmation</label>
+                                            <label for="password" class="col-md-4 col-form-label text-md-right" th:text="#{frag-form-user.confirmPassword}"></label>
                                             <div class="col-md-6">
                                                 <input type="password" id="confirm_password" class="form-control" name="confirm_password" >
                                             </div>
@@ -127,18 +127,12 @@
                                     </div>
                                 <div th:if="${#strings.isEmpty(vue)}" class="col-md-6 offset-md-4">
                                     <div class="flex">
-                                        <button type="submit" name="modify_btn" id="modify_btn" class="btn btn-primary btn-form">
-                                            Enregistrer
-                                        </button>
-                                        <button type ="button" name="delete_btn" id="delete_btn" class="btn btn-primary btn-form ">
-                                            Supprimer Compte
-                                        </button>
+                                        <button type="submit" name="modify_btn" id="modify_btn" class="btn btn-primary btn-form" th:text="#{frag-form-user.create}"></button>
+                                        <button type ="button" name="delete_btn" id="delete_btn" class="btn btn-primary btn-form " th:text="#{frag-form-user.deleteAccount}"></button>
                                     </div>
                                 </div>
                                 <div th:unless="${#strings.isEmpty(vue)}" class="col-md-6 offset-md-4">
-                                    <button type="submit" name="submit_form" id="submit_form" class="btn btn-primary btn-form">
-                                        S'incrire
-                                    </button>
+                                    <button type="submit" name="submit_form" id="submit_form" class="btn btn-primary btn-form" th:text="#{frag-form-user.register}"></button>
                                 </div>
                             </div>
                             </form>

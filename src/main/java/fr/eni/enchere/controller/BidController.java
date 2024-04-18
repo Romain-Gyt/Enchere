@@ -6,6 +6,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
+
 @Controller
 @SessionAttributes({"memberSession"})
 public class BidController {
@@ -25,7 +27,7 @@ public class BidController {
         this.auctionService = auctionService;
     }
 
-    @PostMapping("/showDetails")
+    @GetMapping("/showDetails")
     public String showDetails(@RequestParam("itemId") int itemId, Model model) {
         Article article = articleService.getArticleById(itemId);
         Withdrawals withdrawals = withdrawalsService.getWithdrawalsById(itemId);
@@ -35,11 +37,18 @@ public class BidController {
             User user = userService.loadUserById(auction.getUserId());
             model.addAttribute("auction", auction);
             model.addAttribute("user", user);
+            Date currentDate = new Date();
+            Date endDate = article.getEndAuctionDate();
+            if (endDate != null && endDate.before(currentDate)){
+                model.addAttribute("winner", user.getPseudo());
+            }
         } else {
             Auction bidAmount = new Auction();
             bidAmount.setBidAmount(0);
             model.addAttribute("auction", bidAmount);
+            model.addAttribute("user", null);
         }
+
         model.addAttribute("article", article);
         model.addAttribute("withdrawals", withdrawals);
         return "bid/bidDetails";

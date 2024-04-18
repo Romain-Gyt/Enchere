@@ -18,8 +18,8 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryDAO.getAllCategories();
     }
 
-    @Override
-    public String getCategorieById(int id) {
-        return categoryDAO.getCategorieById(id);
-    }
+//    @Override
+//    public String getCategorieById(int id) {
+//        return categoryDAO.getCategorieById(id);
+//    }
 }

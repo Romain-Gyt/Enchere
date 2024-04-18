@@ -2,7 +2,6 @@ package fr.eni.enchere.dal.Impl;
 
 import fr.eni.enchere.bo.Article;
 import fr.eni.enchere.bo.Category;
-import fr.eni.enchere.bo.SoldItem;
 import fr.eni.enchere.bo.User;
 import fr.eni.enchere.dal.ArticleDAO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +9,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
@@ -57,6 +58,30 @@ public class ArticleDAOImpl implements ArticleDAO {
     }
 
     @Override
+    public int createArticle(Article article) {
+        String sql = "INSERT INTO sold_items (item_name, description, start_auction_date, end_auction_date, initial_price, sale_price, category_id, user_id) VALUES (:itemName, :description, :startAuctionDate, :endAuctionDate, :initialPrice, :salePrice, :categoryId, :userId)";
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("itemName", article.getItemName());
+        params.addValue("description", article.getDescription());
+        params.addValue("startAuctionDate", article.getStartAuctionDate());
+        params.addValue("endAuctionDate", article.getEndAuctionDate());
+        params.addValue("initialPrice", article.getInitialPrice());
+        params.addValue("salePrice", article.getSalePrice());
+        params.addValue("categoryId",article.getCategory().getCategoryId());
+        params.addValue("userId",article.getUser().getIdUser());
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        namedParameterJdbcTemplate.update(sql,params,keyHolder);
+        Number key = keyHolder.getKey();
+        return key.intValue();
+    }
+
+    @Override
+    public void updateArticle(Article article) {
+        String sql = "UPDATE sold_items SET item_name = ?, description = ?, start_auction_date = ?, end_auction_date = ?, initial_price = ?, sale_price = ?, category_id = ? WHERE item_id = ?";
+        jdbcTemplate.update(sql, article.getItemName(), article.getDescription(), article.getStartAuctionDate(), article.getEndAuctionDate(), article.getInitialPrice(), article.getSalePrice(), article.getCategory().getCategoryId(), article.getItemId());
+    }
+
+    @Override
     public List<Article> getAllArticles() {
         return jdbcTemplate.query(SELECT_ALL, new ArticleRowMapper());
     }
@@ -86,6 +111,7 @@ public class ArticleDAOImpl implements ArticleDAO {
             article.setEndAuctionDate(rs.getDate("end_auction_date"));
             article.setInitialPrice(rs.getInt("initial_price"));
             article.setSalePrice(rs.getInt("sale_price"));
+            article.updateStatus();
             Category category = new Category();
             category.setCategoryId(rs.getLong("cat_id"));
             category.setLabel(rs.getString("label"));
