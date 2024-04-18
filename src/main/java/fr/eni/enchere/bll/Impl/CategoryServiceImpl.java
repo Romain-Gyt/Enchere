@@ -26,4 +26,16 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryDAO.getCategoryById(id);
     }
 
+    @Override
+    public List<Category> getCategoryByIdFilter(Long id) {
+        id = checkIdCategory(id);
+       return categoryDAO.getCategoryByIdFilter(id);
+    }
+
+    private Long checkIdCategory(Long id) {
+        if (id == 0) {
+            return null;
+        }
+        return id;
+    }
 }

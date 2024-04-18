@@ -11,7 +11,6 @@ public interface ArticleDAO {
     Article getArticleById(int itemId);
     int createArticle(Article article);
     void updateArticle(Article article);
-    Article getArticleById(Long idArticle);
     List<Article> getArticlesByOpenedBuying();
     List<Article> getAllArticleByNameAndCategory(String nameArticle, Long categoryId);
     List<Article> getArticlesByCurrentBuying(String nameArticle, Long categoryId, Long userId);

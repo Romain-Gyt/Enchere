@@ -47,7 +47,17 @@ public class CategoryDAOImpl implements CategoryDAO {
 
     @Override
     public Category getCategoryById(long id) {
-    public List<Category> getCategoryById(Long id) {
+        MapSqlParameterSource namedParameters = new MapSqlParameterSource();
+        namedParameters.addValue("id", id);
+        return namedParameterJdbcTemplate.queryForObject(
+                SELECT_CAT_BY_ID,
+                namedParameters,
+                new CategoryRowMapper()
+        );
+    }
+
+    @Override
+    public List<Category> getCategoryByIdFilter(Long id) {
         MapSqlParameterSource namedParameters = new MapSqlParameterSource();
         namedParameters.addValue("id", id);
         return namedParameterJdbcTemplate.query(

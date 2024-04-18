@@ -16,25 +16,17 @@ import java.util.List;
 
 @Repository
 public class AuctionDAOImpl implements AuctionDAO {
-    private static  final String DELETE_AUCTION = "DELETE FROM sold_items WHERE user_id = :user_id";
     private JdbcTemplate jdbcTemplate;
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-
    private static final String SELECT_BY_ID = "SELECT user_id, bid_amount FROM bids WHERE item_id = :item_id ORDER BY bid_amount DESC LIMIT 1;";
-    private static final String INSERT_BID_AMOUNT_BY_ID = "INSERT INTO bids (user_id, item_id, bid_date, bid_amount) VALUES (:user_id, :item_id, :bid_date, :bid_amount) ON DUPLICATE KEY UPDATE bid_date = :bid_date, bid_amount = :bid_amount;";
-
+   private static final String INSERT_BID_AMOUNT_BY_ID = "INSERT INTO bids (user_id, item_id, bid_date, bid_amount) VALUES (:user_id, :item_id, :bid_date, :bid_amount) ON DUPLICATE KEY UPDATE bid_date = :bid_date, bid_amount = :bid_amount;";
+   private static final String DELETE_AUCTION = "DELETE FROM sold_items WHERE user_id = :user_id";
 
     public AuctionDAOImpl(
             JdbcTemplate jdbcTemplate,
             NamedParameterJdbcTemplate namedParameterJdbcTemplate
     ) {
         this.jdbcTemplate = jdbcTemplate;
-        this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
-    }
-   
-   
-
-    public AuctionDAOImpl(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
     }
 
@@ -93,14 +85,15 @@ public class AuctionDAOImpl implements AuctionDAO {
         namedParameters.addValue("bid_date", new Date());
         namedParameterJdbcTemplate.update(INSERT_BID_AMOUNT_BY_ID, namedParameters);
     }
-}
+
+    @Override
     public void deleteAuction(int userID) {
         MapSqlParameterSource namedParameters = new MapSqlParameterSource();
         namedParameters.addValue("user_id", userID);
         namedParameterJdbcTemplate.update(DELETE_AUCTION, namedParameters);
     }
-  
-   public class AuctionRowMapper implements RowMapper<Auction> {
+
+    class AuctionRowMapper implements RowMapper<Auction> {
         @Override
         public Auction mapRow(ResultSet rs, int rowNum) throws SQLException {
             Auction auction = new Auction();

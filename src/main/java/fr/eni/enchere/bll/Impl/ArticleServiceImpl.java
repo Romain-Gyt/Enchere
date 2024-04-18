@@ -2,6 +2,7 @@
     import fr.eni.enchere.bll.ArticleService;
     import fr.eni.enchere.bo.Article;
     import fr.eni.enchere.bo.Auction;
+    import fr.eni.enchere.bo.User;
     import fr.eni.enchere.bo.Withdrawals;
     import fr.eni.enchere.dal.ArticleDAO;
     import fr.eni.enchere.dal.AuctionDAO;
@@ -11,8 +12,7 @@
     import org.springframework.stereotype.Service;
 
     import java.time.LocalDate;
-    import java.util.Comparator;
-    import java.util.List;
+    import java.util.*;
 
     @Service
     public class ArticleServiceImpl implements ArticleService {
@@ -68,14 +68,8 @@
         public List<Article> getAllArticles() {
             List<Article> articles = articleDAO.getAllArticles();
             LocalDate now = LocalDate.now();
-
-    @Override
-    public Article getArticleById(Long idArticle) {
-        Article article = articleDAO.getArticleById(idArticle);
-//        List<Auction> auctions = auctionDAO.getAllAuctions(article.getItemId());
-//        article.setAuctions(auctions);
-        return article;
-    }
+            return articles;
+        }
 
 
     public List<Article> getAllArticleByNameAndCategory(String nameArticle, Long categoryId) {
@@ -148,26 +142,25 @@
         }
         return new ArrayList<>(uniqueArticles.values());
     }
-
-            for (Article article : articles) {
-                List<Auction> auctions = auctionDAO.getAuctionsByArticleId(article.getItemId());
-                article.setAuctions(auctions);
-
-                if (!auctions.isEmpty()) {
-                    LocalDate startAuctionDate = article.getStartAuctionDate().toLocalDate();
-                    LocalDate endAuctionDate = article.getEndAuctionDate().toLocalDate();
-
-                    if (now.isAfter(endAuctionDate)) {
-                        article.setStatus("Enchères terminées");
-                    } else if (now.isAfter(startAuctionDate)) {
-                        article.setStatus("En cours");
-                    } else {
-                        article.setStatus("Créée");
-                    }
-                }
-            }
-            return articles;
-        }
+//            for (Article article : articles) {
+//                List<Auction> auctions = auctionDAO.getAuctionsByArticleId(article.getItemId());
+//                article.setAuctions(auctions);
+//
+//                if (!auctions.isEmpty()) {
+//                    LocalDate startAuctionDate = article.getStartAuctionDate().toLocalDate();
+//                    LocalDate endAuctionDate = article.getEndAuctionDate().toLocalDate();
+//
+//                    if (now.isAfter(endAuctionDate)) {
+//                        article.setStatus("Enchères terminées");
+//                    } else if (now.isAfter(startAuctionDate)) {
+//                        article.setStatus("En cours");
+//                    } else {
+//                        article.setStatus("Créée");
+//                    }
+//                }
+//            }
+//            return articles;
+//        }
 
         @Override
         public Article getArticleById(int itemId) {

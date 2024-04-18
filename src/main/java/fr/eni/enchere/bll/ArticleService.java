@@ -24,7 +24,6 @@ public interface ArticleService {
 
     void updateArticle(Article existingArticle, Withdrawals withdrawals);
 
-    Article getArticleById(Long idArticle);
     List<Article> getAllArticleByNameAndCategory(String nameArticle, Long categoryId);
     List<Article> getArticlesByBuying  (User userSession,
                                         String nameArticle,

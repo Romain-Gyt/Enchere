@@ -34,6 +34,7 @@ private static final String INSERT_USER = "INSERT INTO users (username, last_nam
 
     private static final String UPDATE_CREDIT_USER = "UPDATE users " +
             "SET credit = :credit " +
+            "WHERE user_id = :id;";
 
 private static final String DISABLE_USER = "UPDATE users SET disabled = 1 WHERE user_id = :id;";
 private static final String ENABLE_USER = "UPDATE users SET disabled = 0 WHERE user_id = :id;";

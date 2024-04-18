@@ -127,6 +127,7 @@ public class Article {
 
     public void setWithdrawals(Withdrawals withdrawals) {
         this.withdrawals = withdrawals;
+    }
 
 
     public String getStatus() {
@@ -152,6 +153,7 @@ public class Article {
 
     public void removeAuction(Auction auction) {
         this.auctions.remove(auction);
+    }
 
     public void updateStatus() {
         Date currentDate = new Date(System.currentTimeMillis());
@@ -163,7 +165,6 @@ public class Article {
         if(user.isDisabled()){
             this.status = "Vente suspendue";
         }
-
     }
 
     /******** toString ********/

@@ -85,9 +85,12 @@ public class HomeController {
             }
         }
         
-        List<Category> categories = categoryService.getCategoryById(Long.parseLong(category_id));
+        List<Category> categories = categoryService.getCategoryByIdFilter(Long.parseLong(category_id));
         model.addAttribute("articles", articles);
         model.addAttribute("categories", categories);
         return "index.html";
     }
+
+
+
 }

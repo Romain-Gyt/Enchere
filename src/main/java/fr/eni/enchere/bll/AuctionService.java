@@ -14,6 +14,6 @@ public interface AuctionService {
 
     List<Auction> getAuctionsByArticleId(int articleId);
 
-    List<Auction> getAllAuctions(int itemId);
+//    List<Auction> getAllAuctions(int itemId);
     void deleteAuction(int userID);
 }

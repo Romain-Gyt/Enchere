@@ -14,17 +14,26 @@ public class AuctionServiceImpl implements AuctionService {
     private AuctionDAO auctionDAO;
   
   /*********CONSTRUCTOR **********/
-  public AuctionServiceImpl(AuctionDao auctionDao){
-    this.auctionDao = auctionDao;
+  public AuctionServiceImpl(AuctionDAO auctionDAO) {
+    this.auctionDAO = auctionDAO;
   }
 
+//    @Override
+//    public List<Auction> getAllAuctions(int itemId) {
+//        return auctionDAO.getAllAuctions(itemId);
+//    }
+
     @Override
-    public List<Auction> getAllAuctions(int itemId) {
-        return auctionDAO.getAllAuctions(itemId);
+    public void deleteAuction(int userID) {
+       auctionDAO.deleteAuction(userID);
     }
 
     @Override
+    public List<Auction> getAllAuctions() {
+       return auctionDAO.getAllAuctions();
+    }
 
+    @Override
     public Auction getAuctionById(long id) {
         return auctionDAO.read(id);
     }
@@ -40,8 +49,4 @@ public class AuctionServiceImpl implements AuctionService {
     }
 
 }
-    public void deleteAuction(int userID) {
-        auctionDAO.deleteAuction(userID);
-    }
 
-}

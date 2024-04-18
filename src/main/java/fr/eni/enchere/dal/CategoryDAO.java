@@ -8,5 +8,5 @@ public interface CategoryDAO {
     List<Category> getAllCategories();
     Category getCategoryById(long id);
   // regler le probleme car la categorie liste sert pour les filtrages
-    List<Category> getCategoryById(Long id);
+    List<Category> getCategoryByIdFilter(Long id);
 }
