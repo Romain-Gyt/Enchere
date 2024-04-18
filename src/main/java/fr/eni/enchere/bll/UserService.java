@@ -16,4 +16,5 @@ public interface UserService {
     void updateUserCredit(User user, int credit);
 
     void deleteUser(Long id);
+    void insertDeleteAccount(User user);
 }

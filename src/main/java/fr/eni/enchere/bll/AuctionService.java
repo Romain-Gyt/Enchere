@@ -13,4 +13,7 @@ public interface AuctionService {
     void insertBidAmountById(Long userId, int id, int bid_amount);
 
     List<Auction> getAuctionsByArticleId(int articleId);
+
+    List<Auction> getAllAuctions(int itemId);
+    void deleteAuction(int userID);
 }

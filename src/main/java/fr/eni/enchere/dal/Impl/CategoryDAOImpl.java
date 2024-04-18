@@ -22,6 +22,10 @@ public class CategoryDAOImpl implements CategoryDAO {
 
     private static final String SELECT_ALL = "SELECT category_id,label " +
                                             "FROM categories";
+    private static final String SELECT_BY_ID = "SELECT category_id,label " +
+            "FROM categories " +
+            "WHERE category_id = :id " +
+            "OR :id IS NULL;";
 
     private static final String SELECT_CAT_BY_ID = "SELECT category_id,label " +
                                                     "FROM categories" +
@@ -43,9 +47,14 @@ public class CategoryDAOImpl implements CategoryDAO {
 
     @Override
     public Category getCategoryById(long id) {
-        MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("id", id);
-        return namedParameterJdbcTemplate.queryForObject(SELECT_CAT_BY_ID,params,new CategoryRowMapper());
+    public List<Category> getCategoryById(Long id) {
+        MapSqlParameterSource namedParameters = new MapSqlParameterSource();
+        namedParameters.addValue("id", id);
+        return namedParameterJdbcTemplate.query(
+                SELECT_BY_ID,
+                namedParameters,
+                new CategoryRowMapper()
+        );
     }
 
     class CategoryRowMapper implements RowMapper<Category> {

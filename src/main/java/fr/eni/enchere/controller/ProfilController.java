@@ -1,5 +1,7 @@
 package fr.eni.enchere.controller;
 
+import fr.eni.enchere.bll.ArticleService;
+import fr.eni.enchere.bll.AuctionService;
 import fr.eni.enchere.bll.UserService;
 import fr.eni.enchere.bo.User;
 import fr.eni.enchere.exception.RegisterException;
@@ -19,15 +21,35 @@ public class ProfilController {
 
     /********* DECLARATION *********/
     private UserService userService;
+    private AuctionService auctionService;
+    private ArticleService articleService;
 
     /********* CONSTRUCTOR *********/
-    public ProfilController(UserService userService) {
+    public ProfilController(
+            UserService userService,
+            AuctionService auctionService,
+            ArticleService articleService
+    ) {
         this.userService = userService;
+        this.auctionService = auctionService;
+        this.articleService = articleService;
     }
 
     @GetMapping("/profil")
     public String displayProfil() {
         return "profil/profil.html";
+    }
+
+    @GetMapping("/profil/{id}")
+    public String displayViewedProfil(
+            @PathVariable("id") String id,
+            Model model
+    ) {
+        System.out.println(id);
+        User user = userService.loadUserById(Long.parseLong(id));
+        model.addAttribute("user", user);
+        System.out.println(user);
+        return "profil/profil-view.html";
     }
 
     @GetMapping("/profil/details")
@@ -70,7 +92,11 @@ public class ProfilController {
     @GetMapping("/profil/delete")
     public String deleteProfil(
             @RequestParam("user_id") String id) {
+        User user = userService.loadUserById(Long.parseLong(id));
+        userService.insertDeleteAccount(user);
+        auctionService.deleteAuction(Integer.parseInt(id));
+        articleService.deleteArticle(Long.parseLong(id));
         userService.deleteUser(Long.parseLong(id));
-        return "redirect:/logout";
+        return "redirect:/";
     }
 }

@@ -25,4 +25,5 @@ public class CategoryServiceImpl implements CategoryService {
     public Category getCategoryById(long id) {
         return categoryDAO.getCategoryById(id);
     }
+
 }

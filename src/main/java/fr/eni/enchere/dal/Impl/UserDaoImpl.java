@@ -14,18 +14,19 @@ import java.util.List;
 
 @Repository
 public class UserDaoImpl implements UserDao {
-    /******** Declaration ********/
-    private static final String SELECT_BY_ID ="SELECT user_id,username,last_name,first_name,email,phone,street,postal_code,city,password,credit,administrator\n" +
-            "FROM users\n" +
-            "WHERE user_id = :id;";
-    private static final String SELECT_BY_USERNAME ="SELECT user_id,username,last_name,first_name,email,phone,street,postal_code,city,password,credit,administrator\n" +
-            "FROM users\n" +
-            "WHERE username = :username;";
-    private static final String SELECT_ALL ="SELECT user_id,username,last_name,first_name,email,phone,street,postal_code,city,password,credit,administrator\n" +
-            "FROM users;";
+/******** Declaration ********/
+private static final String SELECT_BY_ID ="SELECT user_id,username,last_name,first_name,email,phone,street,postal_code,city,password,credit,administrator,disabled\n" +
+                                            "FROM users\n" +
+                                            "WHERE user_id = :id;";
+private static final String SELECT_BY_USERNAME ="SELECT user_id,username,last_name,first_name,email,phone,street,postal_code,city,password,credit,administrator,disabled\n" +
+                                                "FROM users\n" +
+                                                "WHERE username = :username;";
+private static final String SELECT_ALL ="SELECT user_id,username,last_name,first_name,email,phone,street,postal_code,city,password,credit,administrator,disabled\n" +
+                                            "FROM users\n" +
+                                            "WHERE administrator = 0;";
 
-    private static final String INSERT_USER = "INSERT INTO users (username, last_name, first_name, email, phone, street, postal_code, city, password, credit, administrator) " +
-            "VALUES (:username, :last_name, :first_name, :email, :phone, :street, :postal_code, :city, :password, :credit, :administrator);";
+private static final String INSERT_USER = "INSERT INTO users (username, last_name, first_name, email, phone, street, postal_code, city, password, credit, administrator,disabled) " +
+                                            "VALUES (:username, :last_name, :first_name, :email, :phone, :street, :postal_code, :city, :password, :credit, :administrator,0);";
 
     private static final String UPDATE_USER = "UPDATE users " +
             "SET username = :username, last_name = :last_name, first_name = :first_name, email = :email, phone = :phone, street = :street, postal_code = :postal_code, city = :city, password = :password, credit = :credit, administrator = :administrator " +
@@ -33,7 +34,18 @@ public class UserDaoImpl implements UserDao {
 
     private static final String UPDATE_CREDIT_USER = "UPDATE users " +
             "SET credit = :credit " +
-            "WHERE user_id = :id;";
+
+private static final String DISABLE_USER = "UPDATE users SET disabled = 1 WHERE user_id = :id;";
+private static final String ENABLE_USER = "UPDATE users SET disabled = 0 WHERE user_id = :id;";
+
+private static final String LOAD_ACTIVE_ACCOUNT = "SELECT user_id,username,last_name,first_name,email,phone,street,postal_code,city,password,credit,administrator,disabled\n" +
+                                                    "FROM users\n" +
+                                                    "WHERE  disabled = 0\n" +
+                                                    "AND administrator = 0;";
+
+private static final String LOAD_DISABLED_ACCOUNT = "SELECT user_id,username,last_name,first_name,email,phone,street,postal_code,city,password,credit,administrator,disabled\n" +
+                                                    "FROM users\n" +
+                                                    "WHERE  disabled = 1;";
 
     private static final String DELETE_USER = "DELETE FROM users WHERE user_id = :id;";
 
@@ -78,6 +90,22 @@ public class UserDaoImpl implements UserDao {
     @Override
     public List<User> findAll() {
         return jdbcTemplate.query(SELECT_ALL, new UserRowMapper());
+    }
+
+    @Override
+    public List<User> loadActiveAccount() {
+            return jdbcTemplate.query(
+                LOAD_ACTIVE_ACCOUNT,
+                new UserRowMapper()
+        );
+    }
+
+    @Override
+    public List<User> loadDisabledAccount() {
+       return jdbcTemplate.query(
+                LOAD_DISABLED_ACCOUNT,
+                new UserRowMapper()
+        );
     }
 
     @Override
@@ -130,6 +158,18 @@ public class UserDaoImpl implements UserDao {
         namedParameterJdbcTemplate.update(DELETE_USER, namedParameters);
     }
 
+    @Override
+    public void disable(long id) {
+        MapSqlParameterSource namedParameters = new MapSqlParameterSource();
+        namedParameters.addValue("id", id);
+        namedParameterJdbcTemplate.update(DISABLE_USER, namedParameters);
+    }
+    public void enable(long id) {
+        MapSqlParameterSource namedParameters = new MapSqlParameterSource();
+        namedParameters.addValue("id", id);
+        namedParameterJdbcTemplate.update(ENABLE_USER, namedParameters);
+    }
+
     class UserRowMapper implements RowMapper<User> {
 
         @Override
@@ -147,6 +187,7 @@ public class UserDaoImpl implements UserDao {
             user.setPassword(resultSet.getString("password"));
             user.setCredit(resultSet.getInt("credit"));
             user.setAdmin(resultSet.getBoolean("administrator"));
+            user.setDisabled(resultSet.getBoolean("disabled"));
             return user;
         }
     }

@@ -1,6 +1,7 @@
 package fr.eni.enchere.bo;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -21,7 +22,8 @@ public class Article {
     private Withdrawals withdrawals;
     private Category category;
     private User user;
-    private List<Auction> auctions;
+    private String status;
+    private List<Auction> auctions = new ArrayList<>();
 
 
     /******** Constructor ********/
@@ -110,13 +112,6 @@ public class Article {
         this.user = user;
     }
 
-    public String getStatus() {
-        return Status;
-    }
-
-    public void setStatus(String Status) {
-        this.Status = Status;
-    }
 
     public Integer getLatestBidAmount() {
         return latestBidAmount;
@@ -132,6 +127,15 @@ public class Article {
 
     public void setWithdrawals(Withdrawals withdrawals) {
         this.withdrawals = withdrawals;
+
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+
     }
 
     public List<Auction> getAuctions() {
@@ -148,6 +152,18 @@ public class Article {
 
     public void removeAuction(Auction auction) {
         this.auctions.remove(auction);
+
+    public void updateStatus() {
+        Date currentDate = new Date(System.currentTimeMillis());
+        if(currentDate.before(this.endAuctionDate)) {
+            this.status = "En cours";
+        } else {
+            this.status = "Terminé";
+        }
+        if(user.isDisabled()){
+            this.status = "Vente suspendue";
+        }
+
     }
 
     /******** toString ********/

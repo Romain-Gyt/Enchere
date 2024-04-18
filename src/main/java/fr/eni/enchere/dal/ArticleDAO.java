@@ -11,4 +11,13 @@ public interface ArticleDAO {
     Article getArticleById(int itemId);
     int createArticle(Article article);
     void updateArticle(Article article);
+    Article getArticleById(Long idArticle);
+    List<Article> getArticlesByOpenedBuying();
+    List<Article> getAllArticleByNameAndCategory(String nameArticle, Long categoryId);
+    List<Article> getArticlesByCurrentBuying(String nameArticle, Long categoryId, Long userId);
+    List<Article> getArticlesByClosedBuying(String nameArticle, Long categoryId, Long userId);
+    List<Article> getArticlesByCurrentSelling(String nameArticle, Long categoryId, Long userId);
+    List<Article> getArticlesByNonStartedSelling(String nameArticle, Long categoryId, Long userId);
+    List<Article> getArticlesByClosedSelling(String nameArticle, Long categoryId, Long userId);
+    void deleteArticle(Long idArticle);
 }
