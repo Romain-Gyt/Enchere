@@ -78,7 +78,7 @@
                                 <tr th:each="user : ${users}">
                                     <td th:text="${user.getIdUser}"></td>
                                     <td th:text="${user.getPseudo()}"></td>
-                                    <td th:text="${user.getLastName()} + ' ' + ${user.getFirstName()}       "></td>
+                                    <td th:text="${user.getFirstName()} + ' ' + ${user.getLastName()}       "></td>
                                     <td>
                                         <a th:href="@{/profil/{id}(id=${user.getIdUser()})}" class="btn btn-primary">
                                             <button type="button" class="btn btn-primary">Voir profil</button>

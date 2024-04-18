@@ -157,7 +157,9 @@ public class Article {
 
     public void updateStatus() {
         Date currentDate = new Date(System.currentTimeMillis());
-        if(currentDate.before(this.endAuctionDate)) {
+        if(currentDate.before(this.startAuctionDate)){
+            this.status = "En attente";
+        } else if (currentDate.after(this.startAuctionDate) && currentDate.before(this.endAuctionDate)) {
             this.status = "En cours";
         } else {
             this.status = "Terminé";
