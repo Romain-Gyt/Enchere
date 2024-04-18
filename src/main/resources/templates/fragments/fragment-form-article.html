@@ -33,8 +33,9 @@
                                 <div class="form-group row">
                                     <label for="categoryId" class="col-md-4 col-form-label text-md-right">Catégorie</label>
                                     <div class="col-md-6">
-                                        <select id="categoryId" class="form-control" name="categoryId" th:field="*{category}" th:disabled="${action == 'detail'}">
-                                            <option th:each="category : ${categories}" th:value="${category.categoryId}" th:text="${category.label}"></option>
+                                        <select id="categoryId" class="form-control" name="categoryId" th:field="*{category}">
+                                            <option  th:if="${action == 'create' || action == 'edit'}" th:each="category : ${categories}" th:value="${category.categoryId}" th:text="${category.label}"></option>
+                                            <option th:if="${action == 'detail'}" th:value="${article.getCategory().getCategoryId()}" th:text="${article.getCategory().getLabel()}" selected></option>
                                         </select>
                                     </div>
                                 </div>

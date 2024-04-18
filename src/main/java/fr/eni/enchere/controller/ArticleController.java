@@ -103,6 +103,7 @@ public class ArticleController {
         Withdrawals withdrawals = withdrawalsService.getWithdrawalsByArticleId(itemId);
         List<Auction> auctions = auctionService.getAuctionsByArticleId(itemId);
         model.addAttribute("article", article);
+        System.out.println(article.getCategory().getLabel());
         model.addAttribute("withdrawals", withdrawals);
         model.addAttribute("auctions", auctions);
         return "article/articleDetail";
