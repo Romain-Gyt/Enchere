@@ -10,4 +10,5 @@ public interface WithdrawalsDAO {
     void updateWithdrawals(Withdrawals withdrawals);
 
     void createWithdrawals(Withdrawals withdrawals);
+    void deleteWithdrawals(int id);
 }

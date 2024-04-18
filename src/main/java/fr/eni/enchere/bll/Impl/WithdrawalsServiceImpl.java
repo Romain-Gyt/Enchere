@@ -26,6 +26,10 @@ public class WithdrawalsServiceImpl implements WithdrawalsService {
         return withdrawalsDAO.getWithdrawalsByArticleId(articleId);
     }
 
+    @Override
+    public void deleteWithdrawals(int id) {
+        withdrawalsDAO.deleteWithdrawals(id);
+    }
 
     @Override
     public void updateWithdrawals(Withdrawals withdrawals) {

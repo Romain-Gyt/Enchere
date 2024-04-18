@@ -10,4 +10,5 @@ public interface WithdrawalsService {
     void createWithdrawals(Withdrawals withdrawals);
 
     Withdrawals getWithdrawalsByArticleId(int itemId);
+    void deleteWithdrawals(int id);
 }

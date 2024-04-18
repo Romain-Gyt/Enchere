@@ -1,9 +1,6 @@
 package fr.eni.enchere.controller;
 
-import fr.eni.enchere.bll.AdminService;
-import fr.eni.enchere.bll.ArticleService;
-import fr.eni.enchere.bll.AuctionService;
-import fr.eni.enchere.bll.UserService;
+import fr.eni.enchere.bll.*;
 import fr.eni.enchere.bo.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,6 +20,7 @@ public class    AdminController {
     private AuctionService auctionService;
     private ArticleService articleService;
     private AdminService adminService;
+    private WithdrawalsService withdrawalsService;
 
 
     /********* CONSTRUCTEUR *********/
@@ -30,12 +28,14 @@ public class    AdminController {
             UserService userService,
             AuctionService auctionService,
             ArticleService articleService,
-            AdminService adminService
+            AdminService adminService,
+            WithdrawalsService withdrawalsService
     ) {
         this.userService = userService;
         this.auctionService = auctionService;
         this.articleService = articleService;
         this.adminService = adminService;
+        this.withdrawalsService = withdrawalsService;
     }
 
 
@@ -55,6 +55,7 @@ public class    AdminController {
         User user = userService.loadUserById(Long.parseLong(id));
         adminService.insertDeleteAccount(user);
         auctionService.deleteAuction(Integer.parseInt(id));
+        withdrawalsService.deleteWithdrawals(Integer.parseInt(id));
         articleService.deleteArticle(Long.parseLong(id));
         adminService.deleteUser(Long.parseLong(id));
         return "redirect:/admin";

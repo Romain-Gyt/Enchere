@@ -3,6 +3,7 @@ package fr.eni.enchere.controller;
 import fr.eni.enchere.bll.ArticleService;
 import fr.eni.enchere.bll.AuctionService;
 import fr.eni.enchere.bll.UserService;
+import fr.eni.enchere.bll.WithdrawalsService;
 import fr.eni.enchere.bo.User;
 import fr.eni.enchere.exception.RegisterException;
 import jakarta.servlet.http.HttpSession;
@@ -23,16 +24,19 @@ public class ProfilController {
     private UserService userService;
     private AuctionService auctionService;
     private ArticleService articleService;
+    private WithdrawalsService withdrawalsService;
 
     /********* CONSTRUCTOR *********/
     public ProfilController(
             UserService userService,
             AuctionService auctionService,
-            ArticleService articleService
+            ArticleService articleService,
+            WithdrawalsService withdrawalsService
     ) {
         this.userService = userService;
         this.auctionService = auctionService;
         this.articleService = articleService;
+        this.withdrawalsService = withdrawalsService;
     }
 
     @GetMapping("/profil")
@@ -95,6 +99,7 @@ public class ProfilController {
         User user = userService.loadUserById(Long.parseLong(id));
         userService.insertDeleteAccount(user);
         auctionService.deleteAuction(Integer.parseInt(id));
+        withdrawalsService.deleteWithdrawals(Integer.parseInt(id));
         articleService.deleteArticle(Long.parseLong(id));
         userService.deleteUser(Long.parseLong(id));
         return "redirect:/";

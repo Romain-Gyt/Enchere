@@ -4,6 +4,7 @@ import fr.eni.enchere.bll.AdminService;
 import fr.eni.enchere.bo.User;
 import fr.eni.enchere.dal.DeletedAccount;
 import fr.eni.enchere.dal.UserDao;
+import fr.eni.enchere.dal.WithdrawalsDAO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,17 +13,23 @@ import java.util.List;
 public class AdminServiceImpl implements AdminService {
     private UserDao userDao;
     private DeletedAccount deletedAccount;
+    private WithdrawalsDAO withdrawalsDAO;
 
 
-    public AdminServiceImpl(UserDao userDao, DeletedAccount deletedAccount) {
+    public AdminServiceImpl(UserDao userDao,
+                            DeletedAccount deletedAccount,
+                            WithdrawalsDAO withdrawalsDAO
+    ) {
         this.userDao = userDao;
         this.deletedAccount = deletedAccount;
+        this.withdrawalsDAO = withdrawalsDAO;
     }
 
     @Override
     public void deleteUser(Long id) {
         userDao.delete(id);
     }
+
 
     @Override
     public void disableUser(Long id) {
