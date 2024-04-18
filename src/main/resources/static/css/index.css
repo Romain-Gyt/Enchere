@@ -2,6 +2,10 @@ body{
     background-color: rgb(237, 248, 248);
     font-family: 'Roboto', sans-serif;
 }
+.main-content{
+    max-height: 700px;
+    overflow-y: auto;
+}
 
 footer{
     position: fixed;
