@@ -43,7 +43,7 @@
 
         @Override
         public void setAuctions(Article article) {
-            List<Auction> auctions = auctionDAO.getAuctionsByItemId(article.getItemId());
+            List<Auction> auctions = auctionDAO.getAuctionsByArticleId(article.getItemId());
             article.setAuctions(auctions);
         }
 
@@ -74,7 +74,7 @@
             LocalDate now = LocalDate.now();
 
             for (Article article : articles) {
-                List<Auction> auctions = auctionDAO.getAuctionsByItemId(article.getItemId());
+                List<Auction> auctions = auctionDAO.getAuctionsByArticleId(article.getItemId());
                 article.setAuctions(auctions);
 
                 if (!auctions.isEmpty()) {
@@ -97,7 +97,7 @@
         public Article getArticleById(int itemId) {
             Article article = articleDAO.getArticleById(itemId);
             if (article != null) {
-                List<Auction> auctions = auctionDAO.getAuctionsByItemId(itemId);
+                List<Auction> auctions = auctionDAO.getAuctionsByArticleId(itemId);
                 article.setAuctions(auctions);
 
                 Withdrawals withdrawals = withdrawalsDAO.getWithdrawalsByArticleId(itemId);

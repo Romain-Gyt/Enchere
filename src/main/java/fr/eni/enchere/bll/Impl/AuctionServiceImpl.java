@@ -2,7 +2,6 @@ package fr.eni.enchere.bll.Impl;
 
 import fr.eni.enchere.bll.AuctionService;
 import fr.eni.enchere.bo.Auction;
-import fr.eni.enchere.bo.Withdrawals;
 import fr.eni.enchere.dal.AuctionDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +26,11 @@ public class AuctionServiceImpl implements AuctionService {
     @Override
     public void insertBidAmountById(Long userId, int id, int bid_amount) {
         auctionDAO.create(userId, id, bid_amount);
+    }
+
+    @Override
+    public List<Auction> getAuctionsByArticleId(int articleId) {
+        return auctionDAO.getAuctionsByArticleId(articleId);
     }
 
 }

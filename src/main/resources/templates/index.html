@@ -32,7 +32,7 @@
                     <div class="col-md-6">
                         <select class="form-control" id="categorySelect" name="category_id">
                             <option value=""  selected>---- Catégories ----</option>
-<!--                             Boucle pour afficher les libellés des catégories -->
+                            <!--                             Boucle pour afficher les libellés des catégories -->
                             <option th:each="category : ${categories}"  th:value="${category.categoryId}" th:text="${category.label}"></option>
                         </select>
                     </div>
@@ -41,8 +41,6 @@
                     </div>
                 </div>
             </form>
-
-
         </div>
 
         <div class="row auctions-container">
@@ -63,13 +61,19 @@
                                     </a>
                                 </th:block>
                                 <h5 class="card-title text-white font-weight-bold" th:unless="${#authorization.expression('isAuthenticated()')}" th:text="${article.itemName}"></h5>
-                                <div th:if="${article.auctions.size() > 0}">
-                                    Prix : <span th:text="${article.auctions.get(article.auctions.size() - 1).getBidAmount()}"></span>
-                                </div>
-                                <div th:unless="${article.auctions.size() > 0}">
-                                    Prix : <span th:text="${article.initialPrice}"></span>
+                                <div th:if="${auction != null}">
+                                    <!-- Utilisez la variable auction en toute sécurité ici -->
+                                    <div th:if="${auction.bids != null and auction.bids.size() > 0}">
+                                        <span th:text="'Enchère actuelle : ' + ${auction.bids[auction.bids.size() - 1].bidAmount} + ' points'"></span>
+                                    </div>
+                                    <div th:unless="${auction.bids != null and auction.bids.size() > 0}">
+                                        <span th:text="'Prix de vente : ' + ${article.initialPrice} + ' points'"></span>
+                                    </div>
                                 </div>
 
+                                <div th:unless="${auction != null}">
+                                    <span class="card-text text-white" th:text="'Prix de vente : ' + ${article.initialPrice} + ' points'"></span>
+                                </div>
                                 <p class="card-text text-white">Date de début de l'enchère : <span th:text="${#dates.format(article.startAuctionDate, 'dd/MM/yyyy')}"></span></p>
                                 <p class="card-text text-white">Date de fin de l'enchère : <span th:text="${#dates.format(article.endAuctionDate, 'dd/MM/yyyy')}"></span></p>
                                 <p class="card-text text-white">Vendu par : <span th:text="${article.user.getPseudo()}"></span></p>

@@ -42,9 +42,11 @@ public class AuctionDAOImpl implements AuctionDAO {
     }
 
     @Override
-    public List<Auction> getAuctionsByItemId(int itemId) {
-        String sql = "SELECT * FROM bids WHERE item_id = ?";
-        return jdbcTemplate.query(sql, new Object[]{itemId}, new AuctionRowMapper());
+    public List<Auction> getAuctionsByArticleId(int itemId) {
+        String sql = "SELECT * FROM bids WHERE item_id = :item_id";
+        MapSqlParameterSource namedParameters = new MapSqlParameterSource();
+        namedParameters.addValue("item_id", itemId);
+        return namedParameterJdbcTemplate.query(sql, namedParameters, new AuctionRowMapper());
     }
 
 

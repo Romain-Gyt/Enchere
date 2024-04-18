@@ -9,6 +9,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 @Controller
@@ -19,14 +20,14 @@ public class ArticleController {
     private final CategoryService categoryService;
     private final UserService userService;
     private final WithdrawalsService withdrawalsService;
-    private final AuctionServiceImpl auctionServiceImpl;
+    private final AuctionService auctionService;
 
-    public ArticleController(ArticleService articleService, CategoryService categoryService, UserService userService, WithdrawalsService withdrawalsService, AuctionServiceImpl auctionServiceImpl) {
+    public ArticleController(ArticleService articleService, CategoryService categoryService, UserService userService, WithdrawalsService withdrawalsService, AuctionService auctionService) {
         this.articleService = articleService;
         this.categoryService = categoryService;
         this.userService = userService;
         this.withdrawalsService = withdrawalsService;
-        this.auctionServiceImpl = auctionServiceImpl;
+        this.auctionService = auctionService;
     }
 
     @GetMapping("/article/create")
@@ -100,8 +101,10 @@ public class ArticleController {
     public String showArticleDetails(@PathVariable int itemId, Model model) {
         Article article = articleService.getArticleById(itemId);
         Withdrawals withdrawals = withdrawalsService.getWithdrawalsByArticleId(itemId);
+        List<Auction> auctions = auctionService.getAuctionsByArticleId(itemId);
         model.addAttribute("article", article);
-        model.addAttribute("withdrawals", withdrawals); // Ajouter les informations de retrait au modèle
+        model.addAttribute("withdrawals", withdrawals);
+        model.addAttribute("auctions", auctions);
         return "article/articleDetail";
     }
 

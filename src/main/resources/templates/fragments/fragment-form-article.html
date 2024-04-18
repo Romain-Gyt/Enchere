@@ -70,25 +70,25 @@
                                     <input type="text" class="form-control" th:value="${article.user.pseudo}" disabled>
                                 </div>
 
-                                <!-- Partie Enchère (pour la page détail uniquement) -->
-                                <form th:action="@{/addBid}" method="post" th:if="${action == 'detail'}">
-                                    <label class="labels">Ma proposition :
-                                        <input class="form-control" type="number" name="bidAmount"
-                                               th:min="${article.auction.bidAmount > 0 ? article.auction.bidAmount + 1 : article.initialPrice}"
-                                               th:max="${memberSession.credit}"
-                                               th:value="${article.auction.bidAmount > 0 ? (article.auction.bidAmount + 1 < memberSession.credit ? article.auction.bidAmount + 1 : memberSession.credit) : article.initialPrice}"
-                                               oninput="validateBid(this)"/>
-                                    </label>
-                                    <input type="hidden" id="itemId" name="itemId" th:value="${article.itemId}" />
-                                    <th:block th:if="${article.auction.bidAmount > 0}">
-                                        <input type="hidden" id="userId" name="userId" th:value="${auction.userId}" />
-                                    </th:block>
-                                    <input type="hidden" id="lastBidAmount" name="lastBidAmount" th:value="${auction.bidAmount}" />
-                                    <button class="btn btn-primary profile-button btn-form" type="submit" id="submitBtn"
-                                            th:disabled="${article.startAuctionDate.after(#dates.createNow()) or memberSession.credit &lt; auction.bidAmount}">
-                                        Enchérir</button>
-                                    <span th:if="${memberSession.credit &lt; auction.bidAmount}">Crédit insuffisant</span>
-                                </form>
+<!--                                &lt;!&ndash; Partie Enchère (pour la page détail uniquement) &ndash;&gt;-->
+<!--                                <form th:action="@{/addBid}" method="post" th:if="${action == 'detail'}">-->
+<!--                                    <label class="labels">Ma proposition :-->
+<!--                                        <input class="form-control" type="number" name="bidAmount"-->
+<!--                                               th:min="${article.auction.bidAmount > 0 ? article.auction.bidAmount + 1 : article.initialPrice}"-->
+<!--                                               th:max="${memberSession.credit}"-->
+<!--                                               th:value="${article.auction.bidAmount > 0 ? (article.auction.bidAmount + 1 < memberSession.credit ? article.auction.bidAmount + 1 : memberSession.credit) : article.initialPrice}"-->
+<!--                                               oninput="validateBid(this)"/>-->
+<!--                                    </label>-->
+<!--                                    <input type="hidden" id="itemId" name="itemId" th:value="${article.itemId}" />-->
+<!--                                    <th:block th:if="${article.auction.bidAmount > 0}">-->
+<!--                                        <input type="hidden" id="userId" name="userId" th:value="${auction.userId}" />-->
+<!--                                    </th:block>-->
+<!--                                    <input type="hidden" id="lastBidAmount" name="lastBidAmount" th:value="${auction.bidAmount}" />-->
+<!--                                    <button class="btn btn-primary profile-button btn-form" type="submit" id="submitBtn"-->
+<!--                                            th:disabled="${article.startAuctionDate.after(#dates.createNow()) or memberSession.credit &lt; auction.bidAmount}">-->
+<!--                                        Enchérir</button>-->
+<!--                                    <span th:if="${memberSession.credit &lt; auction.bidAmount}">Crédit insuffisant</span>-->
+<!--                                </form>-->
 
                                 <div class="form-group row">
 <!--                                    <label for="image" class="col-md-4 col-form-label text-md-right">Image</label>-->
