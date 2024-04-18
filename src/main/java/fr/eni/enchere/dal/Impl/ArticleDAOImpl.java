@@ -28,7 +28,8 @@ public class ArticleDAOImpl implements ArticleDAO {
             "       FROM sold_items se\n" +
             "       INNER JOIN categories cat ON se.category_id = cat.category_id\n" +
             "       INNER JOIN users u ON se.user_id = u.user_id\n" +
-            "       WHERE end_auction_date > CURDATE() AND cat.category_id = :category_id;";
+            "WHERE CURDATE() BETWEEN se.start_auction_date AND se.end_auction_date\n" +
+            "AND cat.category_id = :category_id;";
 
    /******** Declaration ********/
    private static final String SELECT_ALL = "SELECT se.item_id,se.item_name,se.description,se.start_auction_date,se.end_auction_date,se.initial_price,se.sale_price,\n" +
@@ -37,7 +38,7 @@ public class ArticleDAOImpl implements ArticleDAO {
            "FROM sold_items se\n" +
            "INNER JOIN categories cat ON se.category_id = cat.category_id\n" +
            "INNER JOIN users u ON se.user_id = u.user_id\n" +
-           "WHERE se.end_auction_date > CURDATE()\n"+
+           "WHERE CURDATE() BETWEEN se.start_auction_date AND se.end_auction_date\n" +
            "AND u.disabled != 1\n"+
            "ORDER BY se.end_auction_date;";
 
@@ -47,7 +48,7 @@ public class ArticleDAOImpl implements ArticleDAO {
            "FROM sold_items se\n" +
            "INNER JOIN categories cat ON se.category_id = cat.category_id\n" +
            "INNER JOIN users u ON se.user_id = u.user_id\n" +
-           "WHERE se.item_id = :item_id" +
+           "WHERE se.item_id = :item_id\n" +
            "AND u.disabled != 1;";
 
 
@@ -68,7 +69,7 @@ public class ArticleDAOImpl implements ArticleDAO {
             "       FROM sold_items se\n" +
             "       INNER JOIN categories cat ON se.category_id = cat.category_id\n" +
             "       INNER JOIN users u ON se.user_id = u.user_id\n" +
-            " WHERE se.end_auction_date > CURDATE()"+
+            "WHERE CURDATE() BETWEEN se.start_auction_date AND se.end_auction_date\n" +
               "AND u.disabled != 1;";
 
     public static final String SELECT_BY_BUYING_CURRENT_AUCTIONS = "SELECT se.item_id,se.item_name,se.description,se.start_auction_date,se.end_auction_date,se.initial_price,se.sale_price,\n" +
@@ -79,7 +80,7 @@ public class ArticleDAOImpl implements ArticleDAO {
             "INNER JOIN categories cat ON se.category_id = cat.category_id\n" +
             "INNER JOIN users u ON se.user_id = u.user_id\n" +
             "INNER JOIN bids b ON se.item_id = b.item_id\n" +
-            "WHERE se.end_auction_date > CURDATE()\n" +
+            "WHERE CURDATE() BETWEEN se.start_auction_date AND se.end_auction_date\n" +
             "AND (se.item_name LIKE :item_name OR :item_name IS NULL)\n" +
             "AND b.user_id = :user_id\n" +
             "AND u.disabled != 1\n"+
@@ -87,7 +88,7 @@ public class ArticleDAOImpl implements ArticleDAO {
 
     public static final String SELECT_BY_BUYING_CLOSED_AUCTIONS = "SELECT se.item_id,se.item_name,se.description,se.start_auction_date,se.end_auction_date,se.initial_price,se.sale_price,\n" +
             "        cat.category_id as cat_id,cat.label,\n" +
-            "        u.user_id as id_user,u.username,u.last_name,u.first_name,u.email,u.phone,u.street,u.postal_code,u.city,u.credit,u.administrator,u.disabled\n" +
+            "        u.user_id as id_user,u.username,u.last_name,u.first_name,u.email,u.phone,u.street,u.postal_code,u.city,u.credit,u.administrator,u.disabled,\n" +
             "        b.user_id as id_bidder,b.item_id as bid_item,b.bid_date,b.bid_amount\n" +
             "FROM sold_items se\n" +
             "INNER JOIN categories cat ON se.category_id = cat.category_id\n" +
@@ -107,7 +108,7 @@ public class ArticleDAOImpl implements ArticleDAO {
             "FROM sold_items se\n" +
             " INNER JOIN categories cat ON se.category_id = cat.category_id\n" +
             " INNER JOIN users u ON se.user_id = u.user_id\n" +
-            "WHERE se.end_auction_date > CURDATE()\n" +
+          "WHERE CURDATE() BETWEEN se.start_auction_date AND se.end_auction_date\n" +
             "AND (se.item_name LIKE :item_name OR :item_name IS NULL)\n" +
             "AND (cat.category_id = :category_id  OR :category_id IS NULL)\n" +
             "AND se.user_id = :user_id\n" +

@@ -56,7 +56,17 @@ public class AppSecurityConfiguration  {
                     .requestMatchers(HttpMethod.GET,"/article/create").authenticated()
                     .requestMatchers(HttpMethod.POST,"/article/create").authenticated()
                     .requestMatchers(HttpMethod.GET,"/category").authenticated()
-                    .requestMatchers(HttpMethod.GET,"/search").permitAll();
+                    .requestMatchers(HttpMethod.GET,"/search").permitAll()
+                    .requestMatchers(HttpMethod.GET,"/article/edit/{itemId}").authenticated()
+                    .requestMatchers(HttpMethod.POST,"/article/edit/{itemId}").authenticated()
+                    .requestMatchers(HttpMethod.GET,"/article/detail/{itemId}").authenticated()
+                    .requestMatchers(HttpMethod.POST,"/article/addBid").authenticated()
+                    .requestMatchers(HttpMethod.GET,"/admin").hasRole("ADMIN")
+                    .requestMatchers(HttpMethod.GET,"/admin/delete").hasRole("ADMIN")
+                    .requestMatchers(HttpMethod.GET,"/admin/disable").hasRole("ADMIN")
+                    .requestMatchers(HttpMethod.GET,"/admin/enable").hasRole("ADMIN")
+                    .requestMatchers(HttpMethod.GET,"/admin/filter").hasRole("ADMIN");
+
 
 
             auth.requestMatchers("/").permitAll();

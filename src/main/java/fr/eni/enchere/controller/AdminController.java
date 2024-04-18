@@ -16,7 +16,7 @@ import java.util.List;
 
 @Controller
 @SessionAttributes({"memberSession"})
-public class AdminController {
+public class    AdminController {
     /********* DECLARATION DES VARIABLES *********/
 
     private UserService userService;
