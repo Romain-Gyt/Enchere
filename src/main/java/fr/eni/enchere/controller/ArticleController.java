@@ -42,8 +42,7 @@ public class ArticleController {
     public String createArticle(@ModelAttribute("memberSession") User userSession,
                                 @ModelAttribute("article") Article article,
                                 BindingResult result,
-                                Model model
-                                /**@RequestParam("image") MultipartFile imageFile**/) throws IOException {
+                                Model model) throws IOException {
         if (result.hasErrors()) {
             model.addAttribute("categories", categoryService.getAllCategories());
             model.addAttribute("errorMessage", "Le formulaire n'a pas été soumis correctement");
@@ -51,11 +50,6 @@ public class ArticleController {
         }
 
         article.setUser(userSession);
-
-//        if (imageFile != null && !imageFile.isEmpty()) {
-//            String fileName = itemId + ".jpg";
-//            article.setImage(fileName);
-//        }
         articleService.createArticle(article, article.getWithdrawals());
 
         return "/article/success";
@@ -75,8 +69,7 @@ public class ArticleController {
                               @ModelAttribute("article") Article article,
                               @ModelAttribute("withdrawals") Withdrawals withdrawals,
                               BindingResult result,
-                              Model model,
-                              @RequestParam(value = "image", required = false) MultipartFile imageFile) throws IOException {
+                              Model model) throws IOException {
         if (result.hasErrors()) {
             model.addAttribute("categories", categoryService.getAllCategories());
             model.addAttribute("errorMessage", "Le formulaire n'a pas été soumis correctement");
@@ -96,10 +89,6 @@ public class ArticleController {
         existingArticle.setStartAuctionDate(article.getStartAuctionDate());
         existingArticle.setEndAuctionDate(article.getEndAuctionDate());
 
-        if (imageFile != null && !imageFile.isEmpty()) {
-            String fileName = UUID.randomUUID().toString() + ".jpg";
-            existingArticle.setImage(fileName);
-        }
 
         articleService.updateArticle(existingArticle, withdrawals);
 

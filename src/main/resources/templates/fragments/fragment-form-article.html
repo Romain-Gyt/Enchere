@@ -57,13 +57,6 @@
                                     </div>
                                 </div>
 
-<!--                                &lt;!&ndash; Partie Retrait &ndash;&gt;-->
-<!--                                <div class="col-md-12" th:if="${action == 'edit' || action == 'detail'}">-->
-<!--                                    <input type="text" class="form-control"-->
-<!--                                           th:value="${article.withdrawals != null ? (article.withdrawals.street + ', ' + (article.withdrawals.postal_code + ' ' + article.withdrawals.city)) : ''}"-->
-<!--                                           name="withdrawals" th:readonly="${action == 'detail'}">-->
-<!--                                </div>-->
-
                                 <div class="col-md-12" th:if="${action == 'create'}">
                                     <input type="text" class="form-control" th:placeholder="Rue" th:field="*{withdrawals.street}">
                                     <input type="text" class="form-control" th:placeholder="CP" th:field="*{withdrawals.postal_code}">

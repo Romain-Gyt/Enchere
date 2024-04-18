@@ -17,7 +17,6 @@ public class Article {
     private int userId;
     private String Status;
     private Integer latestBidAmount;
-    private String image;
 
     private Withdrawals withdrawals;
     private Category category;
@@ -117,14 +116,6 @@ public class Article {
 
     public void setStatus(String Status) {
         this.Status = Status;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
     }
 
     public Integer getLatestBidAmount() {
