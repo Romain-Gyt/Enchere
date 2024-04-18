@@ -38,7 +38,9 @@ private static final String ENABLE_USER = "UPDATE users SET disabled = 0 WHERE u
 
 private static final String LOAD_ACTIVE_ACCOUNT = "SELECT user_id,username,last_name,first_name,email,phone,street,postal_code,city,password,credit,administrator,disabled\n" +
                                                     "FROM users\n" +
-                                                    "WHERE  disabled = 0;";
+                                                    "WHERE  disabled = 0\n" +
+                                                    "AND administrator = 0;";
+
 private static final String LOAD_DISABLED_ACCOUNT = "SELECT user_id,username,last_name,first_name,email,phone,street,postal_code,city,password,credit,administrator,disabled\n" +
                                                     "FROM users\n" +
                                                     "WHERE  disabled = 1;";
