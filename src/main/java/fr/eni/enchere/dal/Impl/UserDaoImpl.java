@@ -28,10 +28,12 @@ private static final String SELECT_ALL ="SELECT user_id,username,last_name,first
 private static final String INSERT_USER = "INSERT INTO users (username, last_name, first_name, email, phone, street, postal_code, city, password, credit, administrator,disabled) " +
                                             "VALUES (:username, :last_name, :first_name, :email, :phone, :street, :postal_code, :city, :password, :credit, :administrator,0);";
 
-private static final String UPDATE_USER = "UPDATE users " +
-                                                "SET username = :username, last_name = :last_name, first_name = :first_name, email = :email, phone = :phone, street = :street, postal_code = :postal_code, city = :city, password = :password, credit = :credit, administrator = :administrator " +
-                                                "WHERE user_id = :id;";
-private static final String DELETE_USER = "DELETE FROM users WHERE user_id = :id;";
+    private static final String UPDATE_USER = "UPDATE users " +
+            "SET username = :username, last_name = :last_name, first_name = :first_name, email = :email, phone = :phone, street = :street, postal_code = :postal_code, city = :city, password = :password, credit = :credit, administrator = :administrator " +
+            "WHERE user_id = :id;";
+
+    private static final String UPDATE_CREDIT_USER = "UPDATE users " +
+            "SET credit = :credit " +
 
 private static final String DISABLE_USER = "UPDATE users SET disabled = 1 WHERE user_id = :id;";
 private static final String ENABLE_USER = "UPDATE users SET disabled = 0 WHERE user_id = :id;";
@@ -45,11 +47,13 @@ private static final String LOAD_DISABLED_ACCOUNT = "SELECT user_id,username,las
                                                     "FROM users\n" +
                                                     "WHERE  disabled = 1;";
 
-private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-private JdbcTemplate jdbcTemplate;
+    private static final String DELETE_USER = "DELETE FROM users WHERE user_id = :id;";
+
+    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+    private JdbcTemplate jdbcTemplate;
 
 
-/******** Constructor ********/
+    /******** Constructor ********/
     public UserDaoImpl(
             NamedParameterJdbcTemplate namedParameterJdbcTemplate,
             JdbcTemplate jdbcTemplate
@@ -59,8 +63,8 @@ private JdbcTemplate jdbcTemplate;
     }
 
 
-/******** Methods ********/
-        @Override
+    /******** Methods ********/
+    @Override
     public User read(long id) {
         MapSqlParameterSource namedParameters = new MapSqlParameterSource();
         namedParameters.addValue("id", id);
@@ -121,6 +125,14 @@ private JdbcTemplate jdbcTemplate;
         namedParameters.addValue("administrator", user.isAdmin());
         namedParameterJdbcTemplate.update(UPDATE_USER, namedParameters);
         return user;
+    }
+
+    @Override
+    public void updateCredit(User user, int credit){
+        MapSqlParameterSource namedParameters = new MapSqlParameterSource();
+        namedParameters.addValue("id", user.getIdUser());
+        namedParameters.addValue("credit", credit);
+        namedParameterJdbcTemplate.update(UPDATE_CREDIT_USER, namedParameters);
     }
 
     @Override

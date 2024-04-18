@@ -10,117 +10,135 @@
     <title th:text="Accueil">Home</title>
     <script src="/js/Filter_home.js"></script>
 </head>
-<body>
-<main class="main-content">
-    <div class="container">
-        <h1 class="text-center">Liste des enchères</h1>
-        <div class="row">
-            <form action="/search" method="GET">
-                <div class="row">
-                    <label>Filtres: </label>
-                    <div class="col-md-6 searchbar">
+  <body>
+    <main class="main-content">
+        <div class="container">
+            <h1 class="text-center">Liste des enchères</h1>
+            <div class="row">
+                <form action="/search" method="GET">
+                    <div class="row">
+                        <label>Filtres: </label>
+                        <div class="col-md-6 searchbar">
+                            <div class="col-md-6">
+                                <input type="text" class="form-control" name="searchInput" placeholder="Le nom contient...">
+                            </div>
+                            <label for="categorySelect">Catégories: </label>
+                            <select class="form-control" id="categorySelect" name="category_id">
+                                <option value="">Toutes</option>
+    <!--                             Boucle pour afficher les libellés des catégories -->
+
+                                <option th:each="category : ${categories}"  th:value="${category.categoryId}" th:text="${category.label}"></option>
+                            </select>
+                        </div>
+                        <div th:if="${#authorization.expression('isAuthenticated()')}" class="filter-container">
+                            <div class="filter_buying">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="transactionType" id="radio_buying" value="buying">
+                                    <label class="form-check-label" for="radio_buying">
+                                        Achats
+                                    </label>
+                                    <div class="form-check">
+                                        <input class="form-check-input" name="open_auction" type="checkbox" value="true"  id="open_auction">
+                                        <label class="form-check-label" for="open_auction">
+                                            Enchères ouvertes
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" name="current_auction" type="checkbox" value="true" id="current_auction">
+                                        <label class="form-check-label" for="current_auction">
+                                           Mes enchères en cours
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" name="won_auction" type="checkbox" value="true" id="won_auction">
+                                        <label class="form-check-label" for="won_auction">
+                                           Mes enchères remportées
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="filter_selling">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="transactionType" id="radio_selling" value="selling">
+                                    <label class="form-check-label" for="radio_selling">
+                                        Mes ventes
+                                    </label>
+                                    <div class="form-check">
+                                        <input class="form-check-input" name="current_selling" type="checkbox" value="true" id="current_selling">
+                                        <label class="form-check-label" for="current_selling">
+                                           Mes ventes en cours
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" name="non_started_selling" type="checkbox" value="true" id="non_started_selling">
+                                        <label class="form-check-label" for="non_started_selling">
+                                           Ventes non débutées
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" name="finished_selling" type="checkbox" value="true" id="finished_selling">
+                                        <label class="form-check-label" for="finished_selling">
+                                            Ventes terminées
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="col-md-6">
-                            <input type="text" class="form-control" name="searchInput" placeholder="Le nom contient...">
+                            <button type="submit" class="btn btn-primary btn-form" id="search_form">Rechercher</button>
                         </div>
-                        <label for="categorySelect">Catégories: </label>
-                        <select class="form-control" id="categorySelect" name="category_id">
-                            <option value="">Toutes</option>
-<!--                             Boucle pour afficher les libellés des catégories -->
-                            <option th:each="category : ${categories}"  th:value="${category.categoryId}" th:text="${category.label}"></option>
-                        </select>
                     </div>
-                    <div th:if="${#authorization.expression('isAuthenticated()')}" class="filter-container">
-                        <div class="filter_buying">
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="transactionType" id="radio_buying" value="buying">
-                                <label class="form-check-label" for="radio_buying">
-                                    Achats
-                                </label>
-                                <div class="form-check">
-                                    <input class="form-check-input" name="open_auction" type="checkbox" value="true"  id="open_auction">
-                                    <label class="form-check-label" for="open_auction">
-                                        Enchères ouvertes
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" name="current_auction" type="checkbox" value="true" id="current_auction">
-                                    <label class="form-check-label" for="current_auction">
-                                       Mes enchères en cours
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" name="won_auction" type="checkbox" value="true" id="won_auction">
-                                    <label class="form-check-label" for="won_auction">
-                                       Mes enchères remportées
-                                    </label>
-                                </div>
+                </form>
+            </div>
+
+            <div class="row auctions-container">
+                <div class="col-md-6" th:each="article : ${articles}">
+                    <div class="card mb-3  bg-dark ">
+                        <div class="row no-gutters">
+                            <div class="col-md-4">
+                                <img th:src="@{${'/images/' + article.itemId + '.jpg'}}"
+                                     onerror="this.onerror=null; this.src='/images/enchere.jpg';"
+                                     class="card-img"
+                                     alt="Image par défaut">
                             </div>
-                        </div>
-                        <div class="filter_selling">
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="transactionType" id="radio_selling" value="selling">
-                                <label class="form-check-label" for="radio_selling">
-                                    Mes ventes
-                                </label>
-                                <div class="form-check">
-                                    <input class="form-check-input" name="current_selling" type="checkbox" value="true" id="current_selling">
-                                    <label class="form-check-label" for="current_selling">
-                                       Mes ventes en cours
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" name="non_started_selling" type="checkbox" value="true" id="non_started_selling">
-                                    <label class="form-check-label" for="non_started_selling">
-                                       Ventes non débutées
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" name="finished_selling" type="checkbox" value="true" id="finished_selling">
-                                    <label class="form-check-label" for="finished_selling">
-                                        Ventes terminées
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <button type="submit" class="btn btn-primary btn-form" id="search_form">Rechercher</button>
-                    </div>
-                </div>
-            </form>
+                            <div class="col-md-8">
+                                <div class="card-body">
+                                    <th:block th:if="${#authorization.expression('isAuthenticated()')}">
+                                        <a th:href="@{/article/detail/{id}(id=${article.itemId})}">
+                                            <h5 class="card-title text-white font-weight-bold" th:text="${article.itemName}"></h5>
+                                        </a>
+                                    </th:block>
+                                    <h5 class="card-title text-white font-weight-bold" th:unless="${#authorization.expression('isAuthenticated()')}" th:text="${article.itemName}"></h5>
+                                    <div th:if="${auction != null}">
+                                        <!-- Utilisez la variable auction en toute sécurité ici -->
+                                        <div th:if="${auction.bids != null and auction.bids.size() > 0}">
+                                            <span th:text="'Enchère actuelle : ' + ${auction.bids[auction.bids.size() - 1].bidAmount} + ' points'"></span>
+                                        </div>
+                                        <div th:unless="${auction.bids != null and auction.bids.size() > 0}">
+                                            <span th:text="'Prix de vente : ' + ${article.initialPrice} + ' points'"></span>
+                                        </div>
+                                    </div>
 
+                                    <div th:unless="${auction != null}">
+                                        <span class="card-text text-white" th:text="'Prix de vente : ' + ${article.initialPrice} + ' points'"></span>
+                                    </div>
 
-        </div>
-
-        <div class="row auctions-container">
-            <div class="col-md-6" th:each="article : ${articles}">
-                <div class="card mb-3  bg-dark ">
-                    <div class="row no-gutters">
-                        <div class="col-md-4">
-                            <img src="/images/Enchere.jpg" class="card-img" alt="..." >
-                            <label class="text-white font-weight-bold">Statut: <span class="text-danger font-weight-bold" th:text="${article.status}"></span></label>
-                        </div>
-                        <div class="col-md-8">
-                            <div class="card-body">
-                                <a th:if="${#authorization.expression('isAuthenticated()')}" th:href="@{/article(idArticle=${article.getItemId()})}"><h5 class="card-title text-white font-weight-bold" th:text="${article.itemName}"></h5></a>
-                                <p class="card-text text-white">Prix initial : <span th:text="${article.itemName}"></span></p>
-                                <p class="card-text text-white">Prix initial : <span th:text="${article.initialPrice}"></span></p>
-                                <p class="card-text text-white">Date de début de l'enchère : <span th:text="${#dates.format(article.startAuctionDate, 'dd/MM/yyyy')}"></span></p>
-                                <p class="card-text text-white">Date de fin de l'enchère : <span th:text="${#dates.format(article.endAuctionDate, 'dd/MM/yyyy')}"></span></p>
-                                <p class="card-text text-white">Vendu par :
-                                    <a th:if="${#authorization.expression('isAuthenticated()')}" th:href="@{/profil/{id}(id=${article.user.getIdUser()})}">
-                                    <span th:text="${article.user.getPseudo()}"></span>
-                                    </a>
-                                    <span th:unless="${#authorization.expression('isAuthenticated()')}" th:text="${article.user.getPseudo()}"></span>
-                                </p>
-                                <p class="card-text text-white">Catégorie : <span name="id_category" th:data-category-id="${article.category.getCategoryId()}" th:text="${article.category.getLabel()}"></span></p>
+                                    <p class="card-text text-white">Date de début de l'enchère : <span th:text="${#dates.format(article.startAuctionDate, 'dd/MM/yyyy')}"></span></p>
+                                    <p class="card-text text-white">Date de fin de l'enchère : <span th:text="${#dates.format(article.endAuctionDate, 'dd/MM/yyyy')}"></span></p>
+                                    <p class="card-text text-white">Vendu par :
+                                        <a th:if="${#authorization.expression('isAuthenticated()')}" th:href="@{/profil/{id}(id=${article.user.getIdUser()})}">
+                                        <span th:text="${article.user.getPseudo()}"></span>
+                                        </a>
+                                        <span th:unless="${#authorization.expression('isAuthenticated()')}" th:text="${article.user.getPseudo()}"></span>
+                                    </p>
+                                    <p class="card-text text-white">Catégorie : <span name="id_category" th:data-category-id="${article.category.getCategoryId()}" th:text="${article.category.getLabel()}"></span></p>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</main>
-</body>
+    </main>
+  </body>
 </html>

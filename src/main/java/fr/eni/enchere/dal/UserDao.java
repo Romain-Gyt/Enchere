@@ -13,6 +13,7 @@ public interface UserDao {
     User update(User user);
     void create(User user);
     void delete(long id);
+    void updateCredit(User user, int credit);
     void disable(long id);
     void enable(long id);
 }

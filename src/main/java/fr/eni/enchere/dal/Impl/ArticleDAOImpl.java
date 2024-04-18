@@ -3,11 +3,14 @@ package fr.eni.enchere.dal.Impl;
 import fr.eni.enchere.bo.Article;
 import fr.eni.enchere.bo.Category;
 import fr.eni.enchere.bo.User;
+import fr.eni.enchere.bo.Withdrawals;
 import fr.eni.enchere.dal.ArticleDAO;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
@@ -17,6 +20,16 @@ import java.util.List;
 @Repository
 public class ArticleDAOImpl implements ArticleDAO {
 
+    /******** Requêtes ********/
+
+    private static final String SELECT_BY_CATEGORY = "SELECT se.item_id,se.item_name,se.description,se.start_auction_date,se.end_auction_date,se.initial_price,se.sale_price,\n" +
+            "        cat.category_id as cat_id,cat.label,\n" +
+            "        u.user_id as id_user,u.username,u.last_name,u.first_name,u.email,u.phone,u.street,u.postal_code,u.city,u.credit,u.administrator\n" +
+            "       FROM sold_items se\n" +
+            "       INNER JOIN categories cat ON se.category_id = cat.category_id\n" +
+            "       INNER JOIN users u ON se.user_id = u.user_id\n" +
+            "       WHERE end_auction_date > CURDATE() AND cat.category_id = :category_id;";
+=======
    /******** Declaration ********/
    private static final String SELECT_ALL = "SELECT se.item_id,se.item_name,se.description,se.start_auction_date,se.end_auction_date,se.initial_price,se.sale_price,\n" +
            "        cat.category_id as cat_id,cat.label,\n" +
@@ -127,16 +140,44 @@ public class ArticleDAOImpl implements ArticleDAO {
 
     public static final String DELETE_ARTICLE = "DELETE FROM sold_items WHERE item_id = :item_id;";
 
+
+    /******** Déclaration ********/
     private JdbcTemplate jdbcTemplate;
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    /******** Constructor ********/
+    /******** Constructeur ********/
+    @Autowired
     public ArticleDAOImpl(
             JdbcTemplate jdbcTemplate,
             NamedParameterJdbcTemplate namedParameterJdbcTemplate
     ) {
         this.jdbcTemplate = jdbcTemplate;
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
+    }
+
+    @Override
+    public int createArticle(Article article) {
+        String sql = "INSERT INTO sold_items (item_name, description, start_auction_date, end_auction_date, initial_price, sale_price, category_id, user_id) VALUES (:itemName, :description, :startAuctionDate, :endAuctionDate, :initialPrice, :salePrice, :categoryId, :userId)";
+        MapSqlParameterSource params = new MapSqlParameterSource();
+        params.addValue("itemName", article.getItemName());
+        params.addValue("description", article.getDescription());
+        params.addValue("startAuctionDate", article.getStartAuctionDate());
+        params.addValue("endAuctionDate", article.getEndAuctionDate());
+        params.addValue("initialPrice", article.getInitialPrice());
+        params.addValue("salePrice", article.getSalePrice());
+        params.addValue("categoryId",article.getCategory().getCategoryId());
+        params.addValue("userId",article.getUser().getIdUser());
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        namedParameterJdbcTemplate.update(sql,params,keyHolder);
+        Number key = keyHolder.getKey();
+        return key.intValue();
+    }
+
+
+    @Override
+    public void updateArticle(Article article) {
+        String sql = "UPDATE sold_items SET item_name = ?, description = ?, start_auction_date = ?, end_auction_date = ?, initial_price = ?, sale_price = ?, category_id = ? WHERE item_id = ?";
+        jdbcTemplate.update(sql, article.getItemName(), article.getDescription(), article.getStartAuctionDate(), article.getEndAuctionDate(), article.getInitialPrice(), article.getSalePrice(), article.getCategory().getCategoryId(), article.getItemId());
     }
 
     @Override

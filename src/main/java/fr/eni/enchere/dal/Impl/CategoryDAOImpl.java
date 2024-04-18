@@ -27,6 +27,10 @@ public class CategoryDAOImpl implements CategoryDAO {
             "WHERE category_id = :id " +
             "OR :id IS NULL;";
 
+    private static final String SELECT_CAT_BY_ID = "SELECT category_id,label " +
+                                                    "FROM categories" +
+                                                    " WHERE category_id=:id";
+
     /********* CONSTRUCTOR *******/
     public CategoryDAOImpl (
             JdbcTemplate jdbcTemplate,
@@ -42,6 +46,7 @@ public class CategoryDAOImpl implements CategoryDAO {
     }
 
     @Override
+    public Category getCategoryById(long id) {
     public List<Category> getCategoryById(Long id) {
         MapSqlParameterSource namedParameters = new MapSqlParameterSource();
         namedParameters.addValue("id", id);

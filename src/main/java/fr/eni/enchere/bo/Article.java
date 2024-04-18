@@ -14,13 +14,16 @@ public class Article {
     private Date startAuctionDate;
     private Date endAuctionDate;
     private int initialPrice;
-    private Integer salePrice; // Peut être nul si l'enchère n'est pas encore terminée
+    private Integer salePrice;
     private int userId;
+    private String Status;
+    private Integer latestBidAmount;
+
+    private Withdrawals withdrawals;
     private Category category;
     private User user;
     private String status;
     private List<Auction> auctions = new ArrayList<>();
-
 
 
     /******** Constructor ********/
@@ -110,12 +113,29 @@ public class Article {
     }
 
 
+    public Integer getLatestBidAmount() {
+        return latestBidAmount;
+    }
+
+    public void setLatestBidAmount(Integer latestBidAmount) {
+        this.latestBidAmount = latestBidAmount;
+    }
+
+    public Withdrawals getWithdrawals() {
+        return withdrawals;
+    }
+
+    public void setWithdrawals(Withdrawals withdrawals) {
+        this.withdrawals = withdrawals;
+
+
     public String getStatus() {
         return status;
     }
 
     public void setStatus(String status) {
         this.status = status;
+
     }
 
     public List<Auction> getAuctions() {
@@ -125,6 +145,13 @@ public class Article {
     public void setAuctions(List<Auction> auctions) {
         this.auctions = auctions;
     }
+
+    public void addAuction(Auction auction) {
+        this.auctions.add(auction);
+    }
+
+    public void removeAuction(Auction auction) {
+        this.auctions.remove(auction);
 
     public void updateStatus() {
         Date currentDate = new Date(System.currentTimeMillis());
@@ -136,6 +163,7 @@ public class Article {
         if(user.isDisabled()){
             this.status = "Vente suspendue";
         }
+
     }
 
     /******** toString ********/
@@ -152,6 +180,7 @@ public class Article {
                 ", userId=" + userId +
                 ", category=" + category +
                 ", user=" + user +
+                ", withdrawals=" + withdrawals +
                 '}';
     }
 
@@ -168,4 +197,6 @@ public class Article {
     public int hashCode() {
         return Objects.hash(itemId, itemName, description, startAuctionDate, endAuctionDate, initialPrice, salePrice, userId, category, user);
     }
+
+
 }

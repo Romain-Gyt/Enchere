@@ -2,7 +2,7 @@
         xmlns:th="http://www.thymeleaf.org"
         th:fragment="frag-form-user(action,vue)"
 >
-<div class="my-form">
+    <div class="my-form">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-md-8">
@@ -28,9 +28,9 @@
                                 <div class="form-group row">
                                     <label for="pseudo" class="col-md-4 col-form-label text-md-right">Pseudo</label>
                                     <div class="col-md-6">
-                                       <input type="text" id="pseudo" class="form-control" name="username"
-                                        th:placeholder="${#strings.isEmpty(memberSession?.pseudo)} ? 'Pseudo' : ${memberSession.pseudo}"
-                                        th:field="*{pseudo}">
+                                        <input type="text" id="pseudo" class="form-control" name="username"
+                                               th:placeholder="${#strings.isEmpty(memberSession?.pseudo)} ? 'Pseudo' : ${memberSession.pseudo}"
+                                               th:field="*{pseudo}">
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -125,22 +125,22 @@
                                             </div>
                                         </div>
                                     </div>
-                                <div th:if="${#strings.isEmpty(vue)}" class="col-md-6 offset-md-4">
-                                    <div class="flex">
-                                        <button type="submit" name="modify_btn" id="modify_btn" class="btn btn-primary btn-form">
-                                            Enregistrer
-                                        </button>
-                                        <button type ="button" name="delete_btn" id="delete_btn" class="btn btn-primary btn-form ">
-                                            Supprimer Compte
+                                    <div th:if="${#strings.isEmpty(vue)}" class="col-md-6 offset-md-4">
+                                        <div class="flex">
+                                            <button type="submit" name="modify_btn" id="modify_btn" class="btn btn-primary btn-form">
+                                                Enregistrer
+                                            </button>
+                                            <button type ="button" name="delete_btn" id="delete_btn" class="btn btn-primary btn-form ">
+                                                Supprimer Compte
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div th:unless="${#strings.isEmpty(vue)}" class="col-md-6 offset-md-4">
+                                        <button type="submit" name="submit_form" id="submit_form" class="btn btn-primary btn-form">
+                                            S'incrire
                                         </button>
                                     </div>
                                 </div>
-                                <div th:unless="${#strings.isEmpty(vue)}" class="col-md-6 offset-md-4">
-                                    <button type="submit" name="submit_form" id="submit_form" class="btn btn-primary btn-form">
-                                        S'incrire
-                                    </button>
-                                </div>
-                            </div>
                             </form>
                         </div>
                     </div>

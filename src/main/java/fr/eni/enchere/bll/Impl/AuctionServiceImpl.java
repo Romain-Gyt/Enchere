@@ -10,8 +10,13 @@ import java.util.List;
 @Service
 public class AuctionServiceImpl implements AuctionService {
 
-    @Autowired
+    /********** DECLARATION *********/
     private AuctionDAO auctionDAO;
+  
+  /*********CONSTRUCTOR **********/
+  public AuctionServiceImpl(AuctionDao auctionDao){
+    this.auctionDao = auctionDao;
+  }
 
     @Override
     public List<Auction> getAllAuctions(int itemId) {
@@ -19,6 +24,22 @@ public class AuctionServiceImpl implements AuctionService {
     }
 
     @Override
+
+    public Auction getAuctionById(long id) {
+        return auctionDAO.read(id);
+    }
+
+    @Override
+    public void insertBidAmountById(Long userId, int id, int bid_amount) {
+        auctionDAO.create(userId, id, bid_amount);
+    }
+
+    @Override
+    public List<Auction> getAuctionsByArticleId(int articleId) {
+        return auctionDAO.getAuctionsByArticleId(articleId);
+    }
+
+}
     public void deleteAuction(int userID) {
         auctionDAO.deleteAuction(userID);
     }

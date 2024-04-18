@@ -1,12 +1,29 @@
 package fr.eni.enchere.bll;
 
 import fr.eni.enchere.bo.Article;
+
+import fr.eni.enchere.bo.Withdrawals;
+
 import fr.eni.enchere.bo.User;
+
 
 import java.util.List;
 
 public interface ArticleService {
+    void setAuctions(Article article);
+
+    void createArticle(Article article, Withdrawals withdrawals);
+
+    void insertBidAmountById(Long userId, int id, int bid_amount);
+
     List<Article> getAllArticles();
+
+    Article getArticleById(int itemId);
+
+    List<Article> getArticlesByCategory(long categoryId);
+
+    void updateArticle(Article existingArticle, Withdrawals withdrawals);
+
     Article getArticleById(Long idArticle);
     List<Article> getAllArticleByNameAndCategory(String nameArticle, Long categoryId);
     List<Article> getArticlesByBuying  (User userSession,

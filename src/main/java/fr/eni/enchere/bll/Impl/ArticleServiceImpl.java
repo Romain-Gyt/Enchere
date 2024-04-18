@@ -1,39 +1,73 @@
-package fr.eni.enchere.bll.Impl;
+    package fr.eni.enchere.bll.Impl;
+    import fr.eni.enchere.bll.ArticleService;
+    import fr.eni.enchere.bo.Article;
+    import fr.eni.enchere.bo.Auction;
+    import fr.eni.enchere.bo.Withdrawals;
+    import fr.eni.enchere.dal.ArticleDAO;
+    import fr.eni.enchere.dal.AuctionDAO;
+    import fr.eni.enchere.dal.WithdrawalsDAO;
+    import org.springframework.beans.factory.annotation.Autowired;
+    import org.springframework.jdbc.core.JdbcTemplate;
+    import org.springframework.stereotype.Service;
 
-import fr.eni.enchere.bll.ArticleService;
-import fr.eni.enchere.bo.Article;
-import fr.eni.enchere.bo.User;
-import fr.eni.enchere.dal.ArticleDAO;
-import fr.eni.enchere.dal.AuctionDAO;
-import org.springframework.stereotype.Service;
+    import java.time.LocalDate;
+    import java.util.Comparator;
+    import java.util.List;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+    @Service
+    public class ArticleServiceImpl implements ArticleService {
 
-@Service
-public class ArticleServiceImpl implements ArticleService {
 /******** Declaration ********/
     private ArticleDAO articleDAO;
     private AuctionDAO auctionDAO;
+     private WithdrawalsDAO withdrawalsDAO;
 
-    /********** Constructor ********/
+        /******** Declaration ********/
 
+        /********** Constructor ********/
     public ArticleServiceImpl(
             ArticleDAO articleDAO,
-            AuctionDAO auctionDAO) {
+            AuctionDAO auctionDAO,
+          WithdrawalsDAO withdrawalsDAO
+    ) {
         this.auctionDAO = auctionDAO;
         this.articleDAO = articleDAO;
+        this.withdrawalsDAO = withdrawalsDAO;
     }
+      
+        /******** Methods ********/
 
-    /******** Methods ********/
+        @Override
+        public void setAuctions(Article article) {
+            List<Auction> auctions = auctionDAO.getAuctionsByArticleId(article.getItemId());
+            article.setAuctions(auctions);
+        }
 
-    @Override
-    public List<Article> getAllArticles() {
-        List<Article> articles = articleDAO.getAllArticles();
-        return articleDAO.getAllArticles();
-    }
+        @Override
+        public void updateArticle(Article article, Withdrawals withdrawals) {
+
+            articleDAO.updateArticle(article);
+            withdrawalsDAO.updateWithdrawals(withdrawals);
+        }
+
+        @Override
+        public void createArticle(Article article, Withdrawals withdrawals) {
+
+          int itemId = articleDAO.createArticle(article);
+            withdrawals.setItem_id(itemId);
+            System.out.println(itemId);
+            withdrawalsDAO.createWithdrawals(withdrawals);
+        }
+
+        @Override
+        public void insertBidAmountById(Long userId, int id, int bid_amount) {
+            auctionDAO.create(userId, id, bid_amount);
+        }
+
+        @Override
+        public List<Article> getAllArticles() {
+            List<Article> articles = articleDAO.getAllArticles();
+            LocalDate now = LocalDate.now();
 
     @Override
     public Article getArticleById(Long idArticle) {
@@ -115,4 +149,66 @@ public class ArticleServiceImpl implements ArticleService {
         return new ArrayList<>(uniqueArticles.values());
     }
 
-}
+            for (Article article : articles) {
+                List<Auction> auctions = auctionDAO.getAuctionsByArticleId(article.getItemId());
+                article.setAuctions(auctions);
+
+                if (!auctions.isEmpty()) {
+                    LocalDate startAuctionDate = article.getStartAuctionDate().toLocalDate();
+                    LocalDate endAuctionDate = article.getEndAuctionDate().toLocalDate();
+
+                    if (now.isAfter(endAuctionDate)) {
+                        article.setStatus("Enchères terminées");
+                    } else if (now.isAfter(startAuctionDate)) {
+                        article.setStatus("En cours");
+                    } else {
+                        article.setStatus("Créée");
+                    }
+                }
+            }
+            return articles;
+        }
+
+        @Override
+        public Article getArticleById(int itemId) {
+            Article article = articleDAO.getArticleById(itemId);
+            if (article != null) {
+                List<Auction> auctions = auctionDAO.getAuctionsByArticleId(itemId);
+                article.setAuctions(auctions);
+
+                Withdrawals withdrawals = withdrawalsDAO.getWithdrawalsByArticleId(itemId);
+                article.setWithdrawals(withdrawals);
+
+                if (auctions != null && !auctions.isEmpty()) {
+                    // Trouver l'offre la plus récente
+                    Auction latestAuction = auctions.stream()
+                            .max(Comparator.comparing(Auction::getBidDate))
+                            .orElse(null);
+
+                    if (latestAuction != null) {
+                        int latestBidAmount = latestAuction.getBidAmount();
+                        article.setLatestBidAmount(latestBidAmount);
+                    }
+                }
+
+                LocalDate now = LocalDate.now();
+                LocalDate startAuctionDate = article.getStartAuctionDate().toLocalDate();
+                LocalDate endAuctionDate = article.getEndAuctionDate().toLocalDate();
+
+                if (now.isAfter(endAuctionDate)) {
+                    article.setStatus("Enchères terminées");
+                } else if (now.isBefore(startAuctionDate)) {
+                    article.setStatus("En cours");
+                } else {
+                    article.setStatus("Créée");
+                }
+            }
+            return article;
+        }
+
+        @Override
+        public List<Article> getArticlesByCategory(long categoryId) {
+            return articleDAO.getArticlesByCategory(categoryId);
+        }
+
+    }

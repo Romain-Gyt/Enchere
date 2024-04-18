@@ -1,0 +1,117 @@
+<div th:fragment="frag-form-article(article, action, errors)" xmlns:th="http://www.thymeleaf.org">
+    <div class="my-form">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div th:if="${action == 'create'}" class="card-header">
+                            <h2>Création d'une enchère</h2>
+                        </div>
+                        <div th:if="${action == 'edit'}" class="card-header">
+                            <h2>Modification de l'article</h2>
+                        </div>
+                        <div th:if="${action == 'detail'}" class="card-header">
+                            <h2>Détails de l'article</h2>
+                        </div>
+                        <div class="card-body">
+                            <form th:action="${action}" method="POST" enctype="multipart/form-data" th:object="${article}">
+                                <div class="alert alert-danger" th:if="${errors}" role="alert">
+                                    <div th:each="error : ${errors}" th:text="${error}"></div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="itemName" class="col-md-4 col-form-label text-md-right">Nom de l'article</label>
+                                    <div class="col-md-6">
+                                        <input type="text" id="itemName" class="form-control" name="itemName" th:placeholder="Titre" th:field="*{itemName}" th:readonly="${action == 'detail'}">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="description" class="col-md-4 col-form-label text-md-right">Description</label>
+                                    <div class="col-md-6">
+                                        <textarea id="description" class="form-control" name="description" th:placeholder="Description" th:field="*{description}" th:readonly="${action == 'detail'}"></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="categoryId" class="col-md-4 col-form-label text-md-right">Catégorie</label>
+                                    <div class="col-md-6">
+                                        <select id="categoryId" class="form-control" name="categoryId" th:field="*{category}" th:disabled="${action == 'detail'}">
+                                            <option th:each="category : ${categories}" th:value="${category.categoryId}" th:text="${category.label}"></option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="initialPrice" class="col-md-4 col-form-label text-md-right">Mise à prix</label>
+                                    <div class="col-md-6">
+                                        <input type="number" id="initialPrice" class="form-control" name="initialPrice" th:placeholder="Prix" th:field="*{initialPrice}" th:readonly="${action == 'detail'}">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="startAuctionDate" class="col-md-4 col-form-label text-md-right">Date de début de l'enchère</label>
+                                    <div class="col-md-6">
+                                        <input type="date" id="startAuctionDate" class="form-control" name="startAuctionDate" th:value="${#dates.format(article.startAuctionDate, 'yyyy-MM-dd')}" th:readonly="${action == 'detail'}">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="endAuctionDate" class="col-md-4 col-form-label text-md-right">Date de fin de l'enchère</label>
+                                    <div class="col-md-6">
+                                        <input type="date" id="endAuctionDate" class="form-control" name="endAuctionDate" th:value="${#dates.format(article.endAuctionDate, 'yyyy-MM-dd')}" th:readonly="${action == 'detail'}">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12" th:if="${action == 'create'}">
+                                    <input type="text" class="form-control" th:placeholder="Rue" th:field="*{withdrawals.street}">
+                                    <input type="text" class="form-control" th:placeholder="CP" th:field="*{withdrawals.postal_code}">
+                                    <input type="text" class="form-control" th:placeholder="Ville" th:field="*{withdrawals.city}">
+                                </div>
+
+
+                                <!-- Partie Vendeur -->
+                                <div class="col-md-12" th:if="${action == 'detail'}">
+                                    <label class="labels">Vendeur : </label>
+                                    <input type="text" class="form-control" th:value="${article.user.pseudo}" disabled>
+                                </div>
+
+<!--                                &lt;!&ndash; Partie Enchère (pour la page détail uniquement) &ndash;&gt;-->
+<!--                                <form th:action="@{/addBid}" method="post" th:if="${action == 'detail'}">-->
+<!--                                    <label class="labels">Ma proposition :-->
+<!--                                        <input class="form-control" type="number" name="bidAmount"-->
+<!--                                               th:min="${article.auction.bidAmount > 0 ? article.auction.bidAmount + 1 : article.initialPrice}"-->
+<!--                                               th:max="${memberSession.credit}"-->
+<!--                                               th:value="${article.auction.bidAmount > 0 ? (article.auction.bidAmount + 1 < memberSession.credit ? article.auction.bidAmount + 1 : memberSession.credit) : article.initialPrice}"-->
+<!--                                               oninput="validateBid(this)"/>-->
+<!--                                    </label>-->
+<!--                                    <input type="hidden" id="itemId" name="itemId" th:value="${article.itemId}" />-->
+<!--                                    <th:block th:if="${article.auction.bidAmount > 0}">-->
+<!--                                        <input type="hidden" id="userId" name="userId" th:value="${auction.userId}" />-->
+<!--                                    </th:block>-->
+<!--                                    <input type="hidden" id="lastBidAmount" name="lastBidAmount" th:value="${auction.bidAmount}" />-->
+<!--                                    <button class="btn btn-primary profile-button btn-form" type="submit" id="submitBtn"-->
+<!--                                            th:disabled="${article.startAuctionDate.after(#dates.createNow()) or memberSession.credit &lt; auction.bidAmount}">-->
+<!--                                        Enchérir</button>-->
+<!--                                    <span th:if="${memberSession.credit &lt; auction.bidAmount}">Crédit insuffisant</span>-->
+<!--                                </form>-->
+
+                                <div class="form-group row">
+<!--                                    <label for="image" class="col-md-4 col-form-label text-md-right">Image</label>-->
+                                    <div class="col-md-6">
+                                        <!-- Afficher l'image uniquement lors de l'édition et de l'affichage des détails -->
+                                        <img th:src="@{${'/images/' + article.itemId +'.jpg'}}" class="img-fluid" alt="Image de l'article" th:unless="${action == 'create'}">
+                                        <!-- Afficher le champ d'entrée de fichier uniquement lors de la création de l'article -->
+<!--                                        <input type="file" id="image" class="form-control" name="image" th:if="${action == 'create'}">-->
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="col-md-6 offset-md-4">
+                                        <button th:if="${action == 'create'}" type="submit" class="btn btn-primary">Créer l'enchère</button>
+                                        <button th:if="${action == 'edit'}" type="submit" class="btn btn-primary">Modifier l'article</button>
+                                        <a th:href="@{'/'}" class="btn btn-secondary">Retour à l'accueil</a>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
