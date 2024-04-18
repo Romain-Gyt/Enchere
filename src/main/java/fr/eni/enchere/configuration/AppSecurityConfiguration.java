@@ -78,7 +78,7 @@ public class AppSecurityConfiguration  {
         });
         http.formLogin(form -> {
             form.loginPage("/login").permitAll();
-            form.defaultSuccessUrl("/session");
+            form.defaultSuccessUrl("/session",true);
             form.failureUrl("/login?error=true");
         });
 
