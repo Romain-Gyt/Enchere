@@ -23,6 +23,9 @@
             </div>
             <div th:if="${#authorization.expression('isAuthenticated()')}">
                 <ul class="navbar-nav">
+                    <li class="navbar-nav">
+                        <a class="text-white nav-link" th:text="${memberSession.pseudo + ' est connecté'}"></a>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/profil}">
                             <span th:if="${memberSession != null && memberSession.disabled}" class="text-danger" th:text="#{frag-header.desactivateAccount}">
@@ -33,7 +36,6 @@
                     </li>
                     <li th:if="${#authorization.expression('hasRole(''ADMIN'')')}" class="nav-item">
                         <a class="nav-link" th:href="@{/admin}" th:text="#{frag-header.admin}">Administration</a>
-                        <a class="text-white nav-link" th:text="${memberSession.pseudo + ' est connecté'}"></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#" th:text="#{frag-header.sellArticle}"></a>
