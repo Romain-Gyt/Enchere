@@ -11,7 +11,6 @@ public interface UserDao {
     List<User> loadActiveAccount();
     List<User> loadDisabledAccount();
     User update(User user);
-    void updateCredit(User user, int credit);
     void create(User user);
     void delete(long id);
     void updateCredit(User user, int credit);

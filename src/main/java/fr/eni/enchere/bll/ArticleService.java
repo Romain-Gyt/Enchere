@@ -2,6 +2,7 @@ package fr.eni.enchere.bll;
 
 import fr.eni.enchere.bo.Article;
 import fr.eni.enchere.bo.User;
+import fr.eni.enchere.bo.Withdrawals;
 
 
 import java.util.List;

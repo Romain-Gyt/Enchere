@@ -32,7 +32,6 @@ public class BidController {
         Article article = articleService.getArticleById(itemId);
         Withdrawals withdrawals = withdrawalsService.getWithdrawalsById(itemId);
         Auction auction = auctionService.getAuctionById(itemId);
-
         if (auction != null) {
             User user = userService.loadUserById(auction.getUserId());
             model.addAttribute("auction", auction);
@@ -48,6 +47,7 @@ public class BidController {
             model.addAttribute("auction", bidAmount);
             model.addAttribute("user", null);
         }
+
 
         model.addAttribute("article", article);
         model.addAttribute("withdrawals", withdrawals);

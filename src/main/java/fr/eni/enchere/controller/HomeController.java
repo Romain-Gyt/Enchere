@@ -1,8 +1,10 @@
 package fr.eni.enchere.controller;
 
 import fr.eni.enchere.bll.ArticleService;
+import fr.eni.enchere.bll.AuctionService;
 import fr.eni.enchere.bll.CategoryService;
 import fr.eni.enchere.bo.Article;
+import fr.eni.enchere.bo.Auction;
 import fr.eni.enchere.bo.Category;
 import fr.eni.enchere.bo.User;
 import jakarta.servlet.http.HttpSession;
@@ -19,14 +21,17 @@ public class HomeController {
   /**************** Declaration **************/
     private ArticleService articleService;
     private CategoryService categoryService;
+    private AuctionService auctionService;
 
     /******** Constructor ********/
     public HomeController(
             ArticleService articleService,
-            CategoryService categoryService
+            CategoryService categoryService,
+            AuctionService auctionService
     ) {
         this.articleService = articleService;
         this.categoryService = categoryService;
+        this.auctionService = auctionService;
     }
 
 
@@ -35,8 +40,11 @@ public class HomeController {
     public String home(Model model) {
         List<Article> articles = articleService.getAllArticles();
         List<Category> categories = categoryService.getAllCategories();
+        List<Auction> auctions = auctionService.getBestAuctionForAllArticle();
+        System.out.println(auctions);
         model.addAttribute("categories", categories);
         model.addAttribute("articles", articles);
+        model.addAttribute("auctions", auctions);
         return "index.html";
     }
 

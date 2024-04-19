@@ -48,5 +48,10 @@ public class AuctionServiceImpl implements AuctionService {
         return auctionDAO.getAuctionsByArticleId(articleId);
     }
 
+    @Override
+    public List<Auction> getBestAuctionForAllArticle() {
+        return auctionDAO.getBestAuctionForAllArticle();
+    }
+
 }
 
