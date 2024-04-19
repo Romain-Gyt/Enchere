@@ -1,7 +1,6 @@
 package fr.eni.enchere.dal;
 
 import fr.eni.enchere.bo.Article;
-import fr.eni.enchere.bo.Withdrawals;
 
 import java.util.List;
 
@@ -18,5 +17,6 @@ public interface ArticleDAO {
     List<Article> getArticlesByCurrentSelling(String nameArticle, Long categoryId, Long userId);
     List<Article> getArticlesByNonStartedSelling(String nameArticle, Long categoryId, Long userId);
     List<Article> getArticlesByClosedSelling(String nameArticle, Long categoryId, Long userId);
+    List<Article> getAllSellingbyUser( String nameArticle,Long categoryId,Long userId);
     void deleteArticle(Long idArticle);
 }

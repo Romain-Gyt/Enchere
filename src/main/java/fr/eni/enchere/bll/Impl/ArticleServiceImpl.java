@@ -1,4 +1,5 @@
     package fr.eni.enchere.bll.Impl;
+
     import fr.eni.enchere.bll.ArticleService;
     import fr.eni.enchere.bo.Article;
     import fr.eni.enchere.bo.Auction;
@@ -7,8 +8,6 @@
     import fr.eni.enchere.dal.ArticleDAO;
     import fr.eni.enchere.dal.AuctionDAO;
     import fr.eni.enchere.dal.WithdrawalsDAO;
-    import org.springframework.beans.factory.annotation.Autowired;
-    import org.springframework.jdbc.core.JdbcTemplate;
     import org.springframework.stereotype.Service;
 
     import java.time.LocalDate;
@@ -71,8 +70,17 @@
             return articles;
         }
 
+        @Override
+        public List<Article> getAllSellingArticlesByUser(String articleName,Long categoryId,Long userId) {
+            articleName = checkNameArticle(articleName);
+            categoryId = checkCategoryId(categoryId);
+            List<Article> articles = articleDAO.getAllSellingbyUser(articleName,categoryId,userId);
+            System.out.println("Liste Service " + articles);
+            return articles;
+        }
 
-    public List<Article> getAllArticleByNameAndCategory(String nameArticle, Long categoryId) {
+
+        public List<Article> getAllArticleByNameAndCategory(String nameArticle, Long categoryId) {
         nameArticle = checkNameArticle(nameArticle);
         categoryId = checkCategoryId(categoryId);
         return articleDAO.getAllArticleByNameAndCategory(nameArticle, categoryId);

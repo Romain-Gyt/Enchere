@@ -17,6 +17,7 @@ public interface ArticleService {
     void insertBidAmountById(Long userId, int id, int bid_amount);
 
     List<Article> getAllArticles();
+    List<Article> getAllSellingArticlesByUser(String articleName,Long categoryId,Long userId);
 
     Article getArticleById(int itemId);
 

@@ -62,7 +62,6 @@ public class HomeController {
         }
         User userSession = (User) session.getAttribute("memberSession");
         if(userSession != null) {
-            System.out.println(buying);
             if(buying.toLowerCase().equals("buying") ) {
                 articles = articleService.getArticlesByBuying(
                         userSession,
@@ -74,7 +73,6 @@ public class HomeController {
             }
             System.out.println(selling);
             if(selling.toLowerCase().equals("selling")) {
-                System.out.println(non_started_selling);
                 articles = articleService.getArticlesBySelling(
                         userSession,
                         searchInput,
@@ -83,8 +81,15 @@ public class HomeController {
                         Boolean.parseBoolean(non_started_selling),
                         Boolean.parseBoolean(finished_selling));
             }
-            if (articles.isEmpty()) {
+
+            if (articles.isEmpty() && buying.toLowerCase().equals("buying") ){
+                System.out.println("liste"+articles);
                 articles = articleService.getAllArticleByNameAndCategory(searchInput, Long.parseLong(category_id));
+            }
+
+            if(articles.isEmpty() && selling.toLowerCase().equals("selling")){
+                articles = articleService.getAllSellingArticlesByUser(searchInput, Long.parseLong(category_id), userSession.getIdUser());
+                System.out.println("liste selling "+articles + ' ' + userSession.getIdUser());
             }
         }
         

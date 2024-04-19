@@ -101,6 +101,17 @@ public class ArticleDAOImpl implements ArticleDAO {
             "AND u.disabled != 1\n"+
             "AND se.sale_price IS NOT NULL;";
 
+    public static final String SELECT_ALL_SELLING_BY_USER = "SELECT se.item_id,se.item_name,se.description,se.start_auction_date,se.end_auction_date,se.initial_price,se.sale_price,\n" +
+                    "        cat.category_id as cat_id,cat.label,\n" +
+                    "        u.user_id as id_user,u.username,u.last_name,u.first_name,u.email,u.phone,u.street,u.postal_code,u.city,u.credit,u.administrator,u.disabled\n" +
+        "        FROM sold_items se\n" +
+        "        INNER JOIN categories cat ON se.category_id = cat.category_id\n" +
+        "        INNER JOIN users u ON se.user_id = u.user_id\n" +
+        "        WHERE u.user_id = :user_id\n" +
+        "AND (cat.category_id = :category_id  OR :category_id IS NULL)\n" +
+        "AND (se.item_name LIKE :item_name OR :item_name IS NULL)\n" +
+        "ORDER BY se.end_auction_date;";
+
     public static final String SELECT_CURRENT_SELLING = "SELECT se.item_id,se.item_name,se.description,se.start_auction_date,se.end_auction_date,se.initial_price,se.sale_price,\n" +
             " cat.category_id as cat_id,cat.label,\n" +
             " u.user_id as id_user,u.username,u.last_name,u.first_name,u.email,u.phone,u.street,u.postal_code,u.city,u.credit,u.administrator,u.disabled\n" +
@@ -251,6 +262,17 @@ public class ArticleDAOImpl implements ArticleDAO {
         namedParameters.addValue("item_name", nameArticle);
         namedParameters.addValue("user_id", userId);
         return namedParameterJdbcTemplate.query(SELECT_CLOSED_SELLING, namedParameters, new ArticleRowMapper());
+    }
+
+    @Override
+    public List<Article> getAllSellingbyUser(String nameArticle, Long categoryId,Long userId) {
+       MapSqlParameterSource namedParameters = new MapSqlParameterSource();
+        namedParameters.addValue("user_id", userId);
+        namedParameters.addValue("category_id", categoryId);
+        namedParameters.addValue("item_name", nameArticle);
+        List<Article> articles =  namedParameterJdbcTemplate.query(SELECT_ALL_SELLING_BY_USER, namedParameters, new ArticleRowMapper());
+        System.out.println("Liste DAO " + articles);
+        return articles;
     }
 
     @Override
