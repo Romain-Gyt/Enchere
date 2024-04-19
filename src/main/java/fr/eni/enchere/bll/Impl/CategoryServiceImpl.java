@@ -1,25 +1,41 @@
-package fr.eni.enchere.bll.impl;
+package fr.eni.enchere.bll.Impl;
 
 import fr.eni.enchere.bll.CategoryService;
 import fr.eni.enchere.bo.Category;
 import fr.eni.enchere.dal.CategoryDAO;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
-    @Autowired
+    /******** Declaration ********/
+
     private CategoryDAO categoryDAO;
 
+    /********* CONSTRUCTOR ********/
+    public CategoryServiceImpl(CategoryDAO categoryDAO){
+        this.categoryDAO = categoryDAO;
+    }
     @Override
     public List<Category> getAllCategories() {
         return categoryDAO.getAllCategories();
     }
 
-//    @Override
-//    public String getCategorieById(int id) {
-//        return categoryDAO.getCategorieById(id);
-//    }
+    @Override
+    public Category getCategoryById(long id) {
+        return categoryDAO.getCategoryById(id);
+    }
+
+    @Override
+    public List<Category> getCategoryByIdFilter(Long id) {
+        id = checkIdCategory(id);
+       return categoryDAO.getCategoryByIdFilter(id);
+    }
+
+    private Long checkIdCategory(Long id) {
+        if (id == 0) {
+            return null;
+        }
+        return id;
+    }
 }

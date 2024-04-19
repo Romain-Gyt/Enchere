@@ -9,6 +9,8 @@ public class Withdrawals {
     public Withdrawals() {
     }
 
+
+
     public Withdrawals(int item_id, String street, String postal_code, String city) {
         this.item_id = item_id;
         this.street = street;
@@ -46,5 +48,15 @@ public class Withdrawals {
 
     public void setCity(String city) {
         this.city = city;
+    }
+
+    @Override
+    public String toString() {
+        return "Withdrawals{" +
+                "item_id=" + item_id +
+                ", street='" + street + '\'' +
+                ", postal_code='" + postal_code + '\'' +
+                ", city='" + city + '\'' +
+                '}';
     }
 }

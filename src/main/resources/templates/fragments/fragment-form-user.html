@@ -2,7 +2,7 @@
         xmlns:th="http://www.thymeleaf.org"
         th:fragment="frag-form-user(action,vue)"
 >
-<div class="my-form">
+    <div class="my-form">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-md-8">
@@ -28,6 +28,9 @@
                                 <div class="form-group row">
                                     <label for="pseudo" class="col-md-4 col-form-label text-md-right" th:text="#{frag-form-user.pseudo}"></label>
                                     <div class="col-md-6">
+                                        <input type="text" id="pseudo" class="form-control" name="username"
+                                               th:placeholder="${#strings.isEmpty(memberSession?.pseudo)} ? 'Pseudo' : ${memberSession.pseudo}"
+                                               th:field="*{pseudo}">
                                        <input type="text" id="pseudo" class="form-control" name="username"
                                         th:placeholder="${#strings.isEmpty(memberSession?.pseudo)} ? #{frag-form-user.pseudo} : ${memberSession.pseudo}"
                                         th:field="*{pseudo}">

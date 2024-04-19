@@ -1,7 +1,7 @@
 package fr.eni.enchere.controller;
 
 import fr.eni.enchere.bll.*;
-import fr.eni.enchere.bll.impl.AuctionServiceImpl;
+import fr.eni.enchere.bll.Impl.AuctionServiceImpl;
 import fr.eni.enchere.bo.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,24 +9,27 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 @Controller
 @SessionAttributes({"memberSession"})
 public class ArticleController {
+    /******** Declaration ********/
+    ArticleService articleService;
 
     private final ArticleService articleService;
     private final CategoryService categoryService;
     private final UserService userService;
     private final WithdrawalsService withdrawalsService;
-    private final AuctionServiceImpl auctionServiceImpl;
+    private final AuctionService auctionService;
 
-    public ArticleController(ArticleService articleService, CategoryService categoryService, UserService userService, WithdrawalsService withdrawalsService, AuctionServiceImpl auctionServiceImpl) {
+    public ArticleController(ArticleService articleService, CategoryService categoryService, UserService userService, WithdrawalsService withdrawalsService, AuctionService auctionService) {
         this.articleService = articleService;
         this.categoryService = categoryService;
         this.userService = userService;
         this.withdrawalsService = withdrawalsService;
-        this.auctionServiceImpl = auctionServiceImpl;
+        this.auctionService = auctionService;
     }
 
     @GetMapping("/article/create")
@@ -42,8 +45,7 @@ public class ArticleController {
     public String createArticle(@ModelAttribute("memberSession") User userSession,
                                 @ModelAttribute("article") Article article,
                                 BindingResult result,
-                                Model model
-                                /**@RequestParam("image") MultipartFile imageFile**/) throws IOException {
+                                Model model) throws IOException {
         if (result.hasErrors()) {
             model.addAttribute("categories", categoryService.getAllCategories());
             model.addAttribute("errorMessage", "Le formulaire n'a pas été soumis correctement");
@@ -51,12 +53,6 @@ public class ArticleController {
         }
 
         article.setUser(userSession);
-
-//        if (imageFile != null && !imageFile.isEmpty()) {
-//            String fileName = itemId + ".jpg";
-//            article.setImage(fileName);
-//        }
-        System.out.println(article);
         articleService.createArticle(article, article.getWithdrawals());
 
         return "/article/success";
@@ -76,8 +72,7 @@ public class ArticleController {
                               @ModelAttribute("article") Article article,
                               @ModelAttribute("withdrawals") Withdrawals withdrawals,
                               BindingResult result,
-                              Model model,
-                              @RequestParam(value = "image", required = false) MultipartFile imageFile) throws IOException {
+                              Model model) throws IOException {
         if (result.hasErrors()) {
             model.addAttribute("categories", categoryService.getAllCategories());
             model.addAttribute("errorMessage", "Le formulaire n'a pas été soumis correctement");
@@ -97,10 +92,6 @@ public class ArticleController {
         existingArticle.setStartAuctionDate(article.getStartAuctionDate());
         existingArticle.setEndAuctionDate(article.getEndAuctionDate());
 
-        if (imageFile != null && !imageFile.isEmpty()) {
-            String fileName = UUID.randomUUID().toString() + ".jpg";
-//            existingArticle.setImage(fileName);
-        }
 
         articleService.updateArticle(existingArticle, withdrawals);
 
@@ -112,8 +103,11 @@ public class ArticleController {
     public String showArticleDetails(@PathVariable int itemId, Model model) {
         Article article = articleService.getArticleById(itemId);
         Withdrawals withdrawals = withdrawalsService.getWithdrawalsByArticleId(itemId);
+        List<Auction> auctions = auctionService.getAuctionsByArticleId(itemId);
         model.addAttribute("article", article);
-        model.addAttribute("withdrawals", withdrawals); // Ajouter les informations de retrait au modèle
+        System.out.println(article.getCategory().getLabel());
+        model.addAttribute("withdrawals", withdrawals);
+        model.addAttribute("auctions", auctions);
         return "article/articleDetail";
     }
 

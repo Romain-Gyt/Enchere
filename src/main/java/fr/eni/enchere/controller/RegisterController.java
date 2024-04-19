@@ -47,6 +47,7 @@ public class RegisterController {
             try{
                 userService.createUser(user,passwordMap);
                 return "login/login.html";
+
             } catch(RegisterException e){
                 e.getKeys().forEach(key -> {
                     ObjectError error = new ObjectError("globalError", key);

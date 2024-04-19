@@ -16,6 +16,29 @@ CREATE TABLE persistent_logins (
 INSERT INTO USERS (username, last_name, first_name, email, phone, street, postal_code, city, password, credit, administrator) values ('Mobius','Jacques','BREL','jacques@gmail.com','0102030405','3 rue de la paix','99000','MoonCity','(bcrypt)$2a$12$MqwJfS4pXYesBQzvqnXyuOVC1Jtq7FkDUvcfgkR5y6i2kHvIcP1vW',1000000,1);
 INSERT INTO USERS (username, last_name, first_name, email, phone, street, postal_code, city, password, credit, administrator) values ('Loki','Francis','Lalanne','francis@gmail.com','0102030405','5 rue de la foret','99999','LostCity','(bcrypt)$2a$12$O.dtqrQPa3Y3s267BpM0fupCrghiIIwRJHCQZihi.WdQWDPBGsfVO',500,0);
 
+CREATE TABLE ROLES (
+    role VARCHAR(20) NOT NULL,
+    is_admin BOOLEAN NOT NULL,
+
+);
+
 INSERT INTO ROLES (role, is_admin) VALUES ('ROLE_MEMBER',0);
 INSERT INTO ROLES (role, is_admin) VALUES ('ROLE_MEMBER',1);
 INSERT INTO ROLES (role, is_admin) VALUES ('ROLE_ADMIN',1);
+
+CREATE TABLE deleted_account
+(
+    user_id       INT          NOT NULL,
+    username      VARCHAR(30)  NOT NULL,
+    last_name     VARCHAR(30)  NOT NULL,
+    first_name    VARCHAR(30)  NOT NULL,
+    email         VARCHAR(50)  NOT NULL,
+    phone         VARCHAR(10)  NOT NULL,
+    street        VARCHAR(50)  NOT NULL,
+    postal_code   VARCHAR(5)   NOT NULL,
+    city          VARCHAR(30)  NOT NULL,
+    password      VARCHAR(255) NOT NULL,
+    credit        INT          NOT NULL,
+    administrator INT          NOT NULL,
+    disabled      INT          NOT NULL,
+);

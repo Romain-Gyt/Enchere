@@ -19,6 +19,7 @@ public class User {
     private String password;
     private int credit;
     private boolean admin = false;
+    private boolean disabled = false;
 
     List<Article> soldArticles = new ArrayList<Article>();
     List<Article> boughtArticles = new ArrayList<Article>();
@@ -200,6 +201,14 @@ public class User {
 
     public void setAuctions(List<Auction> auctions) {
         this.auctions = auctions;
+    }
+
+    public boolean isDisabled() {
+        return disabled;
+    }
+
+    public void setDisabled(boolean disabled) {
+        this.disabled = disabled;
     }
 
     /********** Methode **********/

@@ -1,6 +1,7 @@
 package fr.eni.enchere.bo;
 
-import java.util.Date;
+import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -22,7 +23,9 @@ public class Article {
     private Withdrawals withdrawals;
     private Category category;
     private User user;
-    private List<Auction> auctions;
+    private String status;
+    private List<Auction> auctions = new ArrayList<>();
+
 
 
     /******** Constructor ********/
@@ -111,21 +114,6 @@ public class Article {
         this.user = user;
     }
 
-    public String getStatus() {
-        return Status;
-    }
-
-    public void setStatus(String Status) {
-        this.Status = Status;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
 
     public Integer getLatestBidAmount() {
         return latestBidAmount;
@@ -143,6 +131,16 @@ public class Article {
         this.withdrawals = withdrawals;
     }
 
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+
+    }
+
     public List<Auction> getAuctions() {
         return auctions;
     }
@@ -157,6 +155,20 @@ public class Article {
 
     public void removeAuction(Auction auction) {
         this.auctions.remove(auction);
+    }
+
+    public void updateStatus() {
+        Date currentDate = new Date(System.currentTimeMillis());
+        if(currentDate.before(this.startAuctionDate)){
+            this.status = "En attente";
+        } else if (currentDate.after(this.startAuctionDate) && currentDate.before(this.endAuctionDate)) {
+            this.status = "En cours";
+        } else {
+            this.status = "Terminé";
+        }
+        if(user.isDisabled()){
+            this.status = "Vente suspendue";
+        }
     }
 
     /******** toString ********/
@@ -192,13 +204,4 @@ public class Article {
     }
 
 
-    public void updateStatus() {
-        Date currentDate = new Date(System.currentTimeMillis());
-        if(currentDate.before(this.endAuctionDate)) {
-            this.Status = "En cours";
-        } else {
-            this.Status = "Terminé";
-        }
-    }
 }
-

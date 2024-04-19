@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layouts/layout :: layout(
+            pageContent=~{:: .main-content},
+            pageTitle=~{:: title},
+            additionalCss=~{},
+            additionalJs=~{}
+        )}"
+>
+<head>
+    <title>Détails de l'article</title>
+</head>
+<body>
+<main class="main-content">
+    <div th:with="action='detail'">
+        <div th:replace="fragments/fragment-form-article :: frag-form-article(${article}, ${action}, ${errors})"></div>
+    </div>
+</main>
+</body>
+</html>

@@ -6,5 +6,7 @@ import java.util.List;
 
 public interface CategoryDAO {
     List<Category> getAllCategories();
-//    List<Category> getCategoryById(int id);
+    Category getCategoryById(long id);
+  // regler le probleme car la categorie liste sert pour les filtrages
+    List<Category> getCategoryByIdFilter(Long id);
 }

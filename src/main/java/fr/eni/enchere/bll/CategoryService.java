@@ -6,5 +6,6 @@ import java.util.List;
 
 public interface CategoryService {
     List<Category> getAllCategories();
-//    List<Category>getCategoryById(Long id);
+    Category getCategoryById(long id);
+    List<Category> getCategoryByIdFilter(Long id);
 }

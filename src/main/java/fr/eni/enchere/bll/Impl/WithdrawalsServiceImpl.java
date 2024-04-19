@@ -1,4 +1,4 @@
-package fr.eni.enchere.bll.impl;
+package fr.eni.enchere.bll.Impl;
 
 import fr.eni.enchere.bll.WithdrawalsService;
 import fr.eni.enchere.bo.Withdrawals;
@@ -8,11 +8,36 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class WithdrawalsServiceImpl implements WithdrawalsService {
+
+    private final WithdrawalsDAO withdrawalsDAO;
+
     @Autowired
-    private WithdrawalsDAO withdrawalsDAO;
+    public WithdrawalsServiceImpl(WithdrawalsDAO withdrawalsDAO) {
+        this.withdrawalsDAO = withdrawalsDAO;
+    }
 
     @Override
     public Withdrawals getWithdrawalsById(int id) {
         return withdrawalsDAO.getWithdrawalsById(id);
+    }
+
+    @Override
+    public Withdrawals getWithdrawalsByArticleId(int articleId) {
+        return withdrawalsDAO.getWithdrawalsByArticleId(articleId);
+    }
+
+    @Override
+    public void deleteWithdrawals(int id) {
+        withdrawalsDAO.deleteWithdrawals(id);
+    }
+
+    @Override
+    public void updateWithdrawals(Withdrawals withdrawals) {
+        withdrawalsDAO.updateWithdrawals(withdrawals);
+    }
+
+    @Override
+    public void createWithdrawals(Withdrawals withdrawals) {
+        withdrawalsDAO.createWithdrawals(withdrawals);
     }
 }

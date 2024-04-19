@@ -1,168 +1,207 @@
-package fr.eni.enchere.bll.impl;
+    package fr.eni.enchere.bll.Impl;
+    import fr.eni.enchere.bll.ArticleService;
+    import fr.eni.enchere.bo.Article;
+    import fr.eni.enchere.bo.Auction;
+    import fr.eni.enchere.bo.User;
+    import fr.eni.enchere.bo.Withdrawals;
+    import fr.eni.enchere.dal.ArticleDAO;
+    import fr.eni.enchere.dal.AuctionDAO;
+    import fr.eni.enchere.dal.WithdrawalsDAO;
+    import org.springframework.beans.factory.annotation.Autowired;
+    import org.springframework.jdbc.core.JdbcTemplate;
+    import org.springframework.stereotype.Service;
 
-import fr.eni.enchere.bll.ArticleService;
-import fr.eni.enchere.bo.Article;
-import fr.eni.enchere.bo.Auction;
-import fr.eni.enchere.bo.Withdrawals;
-import fr.eni.enchere.dal.ArticleDAO;
-import fr.eni.enchere.dal.AuctionDAO;
-import fr.eni.enchere.dal.WithdrawalsDAO;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Service;
+    import java.time.LocalDate;
+    import java.util.*;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
+    @Service
+    public class ArticleServiceImpl implements ArticleService {
 
-@Service
-public class ArticleServiceImpl implements ArticleService {
-
-    /******** Declaration ********/
-    @Autowired
+/******** Declaration ********/
     private ArticleDAO articleDAO;
-
-    @Autowired
     private AuctionDAO auctionDAO;
+     private WithdrawalsDAO withdrawalsDAO;
 
-    @Autowired
-    private WithdrawalsDAO withdrawalsDAO;
+        /******** Declaration ********/
 
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
-
-    /********** Constructor ********/
-
-    public ArticleServiceImpl(ArticleDAO articleDAO, AuctionDAO auctionDAO) {
-        this.articleDAO = articleDAO;
+        /********** Constructor ********/
+    public ArticleServiceImpl(
+            ArticleDAO articleDAO,
+            AuctionDAO auctionDAO,
+          WithdrawalsDAO withdrawalsDAO
+    ) {
         this.auctionDAO = auctionDAO;
+        this.articleDAO = articleDAO;
+        this.withdrawalsDAO = withdrawalsDAO;
     }
 
-    /******** Methods ********/
+        /******** Methods ********/
 
-    @Override
-    public void setAuctions(Article article) {
-        List<Auction> auctions = auctionDAO.getAuctionsByItemId(article.getItemId());
-        article.setAuctions(auctions);
-    }
-
-    @Override
-    public void updateArticle(Article article, Withdrawals withdrawals) {
-
-        articleDAO.updateArticle(article);
-        withdrawalsDAO.updateWithdrawals(withdrawals);
-    }
-
-    @Override
-    public void createArticle(Article article, Withdrawals withdrawals) {
-
-        int itemId = articleDAO.createArticle(article);
-        withdrawals.setItem_id(itemId);
-        System.out.println(itemId);
-        withdrawalsDAO.createWithdrawals(withdrawals);
-    }
-
-    @Override
-    public void insertBidAmountById(Long userId, int id, int bid_amount) {
-        auctionDAO.create(userId, id, bid_amount);
-    }
-
-//    @Override
-//    public void updateArticle(Article existingArticle, Withdrawals withdrawals) {
-//
-//    }
-
-//    @Override
-//    public List<Article> getAllArticles() {
-//        return articleDAO.getAllArticles();
-//    }
-
-
-    @Override
-    public List<Article> getArticlesByCategory(long categoryId) {
-        return articleDAO.getArticlesByCategory(categoryId);
-    }
-
-//    @Override
-//    public Article getArticleById(int id) {
-//        return articleDAO.getArticleById(id);
-//    }
-
-
-
-    @Override
-    public List<Article> getAllArticles() {
-        List<Article> articles = articleDAO.getAllArticles();
-        LocalDate now = LocalDate.now();
-
-        for (Article article : articles) {
-            List<Auction> auctions = auctionDAO.getAuctionsByItemId(article.getItemId());
+        @Override
+        public void setAuctions(Article article) {
+            List<Auction> auctions = auctionDAO.getAuctionsByArticleId(article.getItemId());
             article.setAuctions(auctions);
+        }
 
-            if (!auctions.isEmpty()) {
+        @Override
+        public void updateArticle(Article article, Withdrawals withdrawals) {
 
-                Date startAuctionDate = article.getStartAuctionDate();
-                LocalDate startAuctionLocalDate = startAuctionDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            articleDAO.updateArticle(article);
+            withdrawalsDAO.updateWithdrawals(withdrawals);
+        }
 
-                Date endAuctionDate = article.getEndAuctionDate();
-                LocalDate endAuctionLocalDate = endAuctionDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        @Override
+        public void createArticle(Article article, Withdrawals withdrawals) {
 
-//                LocalDate startAuctionDate = article.getStartAuctionDate().toLocalDate();
-//                LocalDate endAuctionDate = article.getEndAuctionDate().toLocalDate();
+          int itemId = articleDAO.createArticle(article);
+            withdrawals.setItem_id(itemId);
+            System.out.println(itemId);
+            withdrawalsDAO.createWithdrawals(withdrawals);
+        }
 
-                if (now.isAfter(endAuctionLocalDate)) {
-                    article.setStatus("Enchères terminées");
-                } else if (now.isAfter(startAuctionLocalDate)) {
-                    article.setStatus("En cours");
-                } else {
-                    article.setStatus("Créée");
-                }
-            }
+        @Override
+        public void insertBidAmountById(Long userId, int id, int bid_amount) {
+            auctionDAO.create(userId, id, bid_amount);
+        }
+
+        @Override
+        public List<Article> getAllArticles() {
+            List<Article> articles = articleDAO.getAllArticles();
+            LocalDate now = LocalDate.now();
+            return articles;
+        }
+
+
+    public List<Article> getAllArticleByNameAndCategory(String nameArticle, Long categoryId) {
+        nameArticle = checkNameArticle(nameArticle);
+        categoryId = checkCategoryId(categoryId);
+        return articleDAO.getAllArticleByNameAndCategory(nameArticle, categoryId);
+    }
+
+    @Override
+    public List<Article> getArticlesByBuying(User userSession, String nameArticle, Long categoryId, boolean openAuction, boolean currentAuction, boolean closedAuction) {
+       nameArticle = checkNameArticle(nameArticle);
+       categoryId = checkCategoryId(categoryId);
+       List<Article>articles = new ArrayList<>();
+       if(openAuction){
+           articles.addAll(articleDAO.getArticlesByOpenedBuying()) ;
+       }
+       if(currentAuction){
+           articles.addAll(articleDAO.getArticlesByCurrentBuying(nameArticle, categoryId, userSession.getIdUser()));
+       }
+       if(closedAuction){
+              articles.addAll(articleDAO.getArticlesByClosedBuying(nameArticle, categoryId, userSession.getIdUser()));
+
+       }
+        articles = removeDuplicates(articles);
+        return articles;
+    }
+
+    public List<Article> getArticlesBySelling(User userSession, String nameArticle, Long categoryId, boolean currentSelling, boolean nonStartedSelling, boolean closedSelling) {
+        nameArticle = checkNameArticle(nameArticle);
+        categoryId = checkCategoryId(categoryId);
+        System.out.println(nonStartedSelling);
+       List<Article> articles = new ArrayList<>();
+        if(currentSelling){
+            articles.addAll(articleDAO.getArticlesByCurrentSelling(nameArticle, categoryId, userSession.getIdUser()));
+        }
+
+        if(nonStartedSelling){
+            articles.addAll(articleDAO.getArticlesByNonStartedSelling(nameArticle, categoryId, userSession.getIdUser()));
+        }
+        if(closedSelling){
+            articles.addAll(articleDAO.getArticlesByClosedSelling(nameArticle, categoryId, userSession.getIdUser()));
         }
         return articles;
     }
 
     @Override
-    public Article getArticleById(int itemId) {
-        Article article = articleDAO.getArticleById(itemId);
-        if (article != null) {
-            List<Auction> auctions = auctionDAO.getAuctionsByItemId(itemId);
-            article.setAuctions(auctions);
+    public void deleteArticle(Long idArticle) {
+        articleDAO.deleteArticle(idArticle);
+    }
 
-            Withdrawals withdrawals = withdrawalsDAO.getWithdrawalsByArticleId(itemId);
-            article.setWithdrawals(withdrawals);
 
-            if (auctions != null && !auctions.isEmpty()) {
-                // Trouver l'offre la plus récente
-                Auction latestAuction = auctions.stream()
-                        .max(Comparator.comparing(Auction::getBidDate))
-                        .orElse(null);
+    private String checkNameArticle(String nameArticle) {
+        if(nameArticle.isEmpty()){
+            return "%";
+        }
+        return nameArticle + "%";
+    }
 
-                if (latestAuction != null) {
-                    int latestBidAmount = latestAuction.getBidAmount();
-                    article.setLatestBidAmount(latestBidAmount);
+    private Long checkCategoryId(Long categoryId) {
+        if(categoryId == 0){
+            return null;
+        }
+        return categoryId;
+    }
+
+    public List<Article> removeDuplicates(List<Article> articles) {
+        Map<Integer, Article> uniqueArticles = new LinkedHashMap<>();
+        for (Article article : articles) {
+            uniqueArticles.put(article.getItemId(), article);
+        }
+        return new ArrayList<>(uniqueArticles.values());
+    }
+//            for (Article article : articles) {
+//                List<Auction> auctions = auctionDAO.getAuctionsByArticleId(article.getItemId());
+//                article.setAuctions(auctions);
+//
+//                if (!auctions.isEmpty()) {
+//                    LocalDate startAuctionDate = article.getStartAuctionDate().toLocalDate();
+//                    LocalDate endAuctionDate = article.getEndAuctionDate().toLocalDate();
+//
+//                    if (now.isAfter(endAuctionDate)) {
+//                        article.setStatus("Enchères terminées");
+//                    } else if (now.isAfter(startAuctionDate)) {
+//                        article.setStatus("En cours");
+//                    } else {
+//                        article.setStatus("Créée");
+//                    }
+//                }
+//            }
+//            return articles;
+//        }
+
+        @Override
+        public Article getArticleById(int itemId) {
+            Article article = articleDAO.getArticleById(itemId);
+            if (article != null) {
+                List<Auction> auctions = auctionDAO.getAuctionsByArticleId(itemId);
+                article.setAuctions(auctions);
+
+                Withdrawals withdrawals = withdrawalsDAO.getWithdrawalsByArticleId(itemId);
+                article.setWithdrawals(withdrawals);
+
+                if (auctions != null && !auctions.isEmpty()) {
+                    // Trouver l'offre la plus récente
+                    Auction latestAuction = auctions.stream()
+                            .max(Comparator.comparing(Auction::getBidDate))
+                            .orElse(null);
+
+                    if (latestAuction != null) {
+                        int latestBidAmount = latestAuction.getBidAmount();
+                        article.setLatestBidAmount(latestBidAmount);
+                    }
+                }
+
+                LocalDate now = LocalDate.now();
+                LocalDate startAuctionDate = article.getStartAuctionDate().toLocalDate();
+                LocalDate endAuctionDate = article.getEndAuctionDate().toLocalDate();
+
+                if (now.isAfter(endAuctionDate)) {
+                    article.setStatus("Enchères terminées");
+                } else if (now.isBefore(startAuctionDate)) {
+                    article.setStatus("En cours");
+                } else {
+                    article.setStatus("Créée");
                 }
             }
-
-            LocalDate now = LocalDate.now();
-            Date startAuctionDate = article.getStartAuctionDate();
-            LocalDate startAuctionLocalDate = startAuctionDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-
-            Date endAuctionDate = article.getEndAuctionDate();
-            LocalDate endAuctionLocalDate = endAuctionDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-//            LocalDate startAuctionDate = article.getStartAuctionDate().toLocalDate();
-//            LocalDate endAuctionDate = article.getEndAuctionDate().toLocalDate();
-
-            if (now.isAfter(endAuctionLocalDate)) {
-                article.setStatus("Enchères terminées");
-            } else if (now.isBefore(startAuctionLocalDate)) {
-                article.setStatus("En cours");
-            } else {
-                article.setStatus("Créée");
-            }
+            return article;
         }
-        return article;
+
+        @Override
+        public List<Article> getArticlesByCategory(long categoryId) {
+            return articleDAO.getArticlesByCategory(categoryId);
+        }
+
     }
-}
