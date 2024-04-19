@@ -83,6 +83,9 @@ public class HomeController {
                         Boolean.parseBoolean(non_started_selling),
                         Boolean.parseBoolean(finished_selling));
             }
+            if (articles.isEmpty()) {
+                articles = articleService.getAllArticleByNameAndCategory(searchInput, Long.parseLong(category_id));
+            }
         }
         
         List<Category> categories = categoryService.getCategoryByIdFilter(Long.parseLong(category_id));
