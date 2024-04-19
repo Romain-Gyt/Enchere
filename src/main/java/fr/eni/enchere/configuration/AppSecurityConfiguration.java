@@ -68,7 +68,6 @@ public class AppSecurityConfiguration  {
                     .requestMatchers(HttpMethod.GET,"/admin/filter").hasRole("ADMIN");
 
 
-
             auth.requestMatchers("/").permitAll();
             auth.requestMatchers("/css/*").permitAll();
             auth.requestMatchers("/images/*").permitAll();
