@@ -36,7 +36,7 @@
                         <a class="text-white nav-link" th:text="${memberSession.pseudo + ' est connecté'}"></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#" th:text="#{frag-header.sellArticle}"></a>
+                        <a class="nav-link" th:href="@{/article/create}" th:text="#{frag-header.sellArticle}"></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/}" th:text="#{frag-header.auction}"></a>

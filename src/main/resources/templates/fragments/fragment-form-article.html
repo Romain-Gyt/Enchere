@@ -45,7 +45,7 @@
                                         <input type="number" id="initialPrice" class="form-control" name="initialPrice" th:placeholder="Prix" th:field="*{initialPrice}" th:readonly="${action == 'detail'}">
                                     </div>
                                 </div>
-                                <div class="form-group row">
+                                <div class="form-group row" th:if="${action == 'detail'}">
                                     <label class="col-md-4 col-form-label text-md-right" th:text="#{frag-form-article.bestOffer}"></label>
                                     <div class="position-relative col-md-6">
                                         <p class="form-control">
@@ -89,9 +89,13 @@
 <!--                                    <label for="image" class="col-md-4 col-form-label text-md-right">Image</label>-->
                                     <div class="col-md-6">
                                         <!-- Afficher l'image uniquement lors de l'édition et de l'affichage des détails -->
-                                        <img th:src="@{${'/images/' + article.itemId +'.jpg'}}" class="img-fluid" alt="Image de l'article" th:unless="${action == 'create'}">
+<!--                                        <img th:src="@{${'/images/' + article.itemId +'.jpg'}}" class="img-fluid" alt="Image de l'article" th:unless="${action == 'create'}">-->
                                         <!-- Afficher le champ d'entrée de fichier uniquement lors de la création de l'article -->
 <!--                                        <input type="file" id="image" class="form-control" name="image" th:if="${action == 'create'}">-->
+                                        <img th:src="@{${'/images/' + article.itemId + '.jpg'}}"
+                                             onerror="this.onerror=null; this.src='/images/enchere.jpg';"
+                                             class="card-img"
+                                             alt="Image par défaut" th:unless="${action == 'create'}">
                                     </div>
                                 </div>
 
