@@ -3,7 +3,6 @@ package fr.eni.enchere.dal.Impl;
 import fr.eni.enchere.bo.Article;
 import fr.eni.enchere.bo.Category;
 import fr.eni.enchere.bo.User;
-import fr.eni.enchere.bo.Withdrawals;
 import fr.eni.enchere.dal.ArticleDAO;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -28,7 +27,7 @@ public class ArticleDAOImpl implements ArticleDAO {
             "       FROM sold_items se\n" +
             "       INNER JOIN categories cat ON se.category_id = cat.category_id\n" +
             "       INNER JOIN users u ON se.user_id = u.user_id\n" +
-            "WHERE CURDATE() BETWEEN se.start_auction_date AND se.end_auction_date\n" +
+            "WHERE CURDATE() BETWEEN se.start_auction_date AND DATE_SUB(se.end_auction_date, INTERVAL 1 DAY)\n"  +
             "AND cat.category_id = :category_id;";
 
    /******** Declaration ********/
@@ -38,7 +37,7 @@ public class ArticleDAOImpl implements ArticleDAO {
            "FROM sold_items se\n" +
            "INNER JOIN categories cat ON se.category_id = cat.category_id\n" +
            "INNER JOIN users u ON se.user_id = u.user_id\n" +
-           "WHERE CURDATE() BETWEEN se.start_auction_date AND se.end_auction_date\n" +
+           "WHERE CURDATE() BETWEEN se.start_auction_date AND DATE_SUB(se.end_auction_date, INTERVAL 1 DAY)\n" +
            "AND u.disabled != 1\n"+
            "ORDER BY se.end_auction_date;";
 
@@ -60,7 +59,7 @@ public class ArticleDAOImpl implements ArticleDAO {
             "INNER JOIN users u ON se.user_id = u.user_id\n" +
             "WHERE(cat.category_id = :category_id OR :category_id IS NULL)\n" +
             "AND u.disabled != 1\n"+
-            "AND CURDATE() BETWEEN se.start_auction_date AND se.end_auction_date\n"+
+            "AND CURDATE() BETWEEN se.start_auction_date AND DATE_SUB(se.end_auction_date, INTERVAL 1 DAY)\n" +
             "AND (se.item_name LIKE :item_name OR :item_name IS NULL);";
 
     private static final String SELECT_OPENED_AUCTION ="SELECT se.item_id,se.item_name,se.description,se.start_auction_date,se.end_auction_date,se.initial_price,se.sale_price,\n" +
@@ -69,7 +68,7 @@ public class ArticleDAOImpl implements ArticleDAO {
             "       FROM sold_items se\n" +
             "       INNER JOIN categories cat ON se.category_id = cat.category_id\n" +
             "       INNER JOIN users u ON se.user_id = u.user_id\n" +
-            "WHERE CURDATE() BETWEEN se.start_auction_date AND se.end_auction_date\n" +
+            "WHERE CURDATE() BETWEEN se.start_auction_date AND DATE_SUB(se.end_auction_date, INTERVAL 1 DAY)\n" +
               "AND u.disabled != 1;";
 
     public static final String SELECT_BY_BUYING_CURRENT_AUCTIONS = "SELECT se.item_id,se.item_name,se.description,se.start_auction_date,se.end_auction_date,se.initial_price,se.sale_price,\n" +
@@ -80,7 +79,7 @@ public class ArticleDAOImpl implements ArticleDAO {
             "INNER JOIN categories cat ON se.category_id = cat.category_id\n" +
             "INNER JOIN users u ON se.user_id = u.user_id\n" +
             "INNER JOIN bids b ON se.item_id = b.item_id\n" +
-            "WHERE CURDATE() BETWEEN se.start_auction_date AND se.end_auction_date\n" +
+            "WHERE CURDATE() BETWEEN se.start_auction_date AND DATE_SUB(se.end_auction_date, INTERVAL 1 DAY)\n" +
             "AND (se.item_name LIKE :item_name OR :item_name IS NULL)\n" +
             "AND b.user_id = :user_id\n" +
             "AND u.disabled != 1\n"+
