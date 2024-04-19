@@ -58,6 +58,17 @@ public class AuctionDAOImpl implements AuctionDAO {
     }
 
     @Override
+    public List<Auction> getBestAuctionForAllArticle() {
+        String sql = "SELECT item_id, MAX(bid_amount) AS best_bid_amount FROM bids GROUP BY item_id;";
+        return jdbcTemplate.query(sql, (rs, rowNum) -> {
+            Auction auction = new Auction();
+            auction.setItemId(rs.getInt("item_id"));
+            auction.setBidAmount(rs.getInt("best_bid_amount"));
+            return auction;
+        });
+    }
+
+    @Override
     public Auction read(long id) {
         MapSqlParameterSource namedParameters = new MapSqlParameterSource();
         namedParameters.addValue("item_id", id);

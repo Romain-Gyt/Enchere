@@ -18,12 +18,14 @@ public class Article {
     private int userId;
     private String Status;
     private Integer latestBidAmount;
+    private String image;
 
     private Withdrawals withdrawals;
     private Category category;
     private User user;
     private String status;
     private List<Auction> auctions = new ArrayList<>();
+
 
 
     /******** Constructor ********/

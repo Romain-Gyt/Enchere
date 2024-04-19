@@ -7,25 +7,24 @@
             additionalJs=~{:: script}
         )}">
 <head>
-    <title th:text="Accueil">Home</title>
+    <title th:text="#{view-index.home}"></title>
     <script src="/js/Filter_home.js"></script>
 </head>
   <body>
     <main class="main-content">
         <div class="container">
-            <h1 class="text-center">Liste des enchères</h1>
+            <h1 class="text-center" th:text="#{view-index.listAuctions}"></h1>
             <div class="row">
                 <form action="/search" method="GET">
                     <div class="row">
-                        <label>Filtres: </label>
+                        <label th:text="#{view-index.filter}"></label>
                         <div class="col-md-6 searchbar">
                             <div class="col-md-6">
-                                <input type="text" class="form-control" name="searchInput" placeholder="Le nom contient...">
+                                <input type="text" class="form-control" name="searchInput" th:placeholder="#{view-index.nameContent}">
                             </div>
-                            <label for="categorySelect">Catégories: </label>
+                            <label for="categorySelect" th:text="#{view-index.categories}"></label>
                             <select class="form-control" id="categorySelect" name="category_id">
-                                <option value="">Toutes</option>
-    <!--                             Boucle pour afficher les libellés des catégories -->
+                                <option value="" th:text="#{view-index.allCategories}"></option>
 
                                 <option th:each="category : ${categories}"  th:value="${category.categoryId}" th:text="${category.label}"></option>
                             </select>
@@ -34,58 +33,42 @@
                             <div class="filter_buying">
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" name="transactionType" id="radio_buying" value="buying">
-                                    <label class="form-check-label" for="radio_buying">
-                                        Achats
-                                    </label>
+                                    <label class="form-check-label" for="radio_buying" th:text="#{view-index.purchases}"></label>
                                     <div class="form-check">
                                         <input class="form-check-input" name="open_auction" type="checkbox" value="true"  id="open_auction">
-                                        <label class="form-check-label" for="open_auction">
-                                            Enchères ouvertes
-                                        </label>
+                                        <label class="form-check-label" for="open_auction" th:text="#{view-index.openAuctions}"></label>
                                     </div>
                                     <div class="form-check">
                                         <input class="form-check-input" name="current_auction" type="checkbox" value="true" id="current_auction">
-                                        <label class="form-check-label" for="current_auction">
-                                           Mes enchères en cours
-                                        </label>
+                                        <label class="form-check-label" for="current_auction" th:text="#{view-index.myCurrentAuctions}"> </label>
                                     </div>
                                     <div class="form-check">
                                         <input class="form-check-input" name="won_auction" type="checkbox" value="true" id="won_auction">
-                                        <label class="form-check-label" for="won_auction">
-                                           Mes enchères remportées
-                                        </label>
+                                        <label class="form-check-label" for="won_auction" th:text="#{view-index.myAuctionsWon}"></label>
                                     </div>
                                 </div>
                             </div>
                             <div class="filter_selling">
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" name="transactionType" id="radio_selling" value="selling">
-                                    <label class="form-check-label" for="radio_selling">
-                                        Mes ventes
-                                    </label>
+                                    <label class="form-check-label" for="radio_selling" th:text="#{view-index.mySales}"></label>
                                     <div class="form-check">
                                         <input class="form-check-input" name="current_selling" type="checkbox" value="true" id="current_selling">
-                                        <label class="form-check-label" for="current_selling">
-                                           Mes ventes en cours
-                                        </label>
+                                        <label class="form-check-label" for="current_selling" th:text="#{view-index.myCurrentPourchases}"></label>
                                     </div>
                                     <div class="form-check">
                                         <input class="form-check-input" name="non_started_selling" type="checkbox" value="true" id="non_started_selling">
-                                        <label class="form-check-label" for="non_started_selling">
-                                           Ventes non débutées
-                                        </label>
+                                        <label class="form-check-label" for="non_started_selling" th:text="#{view-index.salesNotStarted}"></label>
                                     </div>
                                     <div class="form-check">
                                         <input class="form-check-input" name="finished_selling" type="checkbox" value="true" id="finished_selling">
-                                        <label class="form-check-label" for="finished_selling">
-                                            Ventes terminées
-                                        </label>
+                                        <label class="form-check-label" for="finished_selling" th:text="#{view-index.salesEnds}"></label>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <button type="submit" class="btn btn-primary btn-form" id="search_form">Rechercher</button>
+                            <button type="submit" class="btn btn-primary btn-form" id="search_form" th:text="#{view-index.search}"></button>
                         </div>
                     </div>
                 </form>
@@ -110,29 +93,37 @@
                                         </a>
                                     </th:block>
                                     <h5 class="card-title text-white font-weight-bold" th:unless="${#authorization.expression('isAuthenticated()')}" th:text="${article.itemName}"></h5>
-                                    <div th:if="${auction != null}">
-                                        <!-- Utilisez la variable auction en toute sécurité ici -->
-                                        <div th:if="${auction.bids != null and auction.bids.size() > 0}">
-                                            <span th:text="'Enchère actuelle : ' + ${auction.bids[auction.bids.size() - 1].bidAmount} + ' points'"></span>
+                                    <th:block th:each="auction : ${auctions}" th:if="${auction.itemId == article.itemId}">
+                                        <div>
+                                            <span class="card-text text-white" th:text="#{view-index.bestAmount}"></span>
+                                            <span class="card-text text-white" th:text="${auction.bidAmount}"></span>
                                         </div>
-                                        <div th:unless="${auction.bids != null and auction.bids.size() > 0}">
-                                            <span th:text="'Prix de vente : ' + ${article.initialPrice} + ' points'"></span>
-                                        </div>
-                                    </div>
+                                    </th:block>
 
                                     <div th:unless="${auction != null}">
-                                        <span class="card-text text-white" th:text="'Prix de vente : ' + ${article.initialPrice} + ' points'"></span>
+                                        <span class="card-text text-white" th:text="#{view-index.initialPrice}"></span>
+                                        <span class="card-text text-white" th:text="${article.initialPrice}"></span>
                                     </div>
 
-                                    <p class="card-text text-white">Date de début de l'enchère : <span th:text="${#dates.format(article.startAuctionDate, 'dd/MM/yyyy')}"></span></p>
-                                    <p class="card-text text-white">Date de fin de l'enchère : <span th:text="${#dates.format(article.endAuctionDate, 'dd/MM/yyyy')}"></span></p>
-                                    <p class="card-text text-white">Vendu par :
+                                    <p class="card-text text-white">
+                                        <span th:text="#{view-index.AuctionStartDate}"></span>
+                                        <span th:text="${#dates.format(article.startAuctionDate, 'dd/MM/yyyy')}"></span>
+                                    </p>
+                                    <p class="card-text text-white">
+                                        <span th:text="#{view-index.AuctionEndDate}"></span>
+                                        <span th:text="${#dates.format(article.endAuctionDate, 'dd/MM/yyyy')}"></span>
+                                    </p>
+                                    <p class="card-text text-white">
+                                        <span th:text="#{view-index.soldBy}"></span>
                                         <a th:if="${#authorization.expression('isAuthenticated()')}" th:href="@{/profil/{id}(id=${article.user.getIdUser()})}">
                                         <span th:text="${article.user.getPseudo()}"></span>
                                         </a>
                                         <span th:unless="${#authorization.expression('isAuthenticated()')}" th:text="${article.user.getPseudo()}"></span>
                                     </p>
-                                    <p class="card-text text-white">Catégorie : <span name="id_category" th:data-category-id="${article.category.getCategoryId()}" th:text="${article.category.getLabel()}"></span></p>
+                                    <p class="card-text text-white">
+                                        <span th:text="#{view-index.categories}"></span>
+                                        <span name="id_category" th:data-category-id="${article.category.getCategoryId()}" th:text="${article.category.getLabel()}"></span>
+                                    </p>
                                 </div>
                             </div>
                         </div>

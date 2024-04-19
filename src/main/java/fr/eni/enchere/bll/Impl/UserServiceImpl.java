@@ -86,6 +86,7 @@ public class UserServiceImpl implements UserService {
     public void updateUserCredit(User user, int credit){
         userDao.updateCredit(user, credit);
     }
+
     @Override
     public void deleteUser(Long id) {
         userDao.delete(id);

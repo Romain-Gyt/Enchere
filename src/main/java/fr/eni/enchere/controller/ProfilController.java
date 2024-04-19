@@ -40,7 +40,7 @@ public class ProfilController {
     }
 
     @GetMapping("/profil")
-    public String displayProfil() {
+    public String displayProfil(@ModelAttribute("memberSession") User user) {
         return "profil/profil.html";
     }
 
@@ -49,10 +49,8 @@ public class ProfilController {
             @PathVariable("id") String id,
             Model model
     ) {
-        System.out.println(id);
         User user = userService.loadUserById(Long.parseLong(id));
         model.addAttribute("user", user);
-        System.out.println(user);
         return "profil/profil-view.html";
     }
 

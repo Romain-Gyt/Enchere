@@ -1,4 +1,4 @@
-package fr.eni.enchere.bll.Impl;
+package fr.eni.enchere.bll.impl;
 
 import fr.eni.enchere.bll.AuctionService;
 import fr.eni.enchere.bo.Auction;
@@ -12,7 +12,7 @@ public class AuctionServiceImpl implements AuctionService {
 
     /********** DECLARATION *********/
     private AuctionDAO auctionDAO;
-  
+
   /*********CONSTRUCTOR **********/
   public AuctionServiceImpl(AuctionDAO auctionDAO) {
     this.auctionDAO = auctionDAO;
@@ -46,6 +46,11 @@ public class AuctionServiceImpl implements AuctionService {
     @Override
     public List<Auction> getAuctionsByArticleId(int articleId) {
         return auctionDAO.getAuctionsByArticleId(articleId);
+    }
+
+    @Override
+    public List<Auction> getBestAuctionForAllArticle() {
+        return auctionDAO.getBestAuctionForAllArticle();
     }
 
 }

@@ -19,24 +19,24 @@
 
                                 <div class="mb-md-5 mt-md-4 pb-5">
 
-                                    <h2 class="fw-bold mb-2 text-uppercase">Login</h2>
-                                    <p class="text-white-50 mb-5">Entrez votre pseudo et mot de passe !</p>
+                                    <h2 class="fw-bold mb-2 text-uppercase" th:text="#{view-login.login}"></h2>
+                                    <p class="text-white-50 mb-5" th:text="#{view-login.text}"></p>
                                     <form method="POST" th:action="@{/login}">
                                         <div class="form-outline form-white mb-4">
                                             <input type="text" id="username" name="username" class="form-control form-control-lg" />
-                                            <label class="form-label" for="username">Pseudo</label>
+                                            <label class="form-label" for="username" th:text="#{frag-form-user.pseudo}">Pseudo</label>
                                         </div>
 
                                         <div class="form-outline form-white mb-4">
                                             <input type="password" id="password" name="password" class="form-control form-control-lg" />
-                                            <label class="form-label" for="password">Password</label>
+                                            <label class="form-label" for="password" th:text="#{frag-form-user.password}">Password</label>
                                         </div>
-                                        <p th:if="${param.error}" class="text-danger font-weight-bold h3">Mauvais pseudo ou mot de passe</p>
+                                        <p th:if="${param.error}" class="text-danger font-weight-bold h3" th:text="#{view-login.error}"></p>
 
                                         <input type="checkbox" name="remember_me" id="remember_me">
-                                        <label class="form-label" for="remember_me">Se souvenir de moi</label>
-                                        <p class="small mb-5 pb-lg-2"><a class="text-white-50" href="#">Mot de passe oublié?</a></p>
-                                        <button class="btn btn-outline-light btn-lg px-5" type="submit">Login</button>
+                                        <label class="form-label" for="remember_me" th:text="#{view-login.rememberMe}"></label>
+                                        <p class="small mb-5 pb-lg-2"><a class="text-white-50" href="#" th:text="#{view-login.forgotPassword}"></a></p>
+                                        <button class="btn btn-outline-light btn-lg px-5" type="submit" th:text="#{view-login.login}"></button>
 
                                     </form>
 
@@ -49,8 +49,8 @@
                                 </div>
 
                                 <div>
-                                    <p class="mb-0">Pas de compte? <a th:href="@{/register}" class="text-white-50 fw-bold">Inscrivez vous</a>
-                                    </p>
+                                    <p class="mb-0" th:text="#{view-login.noAccount}"></p>
+                                    <a th:href="@{/register}" class="text-white-50 fw-bold" th:text="#{view-login.register}"></a>
                                 </div>
 
                             </div>

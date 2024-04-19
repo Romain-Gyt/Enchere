@@ -46,6 +46,18 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
+                                    <label class="col-md-4 col-form-label text-md-right">Meilleur offre : </label>
+                                    <div class="position-relative col-md-6">
+                                        <p class="form-control">
+                                            <span th:text="${auction.bidAmount}"></span>
+                                            <a th:if="${user != null}" th:href="@{/profil/{id}(id=${user.idUser})}">
+                                                <span th:text="${user.pseudo}"></span>
+                                            </a>
+                                            <span th:if="${user == null}" th:text="${auction.bidAmount != 0 ? ' par ' + user.pseudo : ''}"></span>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
                                     <label for="startAuctionDate" class="col-md-4 col-form-label text-md-right">Date de début de l'enchère</label>
                                     <div class="col-md-6">
                                         <input type="date" id="startAuctionDate" class="form-control" name="startAuctionDate" th:value="${#dates.format(article.startAuctionDate, 'yyyy-MM-dd')}" th:readonly="${action == 'detail'}">
@@ -109,6 +121,30 @@
                                     </div>
                                 </div>
                             </form>
+
+                            <th:block th:unless="${winner != null}" th:if="${article.user.pseudo != memberSession.pseudo}">
+                                <form name="addbid" th:action="@{/article/addBid}" method="post" th:if="${action == 'detail'}">
+                                    <label class="labels">Ma proposition :
+                                        <input class="form-control" type="number" name="bidAmount"
+                                               th:min="${auction.bidAmount > 0 ? auction.bidAmount + 1 : article.initialPrice}"
+                                               th:max="${memberSession.credit}"
+                                               th:value="${auction.bidAmount > 0 ? (auction.bidAmount + 1 < memberSession.credit ? auction.bidAmount + 1 : memberSession.credit) : article.initialPrice}"
+                                               oninput="validateBid(this)"/>
+                                    </label>
+                                    <input type="hidden" id="itemId" name="itemId" th:value="${article.itemId}" />
+                                    <th:block th:if="${auction.bidAmount > 0}">
+                                        <input type="hidden" id="userId" name="userId" th:value="${auction.userId}" />
+                                    </th:block>
+                                    <input type="hidden" id="lastBidAmount" name="lastBidAmount" th:value="${auction.bidAmount}" />
+                                    <button class="btn btn-primary profile-button btn-form" type="submit" id="submitBtn"
+                                            th:disabled="${article.startAuctionDate.after(#dates.createNow()) or memberSession.credit &lt; auction.bidAmount}">
+                                        Enchérir</button>
+                                    <span th:if="${memberSession.credit &lt; auction.bidAmount}">Crédit insuffisant</span>
+                                </form>
+                            </th:block>
+                            <th:block th:if="${article.user.pseudo == memberSession.pseudo && article.startAuctionDate.after(#dates.createNow())}">
+                                <button class="btn btn-primary profile-button btn-form" type="button">Modifier</button>
+                            </th:block>
                         </div>
                     </div>
                 </div>
@@ -116,3 +152,26 @@
         </div>
     </div>
 </div>
+
+
+<!--<script>-->
+<!--    function validateBid(input) {-->
+<!--        var submitBtn = document.getElementById('submitBtn');-->
+<!--        var minValue = parseInt(input.min);-->
+<!--        var maxValue = parseInt(input.max);-->
+<!--        var bidValue = parseInt(input.value);-->
+
+<!--        console.log(minValue, maxValue, bidValue)-->
+
+<!--        if (bidValue < minValue || bidValue > maxValue) {-->
+<!--            submitBtn.disabled = true;-->
+<!--        } else {-->
+<!--            submitBtn.disabled = false;-->
+<!--        }-->
+<!--    }-->
+
+<!--    window.onload = function() {-->
+<!--        validateBid(document.querySelector('input[name=bidAmount]'));-->
+<!--    };-->
+<!--</script>-->
+

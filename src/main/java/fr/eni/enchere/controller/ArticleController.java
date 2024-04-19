@@ -1,7 +1,6 @@
 package fr.eni.enchere.controller;
 
 import fr.eni.enchere.bll.*;
-import fr.eni.enchere.bll.Impl.AuctionServiceImpl;
 import fr.eni.enchere.bo.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,14 +8,16 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
 @Controller
 @SessionAttributes({"memberSession"})
 public class ArticleController {
+    /******** Declaration ********/
+    ArticleService articleService;
 
-    private final ArticleService articleService;
     private final CategoryService categoryService;
     private final UserService userService;
     private final WithdrawalsService withdrawalsService;
@@ -101,11 +102,25 @@ public class ArticleController {
     public String showArticleDetails(@PathVariable int itemId, Model model) {
         Article article = articleService.getArticleById(itemId);
         Withdrawals withdrawals = withdrawalsService.getWithdrawalsByArticleId(itemId);
-        List<Auction> auctions = auctionService.getAuctionsByArticleId(itemId);
+        Auction auction = auctionService.getAuctionById(itemId);
+
+        if (auction != null) {
+            User user = userService.loadUserById(auction.getUserId());
+            model.addAttribute("auction", auction);
+            model.addAttribute("user", user);
+            Date currentDate = new Date();
+            Date endDate = article.getEndAuctionDate();
+            if (endDate != null && endDate.before(currentDate)){
+                model.addAttribute("winner", user.getPseudo());
+            }
+        } else {
+            Auction bidAmount = new Auction();
+            bidAmount.setBidAmount(0);
+            model.addAttribute("auction", bidAmount);
+            model.addAttribute("user", null);
+        }
         model.addAttribute("article", article);
-        System.out.println(article.getCategory().getLabel());
         model.addAttribute("withdrawals", withdrawals);
-        model.addAttribute("auctions", auctions);
         return "article/articleDetail";
     }
 
@@ -113,6 +128,8 @@ public class ArticleController {
     @PostMapping("/article/addBid")
     public String addBid(@RequestParam("bidAmount") int bidAmount,
                          @RequestParam("itemId") int itemId,
+                         @RequestParam(value = "userId", required = false) Integer userId,
+                         @RequestParam("lastBidAmount") int lastBidAmount,
                          @ModelAttribute("memberSession") User memberSession) {
         articleService.insertBidAmountById(memberSession.getIdUser(), itemId, bidAmount);
 
@@ -120,7 +137,12 @@ public class ArticleController {
         int newCreditUser = userSession.getCredit() - bidAmount;
         userService.updateUserCredit(userSession, newCreditUser);
 
+        if(userId != null){
+            User user = userService.loadUserById(userId);
+            int returnCreditLastUser = user.getCredit() + lastBidAmount;
+            userService.updateUserCredit(user, returnCreditLastUser);
+        }
+
         return "redirect:/";
     }
-
 }

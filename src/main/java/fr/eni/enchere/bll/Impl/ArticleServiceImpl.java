@@ -33,7 +33,7 @@
         this.articleDAO = articleDAO;
         this.withdrawalsDAO = withdrawalsDAO;
     }
-      
+
         /******** Methods ********/
 
         @Override

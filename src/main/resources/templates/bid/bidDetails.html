@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        th:replace="~{layouts/layout :: layout(
+            pageContent=~{:: .main-content},
+            pageTitle=~{:: title},
+            additionalCss=~{:: link},
+            additionalJs=~{}
+        )}"
+>
+<title th:text="#{view-bidDetails.title}"></title>
+<link rel="stylesheet" href="/css/profil.css">
+<main class="main-content">
+    <div class="container rounded bg-white mt-5 mb-5">
+        <div class="row">
+            <div class="col-md-3 border-right">
+                <div class="d-flex flex-column align-items-center text-center p-3 py-5">
+                    <img src="/images/Enchere.jpg" class="card-img" alt="..." >
+                </div>
+            </div>
+            <div class="col-md-5 border-right">
+                <div class="p-3 py-5">
+                    <div class="d-flex justify-content-center align-items-center mb-3">
+                        <th:block th:if="${winner != null}">
+                            <h4 class="text-center" th:unless="${winner == memberSession.pseudo}" th:text="${winner + ' a remporté la vente'}"></h4>
+                            <h4 class="text-center" th:if="${winner == memberSession.pseudo}" th:text="#{view-bidDetails.winner}"></h4>
+                        </th:block>
+                        <h4 class="text-center" th:unless="${winner != null}" th:text="#{view-bidDetails.detail}"></h4>
+                    </div>
+                    <div class="row mt-3">
+                        <h5 class="card-title" th:text="${article.itemName}"></h5>
+                        <div class="col-md-12">
+                            <label class="labels">Description : </label>
+                            <input type="text" class="form-control" th:value="${article.description}" disabled>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="labels">Catégorie : </label>
+                            <span class="form-control" th:text="${article.category.label}"></span>
+<!--                            <input type="text" class="form-control" th:value="${article.category.label}" disabled>-->
+                        </div>
+                        <div class="col-md-12">
+                            <label class="labels">Meilleur offre : </label>
+                            <div class="position-relative">
+<!--                                <input type="text" class="form-control" th:value="${auction.bidAmount} != 0 ? ${auction.bidAmount} + ' par ' + ${user.pseudo} : ${auction.bidAmount}" disabled>-->
+<!--                                <th:block th:if="${user != null}">-->
+<!--                                    <a th:href="@{/profil/{id}(id=${user.idUser})}" class="stretched-link"></a>-->
+<!--                                </th:block>-->
+                                <p class="form-control">
+                                    <span th:text="${auction.bidAmount}"></span>
+                                    <a th:if="${user != null}" th:href="@{/profil/{id}(id=${user.idUser})}">
+                                        <span th:text="${user.pseudo}"></span>
+                                    </a>
+                                    <span th:if="${user == null}" th:text="${auction.bidAmount != 0 ? ' par ' + user.pseudo : ''}"></span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="labels">Mise à prix : </label>
+                            <input type="text" class="form-control" th:value="${article.initialPrice}" disabled>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="labels">Début de l'enchère : </label>
+                            <input type="text" class="form-control" th:value="${#dates.format(article.startAuctionDate, 'dd/MM/yyyy')}" disabled>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="labels">Fin de l'enchère : </label>
+                            <input type="text" class="form-control" th:value="${#dates.format(article.endAuctionDate, 'dd/MM/yyyy')}" disabled>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="labels">Retrait : </label>
+                            <input type="text" class="form-control" th:value="${withdrawals.street + ', ' + (withdrawals.postal_code + ' ' + withdrawals.city)}" disabled>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="labels">Vendeur : </label>
+                            <input type="text" class="form-control" th:value="${article.user.pseudo}" disabled>
+                        </div>
+                        <th:block th:unless="${winner != null}" th:if="${article.user.pseudo != memberSession.pseudo}">
+                            <form th:action="@{/addBid}" method="post">
+                                <label class="labels">Ma proposition :
+                                    <input class="form-control" type="number" name="bidAmount"
+                                           th:min="${auction.bidAmount > 0 ? auction.bidAmount + 1 : article.initialPrice}"
+                                           th:max="${memberSession.credit}"
+                                           th:value="${auction.bidAmount > 0 ? (auction.bidAmount + 1 < memberSession.credit ? auction.bidAmount + 1 : memberSession.credit) : article.initialPrice}"
+                                           oninput="validateBid(this)"/>
+                                </label>
+                                <input type="hidden" id="itemId" name="itemId" th:value="${article.itemId}" />
+                                <th:block th:if="${auction.bidAmount > 0}">
+                                    <input type="hidden" id="userId" name="userId" th:value="${auction.userId}" />
+                                </th:block>
+                                <input type="hidden" id="lastBidAmount" name="lastBidAmount" th:value="${auction.bidAmount}" />
+                                <button class="btn btn-primary profile-button btn-form" type="submit" id="submitBtn"
+                                        th:disabled="${article.startAuctionDate.after(#dates.createNow()) or memberSession.credit &lt; auction.bidAmount}">
+                                    Enchérir</button>
+                                <span th:if="${memberSession.credit &lt; auction.bidAmount}">Crédit insuffisant</span>
+                            </form>
+                        </th:block>
+                        <th:block th:if="${article.user.pseudo == memberSession.pseudo && article.startAuctionDate.after(#dates.createNow())}">
+                            <button class="btn btn-primary profile-button btn-form" type="button">Modifier</button>
+                        </th:block>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+</html>
+
+<script>
+    function validateBid(input) {
+        var submitBtn = document.getElementById('submitBtn');
+        var minValue = parseInt(input.min);
+        var maxValue = parseInt(input.max);
+        var bidValue = parseInt(input.value);
+
+        if (bidValue < minValue || bidValue > maxValue) {
+            submitBtn.disabled = true;
+        } else {
+            submitBtn.disabled = false;
+        }
+    }
+
+    window.onload = function() {
+        validateBid(document.querySelector('input[name=bidAmount]'));
+    };
+</script>

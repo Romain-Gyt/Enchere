@@ -156,7 +156,7 @@ public class ArticleDAOImpl implements ArticleDAO {
     private JdbcTemplate jdbcTemplate;
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    /******** Constructeur ********/
+    /******** Constructor ********/
     public ArticleDAOImpl(
             JdbcTemplate jdbcTemplate,
             NamedParameterJdbcTemplate namedParameterJdbcTemplate
